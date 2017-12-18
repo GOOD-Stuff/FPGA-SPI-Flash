@@ -1,0 +1,18 @@
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_srio_clk.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_srio_rst.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/cfg_fabric_srio_gen2_0.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_k7_v7_gtxe2_common.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_gtx_GT.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_gtxe2_init.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_gtx_multi_gt.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_gtxe2_rx_startup_fsm.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_gtxe2_sync_block.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_gtxe2_tx_startup_fsm.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gt_wrapper_srio_gen2_0_k7_2x.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_support.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0_block.v" 
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/srio_gen2_0/synth/srio_gen2_0.v" 
+
+verilog xil_defaultlib "glbl.v"
+
+nosort

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Product Version: Vivado v2016.3 (64-bit)                     -->
+<!--                                                              -->
+<!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.        -->
+
+<hwsession version="1" minor="2">
+  <device name="xc6slx45_0" gui_info="dashboard1=hw_ila_1[xc7k325t_1/hw_ila_1/Status=ILA_STATUS_1;xc7k325t_1/hw_ila_1/Waveform=ILA_WAVE_1;xc7k325t_1/hw_ila_1/Trigger Setup=ILA_TRIGGER_1;xc7k325t_1/hw_ila_1/Capture Setup=ILA_CAPTURE_1;xc7k325t_1/hw_ila_1/Settings=ILA_SETTINGS_1;],dashboard2=hw_vios[xc7k325t_1/hw_vio_1=VIO_PROBES_1;]"/>
+  <ObjectList object_type="hw_device" gui_info="">
+    <Object name="xc7k160t_0" gui_info="">
+      <Properties Property="PROBES.FILE" value="$_project_name_.runs/impl_2/debug_nets.ltx"/>
+      <Properties Property="PROGRAM.HW_BITSTREAM" value="$_project_name_.runs/impl_2/srio_example_test.bit"/>
+    </Object>
+  </ObjectList>
+  <ObjectList object_type="hw_ila" gui_info="">
+    <Object name="ila_ip" gui_info="">
+      <Properties Property="CONTROL.TRIGGER_CONDITION" value="AND"/>
+      <Properties Property="CORE_REFRESH_RATE_MS" value="500"/>
+    </Object>
+  </ObjectList>
+  <ObjectList object_type="hw_probe" gui_info="">
+    <Object name="iorx_tdata[63:0]" gui_info="Trigger Setup=0"/>
+  </ObjectList>
+  <probeset name="hw project" active="false">
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq64&apos;hXXXX_XXXX_XXXX_XXXX"/>
+        <Option Id="COMPARE_VALUE.0" value="neq64&apos;h0000_0000_0000_0000"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe1[63:0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="neq64&apos;h0000_0000_0000_0000"/>
+      </probeOptions>
+      <nets>
+        <net name="iorx_tdata[63]"/>
+        <net name="iorx_tdata[62]"/>
+        <net name="iorx_tdata[61]"/>
+        <net name="iorx_tdata[60]"/>
+        <net name="iorx_tdata[59]"/>
+        <net name="iorx_tdata[58]"/>
+        <net name="iorx_tdata[57]"/>
+        <net name="iorx_tdata[56]"/>
+        <net name="iorx_tdata[55]"/>
+        <net name="iorx_tdata[54]"/>
+        <net name="iorx_tdata[53]"/>
+        <net name="iorx_tdata[52]"/>
+        <net name="iorx_tdata[51]"/>
+        <net name="iorx_tdata[50]"/>
+        <net name="iorx_tdata[49]"/>
+        <net name="iorx_tdata[48]"/>
+        <net name="iorx_tdata[47]"/>
+        <net name="iorx_tdata[46]"/>
+        <net name="iorx_tdata[45]"/>
+        <net name="iorx_tdata[44]"/>
+        <net name="iorx_tdata[43]"/>
+        <net name="iorx_tdata[42]"/>
+        <net name="iorx_tdata[41]"/>
+        <net name="iorx_tdata[40]"/>
+        <net name="iorx_tdata[39]"/>
+        <net name="iorx_tdata[38]"/>
+        <net name="iorx_tdata[37]"/>
+        <net name="iorx_tdata[36]"/>
+        <net name="iorx_tdata[35]"/>
+        <net name="iorx_tdata[34]"/>
+        <net name="iorx_tdata[33]"/>
+        <net name="iorx_tdata[32]"/>
+        <net name="iorx_tdata[31]"/>
+        <net name="iorx_tdata[30]"/>
+        <net name="iorx_tdata[29]"/>
+        <net name="iorx_tdata[28]"/>
+        <net name="iorx_tdata[27]"/>
+        <net name="iorx_tdata[26]"/>
+        <net name="iorx_tdata[25]"/>
+        <net name="iorx_tdata[24]"/>
+        <net name="iorx_tdata[23]"/>
+        <net name="iorx_tdata[22]"/>
+        <net name="iorx_tdata[21]"/>
+        <net name="iorx_tdata[20]"/>
+        <net name="iorx_tdata[19]"/>
+        <net name="iorx_tdata[18]"/>
+        <net name="iorx_tdata[17]"/>
+        <net name="iorx_tdata[16]"/>
+        <net name="iorx_tdata[15]"/>
+        <net name="iorx_tdata[14]"/>
+        <net name="iorx_tdata[13]"/>
+        <net name="iorx_tdata[12]"/>
+        <net name="iorx_tdata[11]"/>
+        <net name="iorx_tdata[10]"/>
+        <net name="iorx_tdata[9]"/>
+        <net name="iorx_tdata[8]"/>
+        <net name="iorx_tdata[7]"/>
+        <net name="iorx_tdata[6]"/>
+        <net name="iorx_tdata[5]"/>
+        <net name="iorx_tdata[4]"/>
+        <net name="iorx_tdata[3]"/>
+        <net name="iorx_tdata[2]"/>
+        <net name="iorx_tdata[1]"/>
+        <net name="iorx_tdata[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq1&apos;bX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe5[0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;bX"/>
+      </probeOptions>
+      <nets>
+        <net name="iorx_tready"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq32&apos;hXXXX_XXXX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq32&apos;hXXXX_XXXX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe3[31:0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq32&apos;hXXXX_XXXX"/>
+      </probeOptions>
+      <nets>
+        <net name="iorx_tuser[31]"/>
+        <net name="iorx_tuser[30]"/>
+        <net name="iorx_tuser[29]"/>
+        <net name="iorx_tuser[28]"/>
+        <net name="iorx_tuser[27]"/>
+        <net name="iorx_tuser[26]"/>
+        <net name="iorx_tuser[25]"/>
+        <net name="iorx_tuser[24]"/>
+        <net name="iorx_tuser[23]"/>
+        <net name="iorx_tuser[22]"/>
+        <net name="iorx_tuser[21]"/>
+        <net name="iorx_tuser[20]"/>
+        <net name="iorx_tuser[19]"/>
+        <net name="iorx_tuser[18]"/>
+        <net name="iorx_tuser[17]"/>
+        <net name="iorx_tuser[16]"/>
+        <net name="iorx_tuser[15]"/>
+        <net name="iorx_tuser[14]"/>
+        <net name="iorx_tuser[13]"/>
+        <net name="iorx_tuser[12]"/>
+        <net name="iorx_tuser[11]"/>
+        <net name="iorx_tuser[10]"/>
+        <net name="iorx_tuser[9]"/>
+        <net name="iorx_tuser[8]"/>
+        <net name="iorx_tuser[7]"/>
+        <net name="iorx_tuser[6]"/>
+        <net name="iorx_tuser[5]"/>
+        <net name="iorx_tuser[4]"/>
+        <net name="iorx_tuser[3]"/>
+        <net name="iorx_tuser[2]"/>
+        <net name="iorx_tuser[1]"/>
+        <net name="iorx_tuser[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq1&apos;bX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe7[0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;bX"/>
+      </probeOptions>
+      <nets>
+        <net name="iorx_tvalid"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq64&apos;hXXXX_XXXX_XXXX_XXXX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq64&apos;hXXXX_XXXX_XXXX_XXXX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe0[63:0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq64&apos;hXXXX_XXXX_XXXX_XXXX"/>
+      </probeOptions>
+      <nets>
+        <net name="iotx_tdata[63]"/>
+        <net name="iotx_tdata[62]"/>
+        <net name="iotx_tdata[61]"/>
+        <net name="iotx_tdata[60]"/>
+        <net name="iotx_tdata[59]"/>
+        <net name="iotx_tdata[58]"/>
+        <net name="iotx_tdata[57]"/>
+        <net name="iotx_tdata[56]"/>
+        <net name="iotx_tdata[55]"/>
+        <net name="iotx_tdata[54]"/>
+        <net name="iotx_tdata[53]"/>
+        <net name="iotx_tdata[52]"/>
+        <net name="iotx_tdata[51]"/>
+        <net name="iotx_tdata[50]"/>
+        <net name="iotx_tdata[49]"/>
+        <net name="iotx_tdata[48]"/>
+        <net name="iotx_tdata[47]"/>
+        <net name="iotx_tdata[46]"/>
+        <net name="iotx_tdata[45]"/>
+        <net name="iotx_tdata[44]"/>
+        <net name="iotx_tdata[43]"/>
+        <net name="iotx_tdata[42]"/>
+        <net name="iotx_tdata[41]"/>
+        <net name="iotx_tdata[40]"/>
+        <net name="iotx_tdata[39]"/>
+        <net name="iotx_tdata[38]"/>
+        <net name="iotx_tdata[37]"/>
+        <net name="iotx_tdata[36]"/>
+        <net name="iotx_tdata[35]"/>
+        <net name="iotx_tdata[34]"/>
+        <net name="iotx_tdata[33]"/>
+        <net name="iotx_tdata[32]"/>
+        <net name="iotx_tdata[31]"/>
+        <net name="iotx_tdata[30]"/>
+        <net name="iotx_tdata[29]"/>
+        <net name="iotx_tdata[28]"/>
+        <net name="iotx_tdata[27]"/>
+        <net name="iotx_tdata[26]"/>
+        <net name="iotx_tdata[25]"/>
+        <net name="iotx_tdata[24]"/>
+        <net name="iotx_tdata[23]"/>
+        <net name="iotx_tdata[22]"/>
+        <net name="iotx_tdata[21]"/>
+        <net name="iotx_tdata[20]"/>
+        <net name="iotx_tdata[19]"/>
+        <net name="iotx_tdata[18]"/>
+        <net name="iotx_tdata[17]"/>
+        <net name="iotx_tdata[16]"/>
+        <net name="iotx_tdata[15]"/>
+        <net name="iotx_tdata[14]"/>
+        <net name="iotx_tdata[13]"/>
+        <net name="iotx_tdata[12]"/>
+        <net name="iotx_tdata[11]"/>
+        <net name="iotx_tdata[10]"/>
+        <net name="iotx_tdata[9]"/>
+        <net name="iotx_tdata[8]"/>
+        <net name="iotx_tdata[7]"/>
+        <net name="iotx_tdata[6]"/>
+        <net name="iotx_tdata[5]"/>
+        <net name="iotx_tdata[4]"/>
+        <net name="iotx_tdata[3]"/>
+        <net name="iotx_tdata[2]"/>
+        <net name="iotx_tdata[1]"/>
+        <net name="iotx_tdata[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq1&apos;bX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe4[0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;bX"/>
+      </probeOptions>
+      <nets>
+        <net name="iotx_tready"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq32&apos;hXXXX_XXXX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq32&apos;hXXXX_XXXX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe2[31:0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq32&apos;hXXXX_XXXX"/>
+      </probeOptions>
+      <nets>
+        <net name="iotx_tuser[31]"/>
+        <net name="iotx_tuser[30]"/>
+        <net name="iotx_tuser[29]"/>
+        <net name="iotx_tuser[28]"/>
+        <net name="iotx_tuser[27]"/>
+        <net name="iotx_tuser[26]"/>
+        <net name="iotx_tuser[25]"/>
+        <net name="iotx_tuser[24]"/>
+        <net name="iotx_tuser[23]"/>
+        <net name="iotx_tuser[22]"/>
+        <net name="iotx_tuser[21]"/>
+        <net name="iotx_tuser[20]"/>
+        <net name="iotx_tuser[19]"/>
+        <net name="iotx_tuser[18]"/>
+        <net name="iotx_tuser[17]"/>
+        <net name="iotx_tuser[16]"/>
+        <net name="iotx_tuser[15]"/>
+        <net name="iotx_tuser[14]"/>
+        <net name="iotx_tuser[13]"/>
+        <net name="iotx_tuser[12]"/>
+        <net name="iotx_tuser[11]"/>
+        <net name="iotx_tuser[10]"/>
+        <net name="iotx_tuser[9]"/>
+        <net name="iotx_tuser[8]"/>
+        <net name="iotx_tuser[7]"/>
+        <net name="iotx_tuser[6]"/>
+        <net name="iotx_tuser[5]"/>
+        <net name="iotx_tuser[4]"/>
+        <net name="iotx_tuser[3]"/>
+        <net name="iotx_tuser[2]"/>
+        <net name="iotx_tuser[1]"/>
+        <net name="iotx_tuser[0]"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq1&apos;bX"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="MAP" value="probe6[0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;bX"/>
+      </probeOptions>
+      <nets>
+        <net name="iotx_tvalid"/>
+      </nets>
+    </probe>
+    <probe type="vio_input" busType="net" source="netlist" spec="VIO_INPUT_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="ACTIVITY_PERSISTENCE" value="SHORT"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_VIO" value="hw_vio_1"/>
+        <Option Id="INPUT_VALUE_RADIX" value="BINARY"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+      </probeOptions>
+      <nets>
+        <net name="link_init"/>
+      </nets>
+    </probe>
+    <probe type="vio_input" busType="net" source="netlist" spec="VIO_INPUT_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="ACTIVITY_PERSISTENCE" value="SHORT"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_VIO" value="hw_vio_1"/>
+        <Option Id="INPUT_VALUE_RADIX" value="BINARY"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+      </probeOptions>
+      <nets>
+        <net name="mode_1x"/>
+      </nets>
+    </probe>
+    <probe type="vio_input" busType="net" source="netlist" spec="VIO_INPUT_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="ACTIVITY_PERSISTENCE" value="SHORT"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_VIO" value="hw_vio_1"/>
+        <Option Id="INPUT_VALUE_RADIX" value="BINARY"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+      </probeOptions>
+      <nets>
+        <net name="port_error"/>
+      </nets>
+    </probe>
+    <probe type="vio_input" busType="net" source="netlist" spec="VIO_INPUT_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="ACTIVITY_PERSISTENCE" value="SHORT"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_VIO" value="hw_vio_1"/>
+        <Option Id="INPUT_VALUE_RADIX" value="BINARY"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+      </probeOptions>
+      <nets>
+        <net name="port_init"/>
+      </nets>
+    </probe>
+  </probeset>
+</hwsession>

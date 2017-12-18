@@ -1,0 +1,105 @@
+#-----------------------------------------------------------
+# Vivado v2016.3 (64-bit)
+# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
+# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
+# Start of session at: Fri Dec 15 15:17:04 2017
+# Process ID: 1428
+# Current directory: C:/Projects/srio_spi/srio_spi.runs/impl_1
+# Command line: vivado.exe -log top_project.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source top_project.tcl -notrace
+# Log file: C:/Projects/srio_spi/srio_spi.runs/impl_1/top_project.vdi
+# Journal file: C:/Projects/srio_spi/srio_spi.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source top_project.tcl -notrace
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Project 1-454] Reading design checkpoint 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/srio_gen2_0/srio_gen2_0.dcp' for cell 'srio_top/srio_ip'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/vio_0/vio_0.dcp' for cell 'srio_top/vio_ip'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_rx_inst/fifo_generator_rx_inst.dcp' for cell 'srio_top/srio_rx/fifo_rx_ip'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/dbg_ila/dbg_ila.dcp' for cell 'srio_top/srio_rx/ila_ip'
+CRITICAL WARNING: [Netlist 29-180] Cell 'FIFO36E2' is not a supported primitive for kintex7 part: xc7k160tffg676-2.  Instance 'spi_loader/spi_prog/FIFO36E2_inst' will be treated as a black box, not an architecture primitive [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:605]
+Resolution: Modify instantiation of primitive to match Xilinx primitive. Please review the guidelines in the Design Methodology Guide UG949 to replace this primitive with a supported primitive.
+CRITICAL WARNING: [Netlist 29-180] Cell 'STARTUPE3' is not a supported primitive for kintex7 part: xc7k160tffg676-2.  Instance 'spi_loader/spi_prog/STARTUPE3_inst' will be treated as a black box, not an architecture primitive [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:559]
+Resolution: Modify instantiation of primitive to match Xilinx primitive. Please review the guidelines in the Design Methodology Guide UG949 to replace this primitive with a supported primitive.
+INFO: [Netlist 29-17] Analyzing 688 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2016.3
+INFO: [Device 21-403] Loading part xc7k160tffg676-2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-140] Inserted 2 IBUFs to IO ports without IO buffers.
+Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/dbg_ila/ila_v6_2/constraints/ila.xdc] for cell 'srio_top/srio_rx/ila_ip/inst'
+Finished Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/dbg_ila/ila_v6_2/constraints/ila.xdc] for cell 'srio_top/srio_rx/ila_ip/inst'
+Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_rx_inst/fifo_generator_rx_inst/fifo_generator_rx_inst.xdc] for cell 'srio_top/srio_rx/fifo_rx_ip/U0'
+Finished Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_rx_inst/fifo_generator_rx_inst/fifo_generator_rx_inst.xdc] for cell 'srio_top/srio_rx/fifo_rx_ip/U0'
+Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/srio_gen2_0/srio_gen2_0_core.xdc] for cell 'srio_top/srio_ip'
+Finished Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/srio_gen2_0/srio_gen2_0_core.xdc] for cell 'srio_top/srio_ip'
+Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/vio_0/vio_0.xdc] for cell 'srio_top/vio_ip'
+Finished Parsing XDC File [c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/vio_0/vio_0.xdc] for cell 'srio_top/vio_ip'
+Parsing XDC File [C:/Projects/srio_test/srio_test/top.xdc]
+WARNING: [Vivado 12-584] No ports matched 'srio_rxp2'. [C:/Projects/srio_test/srio_test/top.xdc:41]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:41]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_rxn2'. [C:/Projects/srio_test/srio_test/top.xdc:42]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:42]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_txp2'. [C:/Projects/srio_test/srio_test/top.xdc:43]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:43]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_txn2'. [C:/Projects/srio_test/srio_test/top.xdc:44]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:44]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_rxp3'. [C:/Projects/srio_test/srio_test/top.xdc:46]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:46]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_rxn3'. [C:/Projects/srio_test/srio_test/top.xdc:47]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:47]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_txp3'. [C:/Projects/srio_test/srio_test/top.xdc:48]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:48]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'srio_txn3'. [C:/Projects/srio_test/srio_test/top.xdc:49]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:49]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+CRITICAL WARNING: [Common 17-69] Command failed: 'C8' is not a valid site or package pin name. [C:/Projects/srio_test/srio_test/top.xdc:52]
+WARNING: [Vivado 12-180] No cells matched '.*/gt_wrapper_i/gt0_gt_wrapper_i/gt.e2_i'. [C:/Projects/srio_test/srio_test/top.xdc:63]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [C:/Projects/srio_test/srio_test/top.xdc:63]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+Finished Parsing XDC File [C:/Projects/srio_test/srio_test/top.xdc]
+INFO: [Project 1-538] Using original IP XDC constraints instead of the XDC constraints in dcp 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/dbg_ila/dbg_ila.dcp'
+INFO: [Project 1-538] Using original IP XDC constraints instead of the XDC constraints in dcp 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_rx_inst/fifo_generator_rx_inst.dcp'
+INFO: [Project 1-538] Using original IP XDC constraints instead of the XDC constraints in dcp 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/srio_gen2_0/srio_gen2_0.dcp'
+INFO: [Project 1-538] Using original IP XDC constraints instead of the XDC constraints in dcp 'c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/vio_0/vio_0.dcp'
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+CRITICAL WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'FIFO36E2' instantiated as 'spi_loader/spi_prog/FIFO36E2_inst' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:605]
+CRITICAL WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'STARTUPE3' instantiated as 'spi_loader/spi_prog/STARTUPE3_inst' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:559]
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 366 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRLC32E, SRL16E): 344 instances
+  LDCP => LDCP (GND, LUT3, LUT3, LDCE, VCC): 1 instances
+  RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 17 instances
+  RAM32X1D => RAM32X1D (RAMD32, RAMD32): 4 instances
+
+link_design: Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 614.277 ; gain = 404.070
+INFO: [Vivado_Tcl 4-424] Cannot write hardware definition file as there are no IPI block design hardware handoff files present
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7k160t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7k160t'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+ERROR: [DRC 23-20] Rule violation (INBB-3) Black Box Instances - Cell 'spi_loader/spi_prog/FIFO36E2_inst' of type 'spi_loader/spi_prog/FIFO36E2_inst/FIFO36E2' has undefined contents and is considered a black box.  The contents of this cell must be defined for opt_design to complete successfully.
+ERROR: [DRC 23-20] Rule violation (INBB-3) Black Box Instances - Cell 'spi_loader/spi_prog/STARTUPE3_inst' of type 'spi_loader/spi_prog/STARTUPE3_inst/STARTUPE3' has undefined contents and is considered a black box.  The contents of this cell must be defined for opt_design to complete successfully.
+ERROR: [DRC 23-20] Rule violation (MDRV-1) Multiple Driver Nets - Net spi_loader/spi_prog/Q[0] has multiple drivers: spi_loader/spi_prog/wr_state_reg[0]/Q, spi_loader/spi_prog/wr_state_reg[0]__0/Q.
+ERROR: [DRC 23-20] Rule violation (MDRV-1) Multiple Driver Nets - Net spi_loader/spi_prog/Q[1] has multiple drivers: spi_loader/spi_prog/wr_state_reg[1]/Q, spi_loader/spi_prog/wr_state_reg[1]__0/Q.
+ERROR: [DRC 23-20] Rule violation (MDRV-1) Multiple Driver Nets - Net spi_loader/spi_prog/wr_state[2] has multiple drivers: spi_loader/spi_prog/wr_state_reg[2]/Q, spi_loader/spi_prog/wr_state_reg[2]__0/Q.
+INFO: [Project 1-461] DRC finished with 5 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+ERROR: [Vivado_Tcl 4-78] Error(s) found during DRC. Opt_design not run.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.962 . Memory (MB): peak = 614.430 ; gain = 0.152
+INFO: [Common 17-83] Releasing license: Implementation
+22 Infos, 9 Warnings, 14 Critical Warnings and 6 Errors encountered.
+opt_design failed
+ERROR: [Common 17-39] 'opt_design' failed due to earlier errors.
+
+INFO: [Common 17-206] Exiting Vivado at Fri Dec 15 15:17:24 2017...

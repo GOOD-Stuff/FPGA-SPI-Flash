@@ -1,0 +1,11 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  "../../../srio_test.srcs/sources_1/ip/fifo_generator_rx_inst/sim/fifo_generator_rx_inst.v"
+verilog xil_defaultlib  "../../../srio_test.srcs/sources_1/ip/dbg_ila/sim/dbg_ila.v"
+verilog xil_defaultlib  "../../../srio_test.srcs/sources_1/imports/new/srio_response.v"
+verilog xil_defaultlib  "../../../srio_test.srcs/sim_1/new/srio_testbench.v"
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

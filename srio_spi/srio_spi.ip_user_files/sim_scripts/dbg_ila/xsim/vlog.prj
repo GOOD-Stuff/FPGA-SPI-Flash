@@ -1,0 +1,5 @@
+verilog xil_defaultlib "../../../../srio_spi.srcs/sources_1/ip/dbg_ila/sim/dbg_ila.v" --include "../../../../srio_spi.srcs/sources_1/ip/dbg_ila/hdl/verilog"
+
+verilog xil_defaultlib "glbl.v"
+
+nosort
