@@ -2,8 +2,8 @@
 # Vivado v2016.3 (64-bit)
 # SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
 # IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
-# Start of session at: Fri Dec 15 12:31:12 2017
-# Process ID: 3488
+# Start of session at: Tue Dec 19 17:43:13 2017
+# Process ID: 444
 # Current directory: C:/Projects/srio_spi/srio_spi.runs/synth_4
 # Command line: vivado.exe -log top_project.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_project.tcl
 # Log file: C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.vds
@@ -15,84 +15,54 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 3992 
+INFO: Helper process launched with PID 4536 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 289.074 ; gain = 78.867
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 287.891 ; gain = 78.000
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'top_project' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
-INFO: [Synth 8-638] synthesizing module 'srio_example_test' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/srio_example_test.v:23]
-INFO: [Synth 8-638] synthesizing module 'vio_0' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/vio_0_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'vio_0' (1#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/vio_0_stub.v:6]
-INFO: [Synth 8-638] synthesizing module 'srio_response' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:24]
-	Parameter NREAD bound to: 4'b0010 
-	Parameter NWRITE bound to: 4'b0101 
-	Parameter SWRITE bound to: 4'b0110 
-	Parameter DOORB bound to: 4'b1010 
-	Parameter MESSG bound to: 4'b1011 
-	Parameter RESP bound to: 4'b1101 
-	Parameter TNWR bound to: 4'b0100 
-	Parameter TNWR_R bound to: 4'b0101 
-	Parameter TNRD bound to: 4'b0100 
-	Parameter TNDATA bound to: 4'b0000 
-	Parameter MSGRSP bound to: 4'b0001 
-	Parameter TWDATA bound to: 4'b1000 
-	Parameter RESERVE bound to: 1'b0 
-	Parameter ERROR bound to: 1'b1 
-	Parameter IDLE_S bound to: 3'b000 
-	Parameter WAIT_REQ_S bound to: 3'b001 
-	Parameter SEND_HD_S bound to: 3'b010 
-	Parameter SEND_DT_S bound to: 3'b100 
-WARNING: [Synth 8-567] referenced signal 'response_ftype' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:396]
-WARNING: [Synth 8-567] referenced signal 'count_req' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:396]
-WARNING: [Synth 8-567] referenced signal 'response_ftype' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-567] referenced signal 'axis_iotx_tready' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-567] referenced signal 'response_tid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-567] referenced signal 'response_prio' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-567] referenced signal 'array_tid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-567] referenced signal 'iter_output' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-567] referenced signal 'dout_fifo' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:433]
-WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:479]
-INFO: [Synth 8-638] synthesizing module 'dbg_ila' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/dbg_ila_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'dbg_ila' (2#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/dbg_ila_stub.v:6]
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_rx_inst' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/fifo_generator_rx_inst_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_rx_inst' (3#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/fifo_generator_rx_inst_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'srio_response' (4#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:24]
-INFO: [Synth 8-638] synthesizing module 'srio_gen2_0' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/srio_gen2_0_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'srio_gen2_0' (5#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/realtime/srio_gen2_0_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'srio_example_test' (6#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/srio_example_test.v:23]
-WARNING: [Synth 8-350] instance 'srio_top' of module 'srio_example_test' requires 12 connections, but only 11 given [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:49]
+	Parameter RES_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-638] synthesizing module 'IBUFDS' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:14161]
+	Parameter CAPACITANCE bound to: DONT_CARE - type: string 
+	Parameter DIFF_TERM bound to: FALSE - type: string 
+	Parameter DQS_BIAS bound to: FALSE - type: string 
+	Parameter IBUF_DELAY_VALUE bound to: 0 - type: string 
+	Parameter IBUF_LOW_PWR bound to: TRUE - type: string 
+	Parameter IFD_DELAY_VALUE bound to: AUTO - type: string 
+	Parameter IOSTANDARD bound to: LVDS - type: string 
+INFO: [Synth 8-256] done synthesizing module 'IBUFDS' (1#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:14161]
 INFO: [Synth 8-638] synthesizing module 'spi_loader_top' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:23]
 	Parameter IDLE_S bound to: 2'b00 
 	Parameter ERASE_S bound to: 2'b01 
 	Parameter ALIGN_S bound to: 2'b10 
 	Parameter DATA_S bound to: 2'b11 
-WARNING: [Synth 8-567] referenced signal 'erasing_spi' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:71]
-WARNING: [Synth 8-567] referenced signal 'counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:71]
-INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:99]
-WARNING: [Synth 8-567] referenced signal 'counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:98]
+INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:109]
+WARNING: [Synth 8-567] referenced signal 'counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:108]
+WARNING: [Synth 8-567] referenced signal 'erasing_spi' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:108]
+WARNING: [Synth 8-567] referenced signal 'data_counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:108]
 INFO: [Synth 8-638] synthesizing module 'spi_flash_programmer' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:22]
-	Parameter SectorSize bound to: 65536 - type: integer 
-	Parameter SubSectorSize bound to: 4096 - type: integer 
-	Parameter PageSize bound to: 256 - type: integer 
-	Parameter SectorCount bound to: 256 - type: integer 
-	Parameter PageCount bound to: 65536 - type: integer 
-	Parameter StartAddr bound to: 0 - type: integer 
-	Parameter EndAddr bound to: 16777215 - type: integer 
-	Parameter IDcode25NQ128 bound to: 23'b01000001011101100011000 
-	Parameter CmdREAD bound to: 8'b00000011 
-	Parameter CmdFastREAD bound to: 8'b00001011 
-	Parameter CmdRDID bound to: 8'b10011111 
-	Parameter CmdFlagStat bound to: 8'b01110000 
-	Parameter CmdClearStat bound to: 8'b01010000 
-	Parameter CmdReadStat bound to: 8'b00000101 
-	Parameter CmdWE bound to: 8'b00000110 
-	Parameter CmdWD bound to: 8'b00000100 
-	Parameter CmdSE bound to: 8'b11011000 
-	Parameter CmdSSE bound to: 8'b00100000 
-	Parameter CmdBE bound to: 8'b11000111 
-	Parameter CmdPP bound to: 8'b00000010 
-	Parameter CmdPPDual bound to: 8'b10100010 
-	Parameter CmdPPQuad bound to: 8'b00110010 
+	Parameter WIDTH bound to: 24 - type: integer 
+	Parameter SECTOR_SIZE bound to: 65536 - type: integer 
+	Parameter SUBSECTOR_SIZE bound to: 4096 - type: integer 
+	Parameter PAGE_SIZE bound to: 256 - type: integer 
+	Parameter SECTOR_COUNT bound to: 256 - type: integer 
+	Parameter PAGE_COUNT bound to: 65536 - type: integer 
+	Parameter START_ADDR bound to: 0 - type: integer 
+	Parameter END_ADDR bound to: 16777215 - type: integer 
+	Parameter IDCODE_25NQ128 bound to: 24'b001000001011101100011000 
+	Parameter CMD_READ bound to: 8'b00000011 
+	Parameter CMD_FASTREAD bound to: 8'b00001011 
+	Parameter CMD_RDID bound to: 8'b10011111 
+	Parameter CMD_FLAGSTAT bound to: 8'b01110000 
+	Parameter CMD_CLEARSTAT bound to: 8'b01010000 
+	Parameter CMD_READSTAT bound to: 8'b00000101 
+	Parameter CMD_WE bound to: 8'b00000110 
+	Parameter CMD_WD bound to: 8'b00000100 
+	Parameter CMD_SE bound to: 8'b11011000 
+	Parameter CMD_SSE bound to: 8'b00100000 
+	Parameter CMD_BE bound to: 8'b11000111 
+	Parameter CMD_PP bound to: 8'b00000010 
+	Parameter CMD_PPDUAL bound to: 8'b10100010 
+	Parameter CMD_PPQUAD bound to: 8'b00110010 
 	Parameter WR_IDLE_S bound to: 3'b000 
 	Parameter WR_ASSCS1_S bound to: 3'b001 
 	Parameter WR_WRCMD_S bound to: 3'b010 
@@ -110,57 +80,59 @@ INFO: [Synth 8-638] synthesizing module 'spi_flash_programmer' [C:/Projects/srio
 	Parameter ER_ASSCS3_S bound to: 4'b0110 
 	Parameter ER_ASSCS4_S bound to: 4'b0111 
 	Parameter ER_RDSTAT_S bound to: 4'b1000 
-WARNING: [Synth 8-567] referenced signal 'erase_inprogress' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:162]
-WARNING: [Synth 8-567] referenced signal 'er_cmd_reg' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:162]
-WARNING: [Synth 8-567] referenced signal 'SPI_MOSI_int' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:162]
-WARNING: [Synth 8-567] referenced signal 'erase_inprogress' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:169]
-WARNING: [Synth 8-567] referenced signal 'er_SpiCsB' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:169]
-WARNING: [Synth 8-567] referenced signal 'SPI_CsB' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:169]
-WARNING: [Synth 8-567] referenced signal 'sector_count_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'sector_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'start_addr_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'start_addr' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'erase_start' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_cmd_counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_cmd_reg' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_current_sector_addr' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_data_valid_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_rd_data' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'SPI_MISO' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_status' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-WARNING: [Synth 8-567] referenced signal 'er_sector_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:255]
-INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:362]
-WARNING: [Synth 8-567] referenced signal 'page_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:359]
-INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:427]
-WARNING: [Synth 8-567] referenced signal 'wr_cmd_reg' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'start_addr_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'start_addr' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'page_count_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'page_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'synced_fifo_almostfull' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'wr_cmd_counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'page_count_int' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'wr_current_addr' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'fifo_dout' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'wrdata_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'log_rst' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'wr_data_valid_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'wr_rd_data' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'SPI_MISO' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'status_data_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
-WARNING: [Synth 8-567] referenced signal 'spi_status' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:426]
+WARNING: [Synth 8-567] referenced signal 'SECTOR_COUNT_VALID_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'SECTOR_COUNT_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'START_ADDR_VALID_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'START_ADDR_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'erase_start' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_cmd_counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_cmd_reg' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_current_sector_addr' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_data_valid_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_rd_data' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'sSpi_Miso' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_status' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+WARNING: [Synth 8-567] referenced signal 'er_sector_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
+INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:368]
+INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:431]
+WARNING: [Synth 8-567] referenced signal 'wr_cmd_reg' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'START_ADDR_VALID_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'START_ADDR_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'PAGE_COUNT_VALID_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'PAGE_COUNT_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'synced_fifo_almostfull' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'wr_cmd_counter' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'page_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'wr_current_addr' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'fifo_dout' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'wr_data_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'LOG_RST_I' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'wr_data_valid_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'wr_rd_data' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'sSpi_Miso' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'status_data_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+WARNING: [Synth 8-567] referenced signal 'spi_status' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
+INFO: [Synth 8-638] synthesizing module 'negedge_flop' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/negedge_flop.v:23]
+INFO: [Synth 8-256] done synthesizing module 'negedge_flop' (2#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/negedge_flop.v:23]
 INFO: [Synth 8-638] synthesizing module 'oneshot' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/oneshot.vhd:16]
-INFO: [Synth 8-256] done synthesizing module 'oneshot' (7#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/oneshot.vhd:16]
-INFO: [Synth 8-638] synthesizing module 'STARTUPE3' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43532]
+INFO: [Synth 8-256] done synthesizing module 'oneshot' (3#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/oneshot.vhd:16]
+INFO: [Synth 8-638] synthesizing module 'spi_serdes' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v:23]
+	Parameter C_SHIFT_COUNT_INIT bound to: 9'b000000001 
+INFO: [Synth 8-256] done synthesizing module 'spi_serdes' (4#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v:23]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:584]
+INFO: [Synth 8-638] synthesizing module 'STARTUPE2' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43498]
 	Parameter PROG_USR bound to: FALSE - type: string 
 	Parameter SIM_CCLK_FREQ bound to: 0.000000 - type: float 
-INFO: [Synth 8-256] done synthesizing module 'STARTUPE3' (8#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43532]
-INFO: [Synth 8-638] synthesizing module 'FIFO36E2' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:4569]
-	Parameter CASCADE_ORDER bound to: NONE - type: string 
-	Parameter CLOCK_DOMAINS bound to: INDEPENDENT - type: string 
-	Parameter EN_ECC_PIPE bound to: FALSE - type: string 
+INFO: [Synth 8-256] done synthesizing module 'STARTUPE2' (5#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43498]
+INFO: [Synth 8-638] synthesizing module 'FIFO36E1' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:4497]
+	Parameter ALMOST_EMPTY_OFFSET bound to: 5 - type: integer 
+	Parameter ALMOST_FULL_OFFSET bound to: 65 - type: integer 
+	Parameter DATA_WIDTH bound to: 36 - type: integer 
+	Parameter DO_REG bound to: 1 - type: integer 
 	Parameter EN_ECC_READ bound to: FALSE - type: string 
 	Parameter EN_ECC_WRITE bound to: FALSE - type: string 
+	Parameter EN_SYN bound to: FALSE - type: string 
+	Parameter FIFO_MODE bound to: FIFO36 - type: string 
 	Parameter FIRST_WORD_FALL_THROUGH bound to: FALSE - type: string 
 	Parameter INIT bound to: 72'b000000000000000000000000000000000000000000000000000000000000000000000000 
 	Parameter IS_RDCLK_INVERTED bound to: 1'b0 
@@ -169,61 +141,19 @@ INFO: [Synth 8-638] synthesizing module 'FIFO36E2' [C:/Xilinx/Vivado/2016.3/scri
 	Parameter IS_RST_INVERTED bound to: 1'b0 
 	Parameter IS_WRCLK_INVERTED bound to: 1'b0 
 	Parameter IS_WREN_INVERTED bound to: 1'b0 
-	Parameter PROG_EMPTY_THRESH bound to: 2 - type: integer 
-	Parameter PROG_FULL_THRESH bound to: 65 - type: integer 
-	Parameter RDCOUNT_TYPE bound to: RAW_PNTR - type: string 
-	Parameter READ_WIDTH bound to: 4 - type: integer 
-	Parameter REGISTER_MODE bound to: REGISTERED - type: string 
-	Parameter RSTREG_PRIORITY bound to: RSTREG - type: string 
-	Parameter SLEEP_ASYNC bound to: FALSE - type: string 
+	Parameter SIM_DEVICE bound to: 7SERIES - type: string 
 	Parameter SRVAL bound to: 72'b000000000000000000000000000000000000000000000000000000000000000000000000 
-	Parameter WRCOUNT_TYPE bound to: RAW_PNTR - type: string 
-	Parameter WRITE_WIDTH bound to: 4 - type: integer 
-INFO: [Synth 8-256] done synthesizing module 'FIFO36E2' (9#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:4569]
-WARNING: [Synth 8-3936] Found unconnected internal register 'synced_erase_reg' and it is trimmed from '2' to '1' bits. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:178]
-WARNING: [Synth 8-3848] Net fifo_wrerr in module/entity spi_flash_programmer does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:37]
-WARNING: [Synth 8-3848] Net SPI_CsB_N in module/entity spi_flash_programmer does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:136]
-INFO: [Synth 8-256] done synthesizing module 'spi_flash_programmer' (10#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:22]
-WARNING: [Synth 8-3848] Net start_addr in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:42]
-WARNING: [Synth 8-3848] Net start_addr_valid in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:43]
-WARNING: [Synth 8-3848] Net page_count in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:44]
-WARNING: [Synth 8-3848] Net page_count_valid in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:45]
-WARNING: [Synth 8-3848] Net sector_count in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:46]
-WARNING: [Synth 8-3848] Net sector_count_valid in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:47]
-WARNING: [Synth 8-3848] Net counter in module/entity spi_loader_top does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:40]
-INFO: [Synth 8-256] done synthesizing module 'spi_loader_top' (11#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:23]
-WARNING: [Synth 8-3848] Net DQ0 in module/entity top_project does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:41]
-INFO: [Synth 8-256] done synthesizing module 'top_project' (12#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
-WARNING: [Synth 8-3331] design spi_flash_programmer has unconnected port fifo_wrerr
-WARNING: [Synth 8-3331] design srio_response has unconnected port id_override
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[7]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[6]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[5]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[4]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[3]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[2]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[1]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[0]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[15]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[14]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[13]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[12]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[11]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[10]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[9]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[8]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[7]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[6]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[5]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[4]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[3]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[2]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[1]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[0]
-WARNING: [Synth 8-3331] design top_project has unconnected port DQ0
-WARNING: [Synth 8-3331] design top_project has unconnected port DQ1
+INFO: [Synth 8-256] done synthesizing module 'FIFO36E1' (6#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:4497]
+WARNING: [Synth 8-3848] Net FIFO_WRERR_O in module/entity spi_flash_programmer does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:37]
+WARNING: [Synth 8-3848] Net di_out in module/entity spi_flash_programmer does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:141]
+WARNING: [Synth 8-3848] Net fifo_wren in module/entity spi_flash_programmer does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:640]
+INFO: [Synth 8-256] done synthesizing module 'spi_flash_programmer' (7#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:22]
+INFO: [Synth 8-256] done synthesizing module 'spi_loader_top' (8#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:23]
+INFO: [Synth 8-256] done synthesizing module 'top_project' (9#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
+WARNING: [Synth 8-3331] design spi_flash_programmer has unconnected port FIFO_WRERR_O
+WARNING: [Synth 8-3331] design spi_flash_programmer has unconnected port FIFO_WREN_I
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 327.277 ; gain = 117.070
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 324.273 ; gain = 114.383
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -232,141 +162,18 @@ Report Check Netlist:
 +------+------------------+-------+---------+-------+------------------+
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[31] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[30] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[29] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[28] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[27] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[26] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[25] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[24] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[23] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[22] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[21] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[20] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[19] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[18] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[17] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[16] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[15] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[14] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[13] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[12] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[11] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[10] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[9] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[8] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[7] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[6] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[5] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[4] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[3] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[2] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[1] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr[0] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:start_addr_valid to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[16] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[15] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[14] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[13] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[12] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[11] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[10] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[9] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[8] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[7] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[6] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[5] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[4] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[3] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[2] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[1] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count[0] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:page_count_valid to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[13] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[12] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[11] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[10] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[9] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[8] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[7] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[6] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[5] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[4] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[3] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[2] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[1] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count[0] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_prog:sector_count_valid to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:131]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[31] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[30] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[29] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[28] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[27] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[26] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[25] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[24] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[23] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[22] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[21] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[20] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[19] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[18] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[17] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[16] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[15] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[14] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[13] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[12] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[11] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[10] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[9] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[8] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[7] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[6] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[5] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[4] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[3] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[2] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[1] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:data_to_prog[0] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 327.277 ; gain = 117.070
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 324.273 ; gain = 114.383
 ---------------------------------------------------------------------------------
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'FIFO36E2' instantiated as 'spi_loader/spi_prog/FIFO36E2_inst' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:605]
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'STARTUPE3' instantiated as 'spi_loader/spi_prog/STARTUPE3_inst' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:559]
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'dbg_ila' instantiated as 'srio_top/srio_rx/ila_ip' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:479]
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'fifo_generator_rx_inst' instantiated as 'srio_top/srio_rx/fifo_rx_ip' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:526]
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'srio_gen2_0' instantiated as 'srio_top/srio_ip' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/srio_example_test.v:191]
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'vio_0' instantiated as 'srio_top/vio_ip' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/srio_example_test.v:134]
-CRITICAL WARNING: [Netlist 29-180] Cell 'STARTUPE3' is not a supported primitive for kintex7 part: xc7k160tffg676-2.  Instance 'spi_loader/spi_prog/STARTUPE3_inst' will be treated as a black box, not an architecture primitive [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:559]
-Resolution: Modify instantiation of primitive to match Xilinx primitive. Please review the guidelines in the Design Methodology Guide UG949 to replace this primitive with a supported primitive.
-CRITICAL WARNING: [Netlist 29-180] Cell 'FIFO36E2' is not a supported primitive for kintex7 part: xc7k160tffg676-2.  Instance 'spi_loader/spi_prog/FIFO36E2_inst' will be treated as a black box, not an architecture primitive [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:605]
-Resolution: Modify instantiation of primitive to match Xilinx primitive. Please review the guidelines in the Design Methodology Guide UG949 to replace this primitive with a supported primitive.
+INFO: [Netlist 29-17] Analyzing 3 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Device 21-403] Loading part xc7k160tffg676-2
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
-Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp/dbg_ila_in_context.xdc] for cell 'srio_top/srio_rx/ila_ip'
-Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp/dbg_ila_in_context.xdc] for cell 'srio_top/srio_rx/ila_ip'
-Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_2/fifo_generator_rx_inst_in_context.xdc] for cell 'srio_top/srio_rx/fifo_rx_ip'
-Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_2/fifo_generator_rx_inst_in_context.xdc] for cell 'srio_top/srio_rx/fifo_rx_ip'
-Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_3/srio_gen2_0_in_context.xdc] for cell 'srio_top/srio_ip'
-Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_3/srio_gen2_0_in_context.xdc] for cell 'srio_top/srio_ip'
-Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_4/vio_0_in_context.xdc] for cell 'srio_top/vio_ip'
-Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_4/vio_0_in_context.xdc] for cell 'srio_top/vio_ip'
 Parsing XDC File [C:/Projects/srio_test/srio_test/top.xdc]
-WARNING: [Vivado 12-584] No ports matched 'srio_rxp2'. [C:/Projects/srio_test/srio_test/top.xdc:41]
-WARNING: [Vivado 12-584] No ports matched 'srio_rxn2'. [C:/Projects/srio_test/srio_test/top.xdc:42]
-WARNING: [Vivado 12-584] No ports matched 'srio_txp2'. [C:/Projects/srio_test/srio_test/top.xdc:43]
-WARNING: [Vivado 12-584] No ports matched 'srio_txn2'. [C:/Projects/srio_test/srio_test/top.xdc:44]
-WARNING: [Vivado 12-584] No ports matched 'srio_rxp3'. [C:/Projects/srio_test/srio_test/top.xdc:46]
-WARNING: [Vivado 12-584] No ports matched 'srio_rxn3'. [C:/Projects/srio_test/srio_test/top.xdc:47]
-WARNING: [Vivado 12-584] No ports matched 'srio_txp3'. [C:/Projects/srio_test/srio_test/top.xdc:48]
-WARNING: [Vivado 12-584] No ports matched 'srio_txn3'. [C:/Projects/srio_test/srio_test/top.xdc:49]
 Finished Parsing XDC File [C:/Projects/srio_test/srio_test/top.xdc]
-WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [C:/Projects/srio_test/srio_test/top.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/top_project_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Projects/srio_test/srio_test/top.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_project_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/top_project_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
@@ -374,44 +181,23 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 655.992 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 605.570 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:15 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tffg676-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:15 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
-Applied set_property IO_BUFFER_TYPE = NONE for sys_clkn. (constraint file  C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_3/srio_gen2_0_in_context.xdc, line 7).
-Applied set_property CLOCK_BUFFER_TYPE = NONE for sys_clkn. (constraint file  C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_3/srio_gen2_0_in_context.xdc, line 8).
-Applied set_property IO_BUFFER_TYPE = NONE for sys_clkp. (constraint file  C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_3/srio_gen2_0_in_context.xdc, line 9).
-Applied set_property CLOCK_BUFFER_TYPE = NONE for sys_clkp. (constraint file  C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3488-vldmr-PC/dcp_3/srio_gen2_0_in_context.xdc, line 10).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:00:15 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-5544] ROM "array_tid_reg[15]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[14]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[13]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[12]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[11]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[10]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[9]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[8]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[7]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[6]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[5]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[4]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[3]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[2]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[1]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "array_tid_reg[0]" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "next_state" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "er_sector_count" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "erase_inprogress" won't be mapped to RAM because it is too sparse
@@ -423,36 +209,34 @@ INFO: [Synth 8-5544] ROM "status_data_valid" won't be mapped to Block RAM becaus
 INFO: [Synth 8-5546] ROM "next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "start_erase" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "fifo_wren" won't be mapped to RAM because it is too sparse
-WARNING: [Synth 8-327] inferring latch for variable 'response_tlast_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:155]
-WARNING: [Synth 8-327] inferring latch for variable 'axis_iotx_tdata_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:436]
-WARNING: [Synth 8-327] inferring latch for variable 'only_header_sent_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/imports/new/srio_response.v:442]
-WARNING: [Synth 8-327] inferring latch for variable 'write_done_int_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:158]
-WARNING: [Synth 8-327] inferring latch for variable 'erase_inprogress_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:264]
-WARNING: [Synth 8-327] inferring latch for variable 'SPI_CsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:430]
-WARNING: [Synth 8-327] inferring latch for variable 'er_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:269]
-WARNING: [Synth 8-327] inferring latch for variable 'fifo_rden_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:440]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_state_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:362]
-WARNING: [Synth 8-327] inferring latch for variable 'page_count_int_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:433]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_cmd_counter_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:437]
-WARNING: [Synth 8-327] inferring latch for variable 'er_cmd_counter_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:262]
-WARNING: [Synth 8-327] inferring latch for variable 'er_sector_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:258]
-WARNING: [Synth 8-327] inferring latch for variable 'er_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:285]
-WARNING: [Synth 8-327] inferring latch for variable 'er_data_valid_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:261]
-WARNING: [Synth 8-327] inferring latch for variable 'wrdata_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:441]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_current_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:432]
-WARNING: [Synth 8-327] inferring latch for variable 'spi_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:525]
-WARNING: [Synth 8-327] inferring latch for variable 'er_rd_data_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:263]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_rd_data_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:438]
-WARNING: [Synth 8-327] inferring latch for variable 'status_data_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:522]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_data_valid_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:436]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:429]
-WARNING: [Synth 8-327] inferring latch for variable 'er_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:275]
-WARNING: [Synth 8-327] inferring latch for variable 'dopin_ts_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:435]
-WARNING: [Synth 8-327] inferring latch for variable 'er_current_sector_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:259]
-WARNING: [Synth 8-327] inferring latch for variable 'fifo_wren_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:118]
-WARNING: [Synth 8-327] inferring latch for variable 'start_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:105]
+WARNING: [Synth 8-327] inferring latch for variable 'write_done_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:164]
+WARNING: [Synth 8-327] inferring latch for variable 'erase_inprogress_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:269]
+WARNING: [Synth 8-327] inferring latch for variable 'fifo_rden_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:444]
+WARNING: [Synth 8-327] inferring latch for variable 'page_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:437]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_cmd_counter_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:441]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_current_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:436]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_data_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:445]
+WARNING: [Synth 8-327] inferring latch for variable 'spi_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:529]
+WARNING: [Synth 8-327] inferring latch for variable 'er_cmd_counter_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:267]
+WARNING: [Synth 8-327] inferring latch for variable 'er_sector_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:263]
+WARNING: [Synth 8-327] inferring latch for variable 'er_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:290]
+WARNING: [Synth 8-327] inferring latch for variable 'er_data_valid_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:266]
+WARNING: [Synth 8-327] inferring latch for variable 'SPI_CsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:434]
+WARNING: [Synth 8-327] inferring latch for variable 'er_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:274]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:433]
+WARNING: [Synth 8-327] inferring latch for variable 'er_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:280]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_rd_data_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:442]
+WARNING: [Synth 8-327] inferring latch for variable 'status_data_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:526]
+WARNING: [Synth 8-327] inferring latch for variable 'er_rd_data_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:268]
+WARNING: [Synth 8-327] inferring latch for variable 'er_current_sector_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:264]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_data_valid_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:440]
+WARNING: [Synth 8-327] inferring latch for variable 'sector_count_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:112]
+WARNING: [Synth 8-327] inferring latch for variable 'fifo_wren_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:137]
+WARNING: [Synth 8-327] inferring latch for variable 'start_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:111]
+WARNING: [Synth 8-327] inferring latch for variable 'counter_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:119]
+WARNING: [Synth 8-327] inferring latch for variable 'data_counter_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:135]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -465,59 +249,47 @@ Start RTL Component Statistics
 ---------------------------------------------------------------------------------
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input     64 Bit       Adders := 2     
-	   2 Input     32 Bit       Adders := 3     
+	   2 Input     24 Bit       Adders := 2     
 	   2 Input     17 Bit       Adders := 1     
-	   2 Input     16 Bit       Adders := 1     
 	   2 Input     14 Bit       Adders := 1     
-	   2 Input      9 Bit       Adders := 1     
-	   2 Input      8 Bit       Adders := 1     
 	   2 Input      6 Bit       Adders := 2     
-	   2 Input      4 Bit       Adders := 2     
+	   2 Input      5 Bit       Adders := 2     
 	   2 Input      3 Bit       Adders := 3     
-	   2 Input      2 Bit       Adders := 2     
 +---Registers : 
-	               64 Bit    Registers := 2     
-	               16 Bit    Registers := 1     
 	                9 Bit    Registers := 1     
-	                8 Bit    Registers := 19    
-	                4 Bit    Registers := 5     
+	                8 Bit    Registers := 1     
+	                4 Bit    Registers := 2     
 	                3 Bit    Registers := 1     
 	                2 Bit    Registers := 2     
-	                1 Bit    Registers := 7     
+	                1 Bit    Registers := 5     
 +---Muxes : 
-	   5 Input     64 Bit        Muxes := 1     
-	   2 Input     64 Bit        Muxes := 2     
-	   8 Input     40 Bit        Muxes := 1     
-	   2 Input     40 Bit        Muxes := 6     
-	   6 Input     40 Bit        Muxes := 1     
 	   8 Input     32 Bit        Muxes := 1     
-	  10 Input     32 Bit        Muxes := 1     
+	   2 Input     32 Bit        Muxes := 6     
+	   6 Input     32 Bit        Muxes := 1     
+	   8 Input     24 Bit        Muxes := 1     
+	  10 Input     24 Bit        Muxes := 1     
 	   8 Input     17 Bit        Muxes := 1     
 	  10 Input     14 Bit        Muxes := 1     
-	   2 Input      9 Bit        Muxes := 1     
-	   2 Input      8 Bit        Muxes := 19    
+	   2 Input      8 Bit        Muxes := 1     
 	   8 Input      6 Bit        Muxes := 1     
 	   2 Input      6 Bit        Muxes := 4     
 	  10 Input      6 Bit        Muxes := 1     
-	   2 Input      4 Bit        Muxes := 5     
-	   8 Input      4 Bit        Muxes := 1     
-	   2 Input      3 Bit        Muxes := 10    
-	   6 Input      3 Bit        Muxes := 1     
-	  10 Input      3 Bit        Muxes := 2     
+	   2 Input      4 Bit        Muxes := 2     
+	   2 Input      3 Bit        Muxes := 8     
 	   8 Input      3 Bit        Muxes := 2     
-	   2 Input      2 Bit        Muxes := 8     
+	  10 Input      3 Bit        Muxes := 2     
 	   3 Input      2 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 2     
 	  10 Input      2 Bit        Muxes := 2     
 	   8 Input      2 Bit        Muxes := 2     
-	   5 Input      2 Bit        Muxes := 1     
-	   2 Input      1 Bit        Muxes := 42    
-	   5 Input      1 Bit        Muxes := 3     
-	   8 Input      1 Bit        Muxes := 13    
+	   7 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 22    
+	   8 Input      1 Bit        Muxes := 11    
 	  10 Input      1 Bit        Muxes := 10    
 	   9 Input      1 Bit        Muxes := 1     
 	   3 Input      1 Bit        Muxes := 2     
-	   4 Input      1 Bit        Muxes := 2     
+	   4 Input      1 Bit        Muxes := 5     
+	   5 Input      1 Bit        Muxes := 1     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -525,85 +297,71 @@ Finished RTL Component Statistics
 Start RTL Hierarchical Component Statistics 
 ---------------------------------------------------------------------------------
 Hierarchical RTL Component report 
-Module srio_response 
+Module top_project 
 Detailed RTL Component Info : 
-+---Adders : 
-	   2 Input     64 Bit       Adders := 2     
-	   2 Input     32 Bit       Adders := 1     
-	   2 Input     16 Bit       Adders := 1     
-	   2 Input      9 Bit       Adders := 1     
-	   2 Input      8 Bit       Adders := 1     
-	   2 Input      4 Bit       Adders := 2     
-	   2 Input      2 Bit       Adders := 2     
 +---Registers : 
-	               64 Bit    Registers := 2     
-	               16 Bit    Registers := 1     
-	                9 Bit    Registers := 1     
-	                8 Bit    Registers := 19    
-	                4 Bit    Registers := 4     
-	                3 Bit    Registers := 1     
-	                1 Bit    Registers := 4     
-+---Muxes : 
-	   5 Input     64 Bit        Muxes := 1     
-	   2 Input     64 Bit        Muxes := 2     
-	   2 Input      9 Bit        Muxes := 1     
-	   2 Input      8 Bit        Muxes := 19    
-	   2 Input      4 Bit        Muxes := 3     
-	   2 Input      3 Bit        Muxes := 1     
-	   6 Input      3 Bit        Muxes := 1     
-	   2 Input      2 Bit        Muxes := 5     
-	   2 Input      1 Bit        Muxes := 21    
-	   5 Input      1 Bit        Muxes := 3     
+	                4 Bit    Registers := 1     
+	                1 Bit    Registers := 1     
 Module oneshot 
 Detailed RTL Component Info : 
 +---Registers : 
 	                1 Bit    Registers := 2     
+Module spi_serdes 
+Detailed RTL Component Info : 
++---Registers : 
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 1     
++---Muxes : 
+	   2 Input      8 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
 Module spi_flash_programmer 
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input     32 Bit       Adders := 2     
+	   2 Input     24 Bit       Adders := 2     
 	   2 Input     17 Bit       Adders := 1     
 	   2 Input     14 Bit       Adders := 1     
 	   2 Input      6 Bit       Adders := 2     
 	   2 Input      3 Bit       Adders := 3     
 +---Registers : 
 	                4 Bit    Registers := 1     
+	                3 Bit    Registers := 1     
 	                2 Bit    Registers := 1     
-	                1 Bit    Registers := 1     
+	                1 Bit    Registers := 2     
 +---Muxes : 
-	   8 Input     40 Bit        Muxes := 1     
-	   2 Input     40 Bit        Muxes := 6     
-	   6 Input     40 Bit        Muxes := 1     
 	   8 Input     32 Bit        Muxes := 1     
-	  10 Input     32 Bit        Muxes := 1     
+	   2 Input     32 Bit        Muxes := 6     
+	   6 Input     32 Bit        Muxes := 1     
+	   8 Input     24 Bit        Muxes := 1     
+	  10 Input     24 Bit        Muxes := 1     
 	   8 Input     17 Bit        Muxes := 1     
 	  10 Input     14 Bit        Muxes := 1     
 	   8 Input      6 Bit        Muxes := 1     
 	   2 Input      6 Bit        Muxes := 4     
 	  10 Input      6 Bit        Muxes := 1     
 	   2 Input      4 Bit        Muxes := 2     
-	   8 Input      4 Bit        Muxes := 1     
-	   2 Input      3 Bit        Muxes := 9     
-	  10 Input      3 Bit        Muxes := 2     
+	   2 Input      3 Bit        Muxes := 8     
 	   8 Input      3 Bit        Muxes := 2     
+	  10 Input      3 Bit        Muxes := 2     
 	   3 Input      2 Bit        Muxes := 1     
 	   2 Input      2 Bit        Muxes := 2     
 	  10 Input      2 Bit        Muxes := 2     
 	   8 Input      2 Bit        Muxes := 2     
-	   2 Input      1 Bit        Muxes := 19    
-	   8 Input      1 Bit        Muxes := 13    
+	   8 Input      1 Bit        Muxes := 11    
 	  10 Input      1 Bit        Muxes := 10    
+	   2 Input      1 Bit        Muxes := 19    
 	   9 Input      1 Bit        Muxes := 1     
 	   3 Input      1 Bit        Muxes := 2     
 Module spi_loader_top 
 Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      5 Bit       Adders := 2     
 +---Registers : 
 	                2 Bit    Registers := 1     
 +---Muxes : 
-	   5 Input      2 Bit        Muxes := 1     
-	   2 Input      2 Bit        Muxes := 1     
+	   7 Input      2 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 5     
 	   2 Input      1 Bit        Muxes := 2     
-	   4 Input      1 Bit        Muxes := 2     
+	   5 Input      1 Bit        Muxes := 1     
 ---------------------------------------------------------------------------------
 Finished RTL Hierarchical Component Statistics
 ---------------------------------------------------------------------------------
@@ -620,53 +378,23 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5546] ROM "spi_loader/spi_prog/SPI_CsB" won't be mapped to RAM because it is too sparse
-WARNING: [Synth 8-3331] design srio_response has unconnected port id_override
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[7]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[6]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[5]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[4]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[3]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[2]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[1]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tkeep[0]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[15]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[14]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[13]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[12]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[11]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[10]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[9]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[8]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[7]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[6]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[5]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[4]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[3]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[2]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[1]
-WARNING: [Synth 8-3331] design srio_response has unconnected port axis_iorx_tuser[0]
-WARNING: [Synth 8-3331] design top_project has unconnected port DQ0
-WARNING: [Synth 8-3331] design top_project has unconnected port DQ1
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/dopin_ts_reg[0] )
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/dopin_ts_reg[1]' (LD) to 'spi_loader/spi_prog/dopin_ts_reg[2]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/dopin_ts_reg[2]' (LD) to 'spi_loader/spi_prog/dopin_ts_reg[3]'
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/fifo_wren_reg )
-INFO: [Synth 8-3333] propagating constant 1 across sequential element (\spi_loader/start_erase_reg )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/er_rd_data_reg[1] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/wr_rd_data_reg[0] )
 INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/wr_rd_data_reg[1] )
 INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/er_rd_data_reg[1]' (LD) to 'spi_loader/spi_prog/er_rd_data_reg[0]'
 INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/er_rd_data_reg[0] )
+INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/spi_status_reg[0]' (LD) to 'spi_loader/spi_prog/spi_status_reg[1]'
 INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/er_status_reg[1]' (LD) to 'spi_loader/spi_prog/er_status_reg[0]'
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/write_done_int_reg) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[0]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_rd_data_reg[1]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/dopin_ts_reg[0]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_rd_data_reg[0]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[0]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/fifo_wren_reg) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/start_erase_reg) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/state_reg[1]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/state_reg[0]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/data_counter_reg[4]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/data_counter_reg[3]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/data_counter_reg[2]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/data_counter_reg[1]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/data_counter_reg[0]) is unused and will be removed from module top_project.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -680,18 +408,11 @@ Start Timing Optimization
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-5578] Moved timing constraint from pin 'srio_top/srio_ip/refclk_out' to pin 'srio_top/srio_ip/bbstub_refclk_out/O'
-INFO: [Synth 8-5578] Moved timing constraint from pin 'srio_top/srio_ip/drpclk_out' to pin 'srio_top/srio_ip/bbstub_drpclk_out/O'
-INFO: [Synth 8-5578] Moved timing constraint from pin 'srio_top/srio_ip/gt_clk_out' to pin 'srio_top/srio_ip/bbstub_gt_clk_out/O'
-INFO: [Synth 8-5578] Moved timing constraint from pin 'srio_top/srio_ip/gt_pcs_clk_out' to pin 'srio_top/srio_ip/bbstub_gt_pcs_clk_out/O'
-INFO: [Synth 8-5578] Moved timing constraint from pin 'srio_top/srio_ip/log_clk_out' to pin 'srio_top/srio_ip/bbstub_log_clk_out/O'
-INFO: [Synth 8-5578] Moved timing constraint from pin 'srio_top/srio_ip/phy_clk_out' to pin 'srio_top/srio_ip/bbstub_phy_clk_out/O'
-INFO: [Synth 8-5819] Moved 6 constraints on hierarchical pins to their respective driving/loading pins
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Timing Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 605.570 ; gain = 395.680
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -702,20 +423,12 @@ Report RTL Partitions:
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_current_addr_reg[0]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[10]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[9]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[8]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[7]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[6]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[5]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[4]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[3]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[2]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[1]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_current_sector_addr_reg[0]) is unused and will be removed from module top_project.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Technology Mapping : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -739,26 +452,20 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished IO Insertion : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
-CRITICAL WARNING: [Synth 8-3352] multi-driven net spi_loader/spi_prog/wr_state[2] with 1st driver pin 'spi_loader/spi_prog/wr_state_reg[2]__0/Q' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:354]
-CRITICAL WARNING: [Synth 8-3352] multi-driven net spi_loader/spi_prog/wr_state[2] with 2nd driver pin 'spi_loader/spi_prog/wr_state_reg[2]/Q' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:362]
-CRITICAL WARNING: [Synth 8-3352] multi-driven net spi_loader/spi_prog/wr_state[1] with 1st driver pin 'spi_loader/spi_prog/wr_state_reg[1]__0/Q' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:354]
-CRITICAL WARNING: [Synth 8-3352] multi-driven net spi_loader/spi_prog/wr_state[1] with 2nd driver pin 'spi_loader/spi_prog/wr_state_reg[1]/Q' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:362]
-CRITICAL WARNING: [Synth 8-3352] multi-driven net spi_loader/spi_prog/wr_state[0] with 1st driver pin 'spi_loader/spi_prog/wr_state_reg[0]__0/Q' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:354]
-CRITICAL WARNING: [Synth 8-3352] multi-driven net spi_loader/spi_prog/wr_state[0] with 2nd driver pin 'spi_loader/spi_prog/wr_state_reg[0]/Q' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:362]
 
 Report Check Netlist: 
 +------+------------------+-------+---------+-------+------------------+
 |      |Item              |Errors |Warnings |Status |Description       |
 +------+------------------+-------+---------+-------+------------------+
-|1     |multi_driven_nets |      0|        3|Failed |Multi driven nets |
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -770,105 +477,106 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:26 ; elapsed = 00:00:29 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:26 ; elapsed = 00:00:29 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++------------+----------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name | RTL Name                                     | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++------------+----------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|top_project | log_rst_reg                                  | 5      | 1     | NO           | NO                 | YES               | 1      | 0       | 
+|top_project | spi_loader/spi_prog/SerDes/ShiftCount_reg[1] | 8      | 1     | YES          | NO                 | YES               | 1      | 0       | 
++------------+----------------------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
 ---------------------------------------------------------------------------------
 
 Report BlackBoxes: 
-+------+-----------------------+----------+
-|      |BlackBox name          |Instances |
-+------+-----------------------+----------+
-|1     |vio_0                  |         1|
-|2     |dbg_ila                |         1|
-|3     |fifo_generator_rx_inst |         1|
-|4     |srio_gen2_0            |         1|
-+------+-----------------------+----------+
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
 
 Report Cell Usage: 
-+------+-----------------------+------+
-|      |Cell                   |Count |
-+------+-----------------------+------+
-|1     |dbg_ila                |     1|
-|2     |fifo_generator_rx_inst |     1|
-|3     |srio_gen2_0            |     1|
-|4     |vio_0                  |     1|
-|5     |BUFG                   |     5|
-|6     |CARRY4                 |    63|
-|7     |FIFO36E2               |     1|
-|8     |LUT1                   |   230|
-|9     |LUT2                   |   125|
-|10    |LUT3                   |    38|
-|11    |LUT4                   |   149|
-|12    |LUT5                   |    74|
-|13    |LUT6                   |   111|
-|14    |MUXF7                  |    16|
-|15    |MUXF8                  |     8|
-|16    |STARTUPE3              |     1|
-|17    |FDCE                   |   334|
-|18    |FDPE                   |     2|
-|19    |FDRE                   |     4|
-|20    |LD                     |   262|
-|21    |LDCP                   |     1|
-|22    |IBUF                   |     5|
-|23    |OBUF                   |     5|
-|24    |OBUFT                  |     1|
-+------+-----------------------+------+
++------+----------+------+
+|      |Cell      |Count |
++------+----------+------+
+|1     |BUFG      |     4|
+|2     |CARRY4    |    18|
+|3     |FIFO36E1  |     1|
+|4     |LUT1      |    72|
+|5     |LUT2      |   101|
+|6     |LUT3      |    27|
+|7     |LUT4      |    53|
+|8     |LUT5      |    29|
+|9     |LUT6      |    66|
+|10    |SRL16E    |     2|
+|11    |STARTUPE2 |     1|
+|12    |FDCE      |     1|
+|13    |FDRE      |    34|
+|14    |FDSE      |     2|
+|15    |LD        |   175|
+|16    |IBUF      |     1|
+|17    |IBUFDS    |     1|
+|18    |OBUF      |     2|
++------+----------+------+
 
 Report Instance Areas: 
-+------+--------------+---------------------+------+
-|      |Instance      |Module               |Cells |
-+------+--------------+---------------------+------+
-|1     |top           |                     |  1973|
-|2     |  spi_loader  |spi_loader_top       |   592|
-|3     |    spi_prog  |spi_flash_programmer |   592|
-|4     |      oneshot |oneshot              |     8|
-|5     |  srio_top    |srio_example_test    |  1366|
-|6     |    srio_rx   |srio_response        |   893|
-+------+--------------+---------------------+------+
++------+-----------------+---------------------+------+
+|      |Instance         |Module               |Cells |
++------+-----------------+---------------------+------+
+|1     |top              |                     |   590|
+|2     |  spi_loader     |spi_loader_top       |   580|
+|3     |    spi_prog     |spi_flash_programmer |   561|
+|4     |      SerDes     |spi_serdes           |    33|
+|5     |      negedge_CS |negedge_flop         |     2|
+|6     |      oneshot    |oneshot              |     7|
++------+-----------------+---------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:26 ; elapsed = 00:00:29 . Memory (MB): peak = 655.992 ; gain = 445.785
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 6 critical warnings and 75 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:17 ; elapsed = 00:00:20 . Memory (MB): peak = 655.992 ; gain = 112.742
-Synthesis Optimization Complete : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 655.992 ; gain = 445.785
+Synthesis finished with 0 errors, 0 critical warnings and 39 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 626.148 ; gain = 132.758
+Synthesis Optimization Complete : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 626.148 ; gain = 416.258
 INFO: [Project 1-571] Translating synthesized netlist
-CRITICAL WARNING: [Netlist 29-180] Cell 'STARTUPE3' is not a supported primitive for kintex7 part: xc7k160tffg676-2.  Instance 'spi_loader/spi_prog/STARTUPE3_inst' will be treated as a black box, not an architecture primitive [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:559]
-Resolution: Modify instantiation of primitive to match Xilinx primitive. Please review the guidelines in the Design Methodology Guide UG949 to replace this primitive with a supported primitive.
-CRITICAL WARNING: [Netlist 29-180] Cell 'FIFO36E2' is not a supported primitive for kintex7 part: xc7k160tffg676-2.  Instance 'spi_loader/spi_prog/FIFO36E2_inst' will be treated as a black box, not an architecture primitive [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:605]
-Resolution: Modify instantiation of primitive to match Xilinx primitive. Please review the guidelines in the Design Methodology Guide UG949 to replace this primitive with a supported primitive.
-INFO: [Netlist 29-17] Analyzing 331 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 197 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
-INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-138] Pushed 1 inverter(s) to 1 load pin(s).
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 263 instances were transformed.
-  LD => LDCE: 262 instances
-  LDCP => LDCP (GND, LUT3, LUT3, LDCE, VCC): 1 instances
+  A total of 175 instances were transformed.
+  LD => LDCE: 174 instances
+  LD => LDCE (inverted pins: G): 1 instances
 
 INFO: [Common 17-83] Releasing license: Synthesis
-91 Infos, 278 Warnings, 10 Critical Warnings and 0 Errors encountered.
+59 Infos, 78 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:27 ; elapsed = 00:00:28 . Memory (MB): peak = 655.992 ; gain = 445.785
+synth_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 628.535 ; gain = 418.645
 INFO: [Common 17-1381] The checkpoint 'C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.dcp' has been generated.
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 655.992 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Fri Dec 15 12:31:43 2017...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 628.535 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Tue Dec 19 17:43:39 2017...
