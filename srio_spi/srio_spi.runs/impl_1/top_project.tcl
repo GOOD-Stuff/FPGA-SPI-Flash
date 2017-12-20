@@ -45,8 +45,6 @@ proc step_failed { step } {
 set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config -id {HDL 9-1061} -limit 100000
 set_msg_config -id {HDL 9-1654} -limit 100000
-set_msg_config -id {Synth 8-256} -limit 10000
-set_msg_config -id {Synth 8-638} -limit 10000
 
 start_step init_design
 set ACTIVE_STEP init_design
@@ -58,7 +56,14 @@ set rc [catch {
   set_property parent.project_path C:/Projects/srio_spi/srio_spi.xpr [current_project]
   set_property ip_output_repo C:/Projects/srio_spi/srio_spi.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
+  set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
   add_files -quiet C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.dcp
+  add_files -quiet c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.dcp
+  set_property netlist_only true [get_files c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.dcp]
+  read_xdc -mode out_of_context -ref fifo_generator_0 -cells U0 c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0_ooc.xdc
+  set_property processing_order EARLY [get_files c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0_ooc.xdc]
+  read_xdc -ref fifo_generator_0 -cells U0 c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0/fifo_generator_0.xdc
+  set_property processing_order EARLY [get_files c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0/fifo_generator_0.xdc]
   read_xdc C:/Projects/srio_test/srio_test/top.xdc
   link_design -top top_project -part xc7k160tffg676-2
   write_hwdef -file top_project.hwdef
@@ -136,6 +141,7 @@ start_step write_bitstream
 set ACTIVE_STEP write_bitstream
 set rc [catch {
   create_msg_db write_bitstream.pb
+  set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
   catch { write_mem_info -force top_project.mmi }
   write_bitstream -force -no_partial_bitfile top_project.bit 
   catch { write_sysdef -hwdef top_project.hwdef -bitfile top_project.bit -meminfo top_project.mmi -file top_project.sysdef }

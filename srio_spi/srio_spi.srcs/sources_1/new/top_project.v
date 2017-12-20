@@ -45,7 +45,7 @@ module top_project(
     reg         log_rst = 1'b1;
     wire        spi_clk;    
     
-    wire [64:0] data = 64'h00AABBCCDD;
+    wire [63:0] data = 64'h00AABBCCDD;
         
     localparam RES_WIDTH = 4;    
     reg [RES_WIDTH-1:0] reset_pipe = {RES_WIDTH{1'b1}};        
@@ -83,15 +83,16 @@ module top_project(
 );   */ 
 
 spi_loader_top spi_loader(
-    .CLK_I          ( log_clk ),
-    .RST_I          ( log_rst ),
-    .DATA_TO_PROG_I ( data[31:0] ),    
-    .START_ADDR_I   ( 24'hABCD   ),
-    .PAGE_COUNT_I   ( 16'h1000   ),
-    .SECTOR_COUNT_I ( 12'h10     ),
-    .SPI_CS_O       ( CS         ),
-    .SPI_MOSI_O     ( DQ0        ),
-    .SPI_MISO_I     ( DQ1        )
+    .CLK_I             ( log_clk ),
+    .SRST_I            ( log_rst ),
+    .DATA_TO_PROG_I    ( data       ),    
+    .START_ADDR_I      ( 24'hABCD   ),
+    .PAGE_COUNT_I      ( 16'h1000   ),
+    .SUBSECTOR_COUNT_I ( 12'h10     ),
+    .STOP_WRITE_O      (   ),
+    .SPI_CS_O          ( CS         ),    
+    .SPI_MOSI_O        ( DQ0        ),
+    .SPI_MISO_I        ( DQ1        )
 );
         
 endmodule

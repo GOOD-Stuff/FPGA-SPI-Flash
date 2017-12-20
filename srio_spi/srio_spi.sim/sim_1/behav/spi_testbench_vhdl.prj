@@ -1,5 +1,4 @@
 # compile vhdl design source files
-vhdl xil_defaultlib  "../../../srio_spi.srcs/sources_1/new/oneshot.vhd"
 
 # Do not sort compile order
 nosort

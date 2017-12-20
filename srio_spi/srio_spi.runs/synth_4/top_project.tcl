@@ -5,8 +5,6 @@
 set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config -id {HDL 9-1061} -limit 100000
 set_msg_config -id {HDL 9-1654} -limit 100000
-set_msg_config -id {Synth 8-256} -limit 10000
-set_msg_config -id {Synth 8-638} -limit 10000
 create_project -in_memory -part xc7k160tffg676-2
 
 set_param project.singleFileAddWarning.threshold 0
@@ -14,10 +12,13 @@ set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_property webtalk.parent_dir C:/Projects/srio_spi/srio_spi.cache/wt [current_project]
 set_property parent.project_path C:/Projects/srio_spi/srio_spi.xpr [current_project]
+set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Projects/srio_spi/srio_spi.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
+add_files -quiet c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.dcp
+set_property used_in_implementation false [get_files c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.dcp]
 read_verilog -library xil_defaultlib {
   C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v
   C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/negedge_flop.v

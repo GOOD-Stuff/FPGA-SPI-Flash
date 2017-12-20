@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_4" LaunchPart="xc7k160tffg676-2" LaunchTime="1513694592">
+<GenRun Id="synth_4" LaunchPart="xc7k160tffg676-2" LaunchTime="1513762397">
   <File Type="RDS-PROPCONSTRS" Name="top_project_drc_synth.rpt"/>
   <File Type="PA-TCL" Name="top_project.tcl"/>
   <File Type="RDS-RDS" Name="top_project.vds"/>
@@ -95,4 +95,5 @@
     <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
     <Step Id="synth_design"/>
   </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="fifo_generator_0"/>
 </GenRun>

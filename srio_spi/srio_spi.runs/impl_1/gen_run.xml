@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7k160tffg676-2" LaunchTime="1513694592">
+<GenRun Id="impl_1" LaunchPart="xc7k160tffg676-2" LaunchTime="1513762397">
   <File Type="PWROPT-DRC" Name="top_project_drc_pwropted.rpt"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="top_project_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="top_project_timing_summary_init.rpt"/>
@@ -155,4 +155,5 @@
     <Step Id="post_route_phys_opt_design"/>
     <Step Id="write_bitstream"/>
   </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="fifo_generator_0"/>
 </GenRun>
