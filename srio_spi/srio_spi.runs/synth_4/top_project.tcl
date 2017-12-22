@@ -5,6 +5,8 @@
 set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config -id {HDL 9-1061} -limit 100000
 set_msg_config -id {HDL 9-1654} -limit 100000
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 create_project -in_memory -part xc7k160tffg676-2
 
 set_param project.singleFileAddWarning.threshold 0
@@ -21,12 +23,10 @@ add_files -quiet c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_
 set_property used_in_implementation false [get_files c:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.dcp]
 read_verilog -library xil_defaultlib {
   C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v
-  C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/negedge_flop.v
   C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v
   C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v
   C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v
 }
-read_vhdl -library xil_defaultlib C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/oneshot.vhd
 foreach dcp [get_files -quiet -all *.dcp] {
   set_property used_in_implementation false $dcp
 }

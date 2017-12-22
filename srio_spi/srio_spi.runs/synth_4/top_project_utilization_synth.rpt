@@ -1,7 +1,7 @@
 Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
-| Date         : Wed Dec 20 12:33:41 2017
+| Date         : Fri Dec 22 14:33:02 2017
 | Host         : vldmr-PC running 64-bit Service Pack 1  (build 7601)
 | Command      : report_utilization -file top_project_utilization_synth.rpt -pb top_project_utilization_synth.pb
 | Design       : top_project
@@ -30,14 +30,14 @@ Table of Contents
 +----------------------------+------+-------+-----------+-------+
 |          Site Type         | Used | Fixed | Available | Util% |
 +----------------------------+------+-------+-----------+-------+
-| Slice LUTs*                |  146 |     0 |    101400 |  0.14 |
-|   LUT as Logic             |  144 |     0 |    101400 |  0.14 |
+| Slice LUTs*                |  164 |     0 |    101400 |  0.16 |
+|   LUT as Logic             |  162 |     0 |    101400 |  0.16 |
 |   LUT as Memory            |    2 |     0 |     35000 | <0.01 |
 |     LUT as Distributed RAM |    0 |     0 |           |       |
 |     LUT as Shift Register  |    2 |     0 |           |       |
-| Slice Registers            |  121 |     0 |    202800 |  0.06 |
-|   Register as Flip Flop    |   31 |     0 |    202800 |  0.02 |
-|   Register as Latch        |   90 |     0 |    202800 |  0.04 |
+| Slice Registers            |  132 |     0 |    202800 |  0.07 |
+|   Register as Flip Flop    |   53 |     0 |    202800 |  0.03 |
+|   Register as Latch        |   79 |     0 |    202800 |  0.04 |
 | F7 Muxes                   |    0 |     0 |     50700 |  0.00 |
 | F8 Muxes                   |    0 |     0 |     25350 |  0.00 |
 +----------------------------+------+-------+-----------+-------+
@@ -57,9 +57,9 @@ Table of Contents
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 0     |          Yes |           - |          Set |
-| 90    |          Yes |           - |        Reset |
-| 2     |          Yes |         Set |            - |
-| 29    |          Yes |       Reset |            - |
+| 79    |          Yes |           - |        Reset |
+| 8     |          Yes |         Set |            - |
+| 45    |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -119,7 +119,7 @@ Table of Contents
 +------------+------+-------+-----------+-------+
 |  Site Type | Used | Fixed | Available | Util% |
 +------------+------+-------+-----------+-------+
-| BUFGCTRL   |    2 |     0 |        32 |  6.25 |
+| BUFGCTRL   |    3 |     0 |        32 |  9.38 |
 | BUFIO      |    0 |     0 |        32 |  0.00 |
 | MMCME2_ADV |    0 |     0 |         8 |  0.00 |
 | PLLE2_ADV  |    0 |     0 |         8 |  0.00 |
@@ -153,19 +153,19 @@ Table of Contents
 +-----------+------+---------------------+
 |  Ref Name | Used | Functional Category |
 +-----------+------+---------------------+
-| LDCE      |   90 |        Flop & Latch |
-| LUT2      |   51 |                 LUT |
-| LUT1      |   44 |                 LUT |
-| LUT5      |   35 |                 LUT |
-| FDRE      |   29 |        Flop & Latch |
-| LUT6      |   23 |                 LUT |
-| LUT4      |   21 |                 LUT |
-| LUT3      |   13 |                 LUT |
-| CARRY4    |   10 |          CarryLogic |
+| LDCE      |   79 |        Flop & Latch |
+| LUT3      |   54 |                 LUT |
+| FDRE      |   45 |        Flop & Latch |
+| LUT6      |   33 |                 LUT |
+| LUT1      |   30 |                 LUT |
+| LUT5      |   26 |                 LUT |
+| LUT4      |   23 |                 LUT |
+| LUT2      |   16 |                 LUT |
+| FDSE      |    8 |        Flop & Latch |
+| CARRY4    |    7 |          CarryLogic |
+| BUFG      |    3 |               Clock |
 | SRL16E    |    2 |  Distributed Memory |
 | OBUF      |    2 |                  IO |
-| FDSE      |    2 |        Flop & Latch |
-| BUFG      |    2 |               Clock |
 | STARTUPE2 |    1 |              Others |
 | IBUFDS    |    1 |                  IO |
 | IBUF      |    1 |                  IO |

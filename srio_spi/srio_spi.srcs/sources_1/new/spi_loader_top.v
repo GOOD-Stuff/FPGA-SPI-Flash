@@ -35,34 +35,34 @@ module spi_loader_top(
     
     // {{{ local parameters (constants) --------
     // FSM
-    localparam [2:0] IDLE_S       = 3'h00;  // Set validation of data
-    localparam [2:0] ERASE_S      = 3'h01;  // Start erase process
-    localparam [2:0] WAIT_ERASE_S = 3'h02;  // Wait while SPI Flash erasing
-    localparam [2:0] ALIGN_S      = 3'h03;  // Segmentation data to SPI
-    localparam [2:0] DATA_S       = 3'h04;  // Send data to SPI
+        localparam [2:0] IDLE_S       = 3'h00;  // Set validation of data
+        localparam [2:0] ERASE_S      = 3'h01;  // Start erase process
+        localparam [2:0] WAIT_ERASE_S = 3'h02;  // Wait while SPI Flash erasing
+        localparam [2:0] ALIGN_S      = 3'h03;  // Segmentation data to SPI
+        localparam [2:0] DATA_S       = 3'h04;  // Send data to SPI
     // }}} End local parameters -------------
     
     // {{{ Wire declarations ----------------
-    reg  [2:0]  state, next_state;
-    reg  [4:0]  counter;
-    reg  [4:0]  data_counter;
-    wire        write_done;
-    
-    //wire [23:0] start_addr;
-    reg         start_addr_valid;
-    //wire [15:0] page_count;
-    reg         page_count_valid;
-    //wire [11:0] sector_count;
-    reg         subsector_count_valid;
-    reg         start_erase;
-    reg         start_write;
-    reg         stop_write;
-    wire        erasing_spi;
-    
-    reg         fifo_wren;
-    wire        fifo_full;
-    wire        fifo_empty;
-    wire        overflow;
+        reg  [2:0]  state, next_state;
+        reg  [4:0]  counter;
+        reg  [4:0]  data_counter;
+        wire        write_done;
+        
+        //wire [23:0] start_addr;
+        reg         start_addr_valid = 1'b0;
+        //wire [15:0] page_count;
+        reg         page_count_valid = 1'b0;
+        //wire [11:0] sector_count;
+        reg         subsector_count_valid = 1'b0;
+        reg         start_erase = 1'b0;
+        reg         start_write = 1'b0;
+        reg         stop_write  = 1'b0;
+        wire        erasing_spi;
+        
+        reg         fifo_wren = 1'b0;
+        wire        fifo_full;
+        wire        fifo_empty;
+        wire        overflow;
     // }}} End of wire declarations ------------
         
         
@@ -84,7 +84,6 @@ module spi_loader_top(
         else if (stop_write)
             data_counter <= data_counter + 1'b1;
     end
-
 
     // {{{ FSM logic ------------    
     always @(posedge CLK_I) begin
@@ -138,7 +137,7 @@ module spi_loader_top(
                 fifo_wren             <= 1'b0;
                 start_erase           <= 1'b0;
                 start_write           <= 1'b0;
-                stop_write            <= 1'b0;
+                stop_write            <= 1'b0;                
             end
                 
             ERASE_S: begin                              // 1

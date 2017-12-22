@@ -1,4 +1,4 @@
-`timescale 1ps / 1ps
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -28,11 +28,13 @@ module spi_testbench();
     wire CS;
     wire DQ0;
     reg  DQ1;
-        
+    
+    integer count;
+
     initial begin
-        log_clk_t            = 1'b1;
-        log_rst_t            = 1'b1;
-        
+        log_clk_t            = 1'b0;
+        log_rst_t            = 1'b0;
+        count                = 0;
         DQ1                  = 1'b0;        
         data                 = 64'h00AABBCCDD;
                         
@@ -41,7 +43,18 @@ module spi_testbench();
     
     always begin// генератор clk
         #10 log_clk_t = !log_clk_t; // 50 MHz     
-        #5 log_rst_t = 1'b0;
+        
+    end
+
+    always @(posedge log_clk_t) begin
+        count <= count + 1'b1;        
+    end 
+
+    always @(posedge log_clk_t) begin
+        if (count < 100)
+            log_rst_t <= 1'b1;
+        else
+            log_rst_t <= 1'b0;
     end
 
     spi_loader_top spi_loader(
