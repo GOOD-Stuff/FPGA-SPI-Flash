@@ -87,67 +87,74 @@ module spi_flash_programmer(
     localparam [7:0] CMD_PPQUAD     = 8'h32; // Quad Input Fast Program    
     // FSM
     // Write
-    localparam [2:0] WR_IDLE_S         = 3'h00;
-    localparam [2:0] WR_ASSCS1_S       = 3'h01;
-    localparam [2:0] WR_WRCMD_S        = 3'h02;
-    localparam [2:0] WR_ASSCS2_S       = 3'h03;
-    localparam [2:0] WR_PROGRAM_S      = 3'h04;
-    localparam [2:0] WR_DATA_S         = 3'h05;
-    localparam [2:0] WR_PPDONE_S       = 3'h06;
-    localparam [2:0] WR_PPDONE_WAIT_S  = 3'h07;
+    localparam [3:0] WR_IDLE_S         = 4'h00;   // Get start_address and count of page, and set WE command
+    localparam [3:0] WR_SENDCMD1_S     = 4'h01;   // Send WE command
+    localparam [3:0] WR_PPCMD_S        = 4'h02;   // Set PP command
+    localparam [3:0] WR_SENDCMD2_S     = 4'h03;   // Send PP command
+    localparam [3:0] WR_DATA_S         = 4'h04;   // Send (?) data from FIFO 
+    localparam [3:0] WR_STATCMD_S      = 4'h05;   // Set READSTAT command
+    localparam [3:0] WR_SENDCMD3_S     = 4'h06;   // Send READSTAT command
+    localparam [3:0] WR_PPDONE_S       = 4'h07;   // Get status
+    localparam [3:0] WR_PPDONE_WAIT_S  = 4'h08;   // Check status and set WE command
     // Erase    
-    localparam [3:0] ER_IDLE_S         = 4'h00;
-    localparam [3:0] ER_SENDCMD1_S     = 4'h01;    
-    localparam [3:0] ER_SSECMD_S       = 4'h02;
-    localparam [3:0] ER_SENDCMD2_S     = 4'h03;        
-    localparam [3:0] ER_SENDCMD3_S     = 4'h04;
-    localparam [3:0] ER_STATCMD_S      = 4'h05;    
-    localparam [3:0] ER_SENDCMD4_S     = 4'h06;
-    localparam [3:0] ER_RDSTAT_S       = 4'h07;
-    localparam [3:0] ER_SENDCMD5_S     = 4'h08;
-    localparam [3:0] ER_IDLE2_S        = 4'h09;
+    localparam [2:0] ER_IDLE_S         = 3'h00;   // Get start_address and count of sector, and set WE command
+    localparam [2:0] ER_SENDCMD1_S     = 3'h01;   // Send WE command
+    localparam [2:0] ER_SSECMD_S       = 3'h02;   // Set SSE command
+    localparam [2:0] ER_SENDCMD3_S     = 3'h03;   // Send SSE command
+    localparam [2:0] ER_STATCMD_S      = 3'h04;   // Set READDSTAT command
+    localparam [2:0] ER_SENDCMD4_S     = 3'h05;   // Send READSTAT command
+    localparam [2:0] ER_RDSTAT_S       = 3'h06;   // Get status
+    localparam [2:0] ER_SENDCMD5_S     = 3'h07;   // Check received status and set WE command
 // }}} End local parameters -------------
 
 // {{{ Wire declarations ----------------
     //----- write -----
-    reg  [5:0]       wr_cmd_counter         = 6'h27;
-    reg  [31:0]      wr_cmd_reg             = 32'h11111111; // ?
+    reg  [4:0]       wr_cmd_cntr            = 6'h27;
+    reg  [31:0]      wr_cmd_reg             = 32'h00; // ?
     reg  [1:0]       wr_rd_data             = 2'h00;
-    reg  [2:0]       wr_data_valid_count    = 3'h00;
-    reg  [2:0]       wr_data_count          = 3'h00; // SPI from FIFO Nibble count
+    reg  [2:0]       wr_data_valid_cntr     = 3'h00;
+    reg  [3:0]       wr_delay_cntr;
+    reg  [2:0]       wr_data_cntr           = 3'h00; // SPI from FIFO Nibble count
     reg  [WIDTH-1:0] wr_current_addr        = 24'h00;
+    reg              wr_SpiCsB              = 1'b1;                 // Chip Select (inversion: 1 - device is deselected, 0 - enables the device)
     reg  [31:0]      spi_wrdata             = 32'h00;
     reg  [15:0]      page_count             = 16'hFFFF;    
-    reg  [1:0]       spi_status             = 2'h03;
+    reg  [1:0]       wr_status              = 2'h03;
     reg              status_data_valid      = 1'b0;
-    reg              write_done;
-    wire             wrerr;
-    wire             rderr;    
+    reg              wr_strt_cmd_cnt;
+    reg              wr_strt_valid_cnt;
+    reg              wr_strt_delay_cnt;
+    reg              wr_strt_data_cntr;
+    wire             write_start;
+    reg              write_done;   
     reg  [2:0]       wr_state, wr_next_state;    
     //----- erase -----
     reg  [4:0]       er_cmd_cntr;
     reg  [31:0]      er_cmd_reg;
     reg  [1:0]       er_rd_data;
     reg  [2:0]       er_data_valid_cntr;
+    reg  [3:0]       er_delay_cntr;
     reg  [11:0]      er_sector_count;
-    reg  [WIDTH-1:0] er_current_sector_addr;
+    reg  [WIDTH-1:0] er_curr_sect_addr;
     wire [WIDTH-1:0] sCurrent_addr;
     wire [11:0]      sSector_count;
     wire [15:0]      sPage_count;
     reg              er_SpiCsB;
     reg  [1:0]       er_status;
+    reg              er_strt_cmd_cnt;
+    reg              er_strt_valid_cnt;
+    reg              er_strt_delay_cnt;    
     reg              erase_inprogress;
     wire             erase_start;
-    reg  [3:0]       er_state, er_next_state;
+    reg  [2:0]       er_state, er_next_state;
     //----- Startupe2 signals -----
     wire             sSpi_Miso;
-    reg              Spi_Mosi;
-    reg              wr_SpiCsB;                 // Chip Select (inversion: 1 - device is deselected, 0 - enables the device)
+    reg              Spi_Mosi;    
     wire             SPI_CsB_N;
     //reg              SPI_CsB_FFDin;   
     wire [3:0]       di_out;
     reg  [3:0]       dopin_ts               = 4'h0E;
-    reg              spi_mosi_int;    
+    wire              spi_mosi_int;//           = 1'b0;    
     //----- FIFO signals -----
     reg              fifo_rden              = 1'b0;
     wire             fifo_empty;
@@ -156,12 +163,8 @@ module spi_flash_programmer(
     wire             fifo_almostempty;
     wire [63:0]      fifo_dout;
     wire [63:0]      fifo_unconned;   
-    //----- Other -----    
-    reg              er_strt_cmd_cnt;
-    reg              er_strt_valid_cnt;
-    reg              er_strt_delay_cnt;
-    reg  [1:0]       synced_fifo_almostfull = 2'h00;    
-    reg  [3:0]       er_delay_cntr;
+    //----- Other -----        
+    reg  [1:0]       synced_fifo_almostfull = 2'h00;        
     wire             sSpi_clk;
 // }}} End of wire declarations ------------
 
@@ -171,10 +174,12 @@ module spi_flash_programmer(
     assign sCurrent_addr       = (START_ADDR_VALID_I)   ? START_ADDR_I   : 24'h00;
     assign sSector_count       = (SECTOR_COUNT_VALID_I) ? SECTOR_COUNT_I : 12'hFFF;
     assign sPage_count         = (PAGE_COUNT_VALID_I)   ? PAGE_COUNT     : 16'h00;
-    assign SPI_CsB_N           = (erase_inprogress) ? er_SpiCsB : wr_SpiCsB;
+    assign SPI_CsB_N           = (erase_inprogress)     ? er_SpiCsB      : wr_SpiCsB;
     assign sSpi_Miso           = SPI_MISO_I;
+    assign spi_mosi_int        = (wr_state == WR_DATA_S) ? fifo_dout[0] : wr_cmd_reg[31];
     assign fifo_unconned       = DATA_TO_FIFO_I;
     assign erase_start         = ERASE_I;
+    assign write_start         = WRITE_I;
     assign FIFO_FULL_O         = fifo_full;
     assign FIFO_EMPTY_O        = fifo_empty;
     assign ERASEING_O          = erase_inprogress;
@@ -182,33 +187,61 @@ module spi_flash_programmer(
     assign SPI_CS_O            = SPI_CsB_N;
 // }}} End of wire initializations ------------	
 
-always @(posedge LOG_CLK_I) begin
-    if (erase_inprogress == 1'b1)
-        Spi_Mosi <= er_cmd_reg[31];
-    else
-        Spi_Mosi <= spi_mosi_int;
-end
+    always @(posedge LOG_CLK_I) begin
+        if (erase_inprogress == 1'b1)
+            Spi_Mosi <= er_cmd_reg[31];
+        else
+            Spi_Mosi <= spi_mosi_int;
+    end
 
-always @(posedge LOG_CLK_I) begin
-    if (LOG_RST_I || (!er_strt_cmd_cnt))
-        er_cmd_cntr <= 6'h1F; // d31: 8 bit cmd and 24 bit address
-    else
-        er_cmd_cntr <= er_cmd_cntr - 1'b1;
-end
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!er_strt_cmd_cnt))
+            er_cmd_cntr <= 6'h1F; // d31: 8 bit cmd and 24 bit address
+        else
+            er_cmd_cntr <= er_cmd_cntr - 1'b1;
+    end
 
-always @(posedge LOG_CLK_I) begin
-    if (LOG_RST_I || (!er_strt_delay_cnt))
-        er_delay_cntr <= 4'h00;
-    else 
-        er_delay_cntr <= er_delay_cntr + 1'b1;
-end
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!er_strt_delay_cnt))
+            er_delay_cntr <= 4'h00;
+        else 
+            er_delay_cntr <= er_delay_cntr + 1'b1;
+    end
 
-always @(posedge LOG_CLK_I) begin
-    if (LOG_RST_I || (!er_strt_valid_cnt))
-        er_data_valid_cntr <= 3'h00;
-    else 
-        er_data_valid_cntr <= er_data_valid_cntr + 1'b1;
-end 
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!wr_strt_valid_cnt))
+            wr_data_valid_cntr <= 3'h00;
+        else 
+            wr_data_valid_cntr <= wr_data_valid_cntr + 1'b1;
+    end 
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!wr_strt_cmd_cnt))
+            wr_cmd_cntr <= 6'h1F; // d31: 8 bit cmd and 24 bit address
+        else
+            wr_cmd_cntr <= wr_cmd_cntr - 1'b1;
+    end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!wr_strt_delay_cnt))
+            wr_delay_cntr <= 4'h00;
+        else
+            wr_delay_cntr <= wr_delay_cntr + 1'b1;
+    end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!wr_strt_valid_cnt))
+            wr_data_valid_cntr <= 3'h00;
+        else
+            wr_data_valid_cntr <= wr_data_valid_cntr + 1'b1;
+    end 
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!wr_strt_data_cntr))
+            wr_data_cntr <= 3'h00;
+        else
+            wr_data_cntr <= wr_data_cntr + 1'b1;
+    end
 
 // {{{ Erase Sectors FSM ------------ 
 	always @(posedge LOG_CLK_I) begin
@@ -218,8 +251,8 @@ end
 			er_state <= er_next_state;
 	end
 
-
-	always @(er_state, erase_start, er_cmd_cntr, er_delay_cntr, er_data_valid_cntr, er_status, er_sector_count) begin
+	always @(er_state, erase_start, er_cmd_cntr, er_delay_cntr, er_data_valid_cntr, 
+             er_status, er_sector_count) begin
 		er_next_state = ER_IDLE_S;
 		case (er_state)
 			ER_IDLE_S: begin                             // 0
@@ -228,14 +261,6 @@ end
                 else 
                     er_next_state = ER_IDLE_S;
 			end
-///temp
-            /*ER_IDLE2_S: begin                             // 0
-                if (erase_start)
-                    er_next_state = ER_SENDCMD1_S;
-                else 
-                    er_next_state = ER_IDLE2_S;
-            end*/
-
 
 			ER_SENDCMD1_S: begin                           // 1
                 if (er_cmd_cntr == 5'd24)
@@ -244,14 +269,7 @@ end
                     er_next_state = ER_SENDCMD1_S;
 			end
 
-            ER_SENDCMD2_S: begin                          // 3
-                if (er_cmd_cntr == 5'd24)
-                    er_next_state = ER_SSECMD_S;
-                else
-                    er_next_state = ER_SENDCMD2_S;
-            end
-
-			ER_SSECMD_S: begin                          // 2 ! THIS DOESN'T WORK. WHY?
+			ER_SSECMD_S: begin                          // 2 
                 if (er_delay_cntr == 4'h04)
                     er_next_state = ER_SENDCMD3_S;
                 else
@@ -281,7 +299,7 @@ end
 
 			ER_RDSTAT_S: begin                          // 7
                 //if (er_delay_cntr == 4'h01)
-                if (er_data_valid_cntr == 3'd7) 
+                if (er_data_valid_cntr == 3'd07) 
                     er_next_state = ER_SENDCMD5_S;
                 else
                     er_next_state = ER_RDSTAT_S;
@@ -292,8 +310,10 @@ end
                     if (er_sector_count == 14'h00)
                         er_next_state = ER_IDLE_S;
                     else                    
-                        er_next_state = ER_SENDCMD2_S;
-                end
+                        er_next_state = ER_SENDCMD1_S;
+                end else
+                    wr_next_state = ER_STATCMD_S;
+
             end
 
 			default: begin
@@ -302,92 +322,69 @@ end
 		endcase
 	end
 
-	always @(er_state) begin		
+	always @(er_state, sCurrent_addr) begin		
 		case (er_state)
-			ER_IDLE_S: begin                                   // 0                
-                //er_current_sector_addr     <= sCurrent_addr;
-                if (START_ADDR_VALID_I == 1'b1) er_current_sector_addr <= START_ADDR_I;
-                else er_current_sector_addr <= 24'h00;
-                er_sector_count            <= SECTOR_COUNT_I; //sSector_count;                
-                er_status                  <= 2'h03;
-                er_strt_cmd_cnt            <= 1'b0;                
-                er_strt_valid_cnt          <= 1'b0;
-                er_strt_delay_cnt          <= 1'b0;
-                erase_inprogress           <= 1'b0;
-                er_SpiCsB                  <= 1'b1;
-                er_data_valid_cntr         <= 3'h00;                
-                er_rd_data                 <= 2'b00;
-                er_cmd_reg                 <= {CMD_WE, 24'h00};
+			ER_IDLE_S: begin                                           // 0                
+                er_curr_sect_addr         <= sCurrent_addr;
+                er_sector_count           <= sSector_count; //sSector_count;                
+                er_status                 <= 2'h03;
+                er_strt_cmd_cnt           <= 1'b0;                
+                er_strt_valid_cnt         <= 1'b0;
+                er_strt_delay_cnt         <= 1'b0;
+                erase_inprogress          <= 1'b0;
+                er_SpiCsB                 <= 1'b1;
+                er_data_valid_cntr        <= 3'h00;                
+                er_rd_data                <= 2'b00;
+                er_cmd_reg                <= {CMD_WE, 24'h00};
 			end
-
-            /*ER_IDLE2_S: begin                                   // 0                
-                er_current_sector_addr     <= sCurrent_addr;
-                er_sector_count            <= SECTOR_COUNT_I; //sSector_count;                
-                er_status                  <= 2'h03;
-                er_strt_cmd_cnt            <= 1'b0;                
-                er_strt_valid_cnt          <= 1'b0;
-                er_strt_delay_cnt          <= 1'b0;
-                erase_inprogress           <= 1'b0;
-                er_SpiCsB                  <= 1'b1;
-                er_data_valid_cntr         <= 3'h00;                
-                er_rd_data                 <= 2'b00;
-                er_cmd_reg                 <= {CMD_WE, 24'h00};
-            end*/
 
 			ER_SENDCMD1_S: begin                                       // 1
-				erase_inprogress           <= 1'b1;                
-                er_SpiCsB                  <= 1'b0;
-                er_strt_cmd_cnt            <= 1'b1;
+				er_strt_delay_cnt         <= 1'b0;
+                erase_inprogress          <= 1'b1;                
+                er_SpiCsB                 <= 1'b0;
+                er_strt_cmd_cnt           <= 1'b1;
                 if (er_cmd_cntr != 5'd24) 
-                    er_cmd_reg             <= {er_cmd_reg[30:0], 1'b0};
+                    er_cmd_reg            <= {er_cmd_reg[30:0], 1'b0};
 			end
 			
-			ER_SENDCMD2_S: begin                                       // 4
-                er_strt_delay_cnt          <= 1'b0;                                
-                er_SpiCsB                  <= 1'b0;
-                er_strt_cmd_cnt            <= 1'b1;
-                if (er_cmd_cntr != 5'd24)
-                    er_cmd_reg             <= {er_cmd_reg[30:0], 1'b0};
+			ER_SSECMD_S: begin                                      // 2                             
+                er_strt_cmd_cnt           <= 1'b0;                    
+                er_strt_delay_cnt         <= 1'b1;                                
+                er_SpiCsB                 <= 1'b1;                
+                er_cmd_reg                <= {CMD_SSE, er_curr_sect_addr}; // erase 4 KB subsector                                                    
 			end
 
-			ER_SSECMD_S: begin                                       // 3                            
-                er_strt_cmd_cnt            <= 1'b0;                    
-                er_strt_delay_cnt          <= 1'b1;                                
-                er_SpiCsB                  <= 1'b1;                
-                er_cmd_reg                 <= {CMD_SSE, er_current_sector_addr}; // erase 4 KB subsector                                                    
-			end
-
-			ER_SENDCMD3_S: begin
-                er_strt_delay_cnt          <= 1'b0;                                
-                er_SpiCsB                  <= 1'b0;
-                er_strt_cmd_cnt            <= 1'b1;
+			ER_SENDCMD3_S: begin                                     // 3
+                er_strt_delay_cnt         <= 1'b0;                                
+                er_SpiCsB                 <= 1'b0;
+                er_strt_cmd_cnt           <= 1'b1;
                 if (er_cmd_cntr != 5'd00)
-                    er_cmd_reg             <= {er_cmd_reg[30:0], 1'b0};
-			end
-
-			ER_STATCMD_S: begin                                      // 5 
-                er_SpiCsB                  <= 1'b1;
-                er_strt_cmd_cnt            <= 1'b0;
-                er_cmd_reg                 <= {CMD_RDST, 24'h00};            
-                er_strt_delay_cnt          <= 1'b1;                                
-			end
-
-			ER_SENDCMD4_S: begin                                       // 6
-               er_strt_delay_cnt           <= 1'b0;                                
-               er_SpiCsB                   <= 1'b0;
-               er_strt_cmd_cnt             <= 1'b1;
+                    er_cmd_reg            <= {er_cmd_reg[30:0], 1'b0};
+			end 
+ 
+			ER_STATCMD_S: begin                                      // 4
+                er_SpiCsB                 <= 1'b1;
+                er_strt_cmd_cnt           <= 1'b0;
+                er_cmd_reg                <= {CMD_RDST, 24'h00};            
+                er_strt_delay_cnt         <= 1'b1;                                
+			end 
+ 
+			ER_SENDCMD4_S: begin                                       // 5
+               er_strt_delay_cnt          <= 1'b0;                                
+               er_SpiCsB                  <= 1'b0;
+               er_strt_cmd_cnt            <= 1'b1;
                if (er_cmd_cntr != 5'd24) 
-                    er_cmd_reg             <= {er_cmd_reg[30:0], 1'b0};
-			end
-
-			ER_RDSTAT_S: begin                                       // 7
-                //er_SpiCsB             <= 1'b1;           
-                er_strt_valid_cnt       <= 1'b1;
-                er_strt_cmd_cnt         <= 1'b0;
-                er_rd_data              <= {er_rd_data[1], sSpi_Miso};
+                    er_cmd_reg            <= {er_cmd_reg[30:0], 1'b0};
+			end 
+ 
+			ER_RDSTAT_S: begin                                        // 6
+                //er_SpiCsB             < = 1'b1;           
+                er_strt_valid_cnt         <= 1'b1;
+                er_strt_cmd_cnt           <= 1'b0;
+                er_rd_data                <= {er_rd_data[1], sSpi_Miso};
             end
                 			
-            ER_SENDCMD5_S: begin                                    // 8
+            ER_SENDCMD5_S: begin                                    // 7
                 er_strt_valid_cnt <= 1'b0;                                                
                 //if (er_data_valid_cntr == 3'h07) begin // Check Status after 8 bits (+1) of status read                    
                 er_status         <= er_rd_data;   // Check WE and ERASE in progress one cycle after er_rd_date
@@ -395,17 +392,17 @@ end
                     if (er_sector_count == 14'h00)
                        erase_inprogress <= 1'b0;
                     else begin
-                        er_SpiCsB              <= 1'b1;                                
-                        er_current_sector_addr <= er_current_sector_addr + SUBSECTOR_SIZE;
-                        er_sector_count        <= er_sector_count - 1'b1;
-                        er_cmd_reg             <= {CMD_WE, 24'h00};                        
+                        er_SpiCsB         <= 1'b1;                                
+                        er_curr_sect_addr <= er_curr_sect_addr + SUBSECTOR_SIZE;
+                        er_sector_count   <= er_sector_count - 1'b1;
+                        er_cmd_reg        <= {CMD_WE, 24'h00};                        
                     end
                 end
             end
 
 			default: begin
                 er_sector_count        <= 12'h00;
-                er_current_sector_addr <= 24'h00;            
+                er_curr_sect_addr      <= 24'h00;            
             end
 		endcase
 	end
@@ -420,62 +417,72 @@ end
             wr_state <= wr_next_state;
     end
 
-    always @(wr_state, synced_fifo_almostfull, wr_cmd_counter, page_count, wr_data_count, 
-             wr_current_addr, spi_status) begin
+    always @(wr_state, fifo_almostfull, write_start, page_count, wr_cmd_cntr, wr_delay_cntr, wr_data_valid_cntr, wr_status) begin
         wr_next_state = WR_IDLE_S;
-        case (wr_state)
-            WR_IDLE_S: begin
-                if (synced_fifo_almostfull[1] == 1'b1)   
-                    wr_next_state = WR_ASSCS1_S;
+        case (wr_state) 
+            WR_IDLE_S: begin                                    // 0
+                if (fifo_almostfull && write_start)
+                    wr_next_state = WR_SENDCMD1_S;
                 else
                     wr_next_state = WR_IDLE_S;
             end
 
-            WR_ASSCS1_S: begin
-                if (page_count != 0)
-                    if (synced_fifo_almostfull[1] == 1'b1)
-                        wr_next_state = WR_WRCMD_S;
+            WR_SENDCMD1_S: begin                                // 1
+                if (page_count != 16'h00) begin
+                    if (wr_cmd_cntr == 5'd24)
+                        wr_next_state = WR_PPCMD_S;
                     else
-                        wr_next_state = WR_ASSCS1_S;
-                else
-                    wr_next_state = WR_WRCMD_S;
-            end
-
-            WR_WRCMD_S: begin
-                if (wr_cmd_counter != 6'd32) 
-                    wr_next_state = WR_WRCMD_S;
-                else if (page_count != 17'h00)
-                    wr_next_state = WR_ASSCS2_S;
-                else
+                        wr_next_state = WR_SENDCMD1_S;
+                end else
                     wr_next_state = WR_IDLE_S;
-            end
+            end    
 
-            WR_ASSCS2_S: begin
-                wr_next_state = WR_PROGRAM_S;
-            end
-
-            WR_PROGRAM_S: begin
-                if (wr_cmd_counter != 0)
-                    wr_next_state = WR_PROGRAM_S;
+            WR_PPCMD_S: begin                                   // 2
+                if (wr_delay_cntr == 4'h04)
+                    wr_next_state = WR_SENDCMD2_S;
                 else
+                    wr_next_state = WR_PPCMD_S;
+            end
+
+            WR_SENDCMD2_S: begin                                // 3
+                if (wr_cmd_cntr == 5'd00) 
+                    wr_next_state = WR_DATA_S;
+                else
+                    wr_next_state = WR_SENDCMD2_S;
+            end
+
+            WR_DATA_S: begin                                    // 4
+                if (wr_current_addr[7:0] == 24'd252)
+                    wr_next_state = WR_STATCMD_S;
+                else 
                     wr_next_state = WR_DATA_S;
             end
 
-            WR_DATA_S: begin
-                if ((wr_data_count == 7) && (wr_current_addr[7:0] == 32'd252))
+            WR_STATCMD_S: begin                                 // 5
+                if (wr_delay_cntr == 4'h04)
                     wr_next_state = WR_PPDONE_S;
                 else
-                    wr_next_state = WR_DATA_S;
+                    wr_next_state = WR_STATCMD_S;               
+            end        
+
+            WR_SENDCMD3_S: begin                                // 6
+                if (wr_cmd_cntr == 5'd24) 
+                    wr_next_state = WR_PPDONE_S;
+                else
+                    wr_next_state = WR_SENDCMD3_S;
             end
 
-            WR_PPDONE_S: begin
-                wr_next_state = WR_PPDONE_WAIT_S;
+            WR_PPDONE_S: begin                                  // 7
+                if (wr_data_valid_cntr == 3'd07)
+                    wr_next_state = WR_PPDONE_WAIT_S;
+                else
+                    wr_next_state = WR_PPDONE_S;
             end
 
-            WR_PPDONE_WAIT_S: begin
-                if ((wr_cmd_counter == 6'd31) && (spi_status == 2'b0))
-                    wr_next_state = WR_ASSCS1_S;
-                else 
+            WR_PPDONE_WAIT_S: begin                             // 8
+                if (wr_status == 2'h00) 
+                    wr_next_state = WR_SENDCMD1_S;
+                else
                     wr_next_state = WR_PPDONE_WAIT_S;
             end
 
@@ -488,118 +495,93 @@ end
     always @(wr_state) begin
         case (wr_state)
             WR_IDLE_S: begin
-                spi_mosi_int   <= wr_cmd_reg[31];
-                wr_SpiCsB      <= 1'b1;
-                write_done     <= 1'b0;
-                if (START_ADDR_VALID_I == 1'b1) wr_current_addr <= START_ADDR_I;
-                if (PAGE_COUNT_VALID_I == 1'b1) page_count      <= PAGE_COUNT_I;
-                if (synced_fifo_almostfull[1] == 1'b1) begin
-                    dopin_ts            <= 4'h0E;
-                    wr_data_valid_count <= 3'h00;
-                    wr_cmd_counter      <= 6'h27;
-                    wr_rd_data          <= 2'h00;
-                    wr_cmd_reg          <= {CMD_WE, 24'h00};
-                    fifo_rden           <= 1'b0;
-                    wr_data_count       <= 3'h00; 
-                    spi_wrdata          <= 32'h00;                    
-                end
+               wr_current_addr    <= sCurrent_addr;
+               page_count         <= sPage_count;
+               write_done         <= 1'b0;
+               wr_SpiCsB          <= 1'b1;
+               wr_strt_cmd_cnt    <= 1'b0;
+               wr_strt_valid_cnt  <= 1'b0;
+               wr_strt_delay_cnt  <= 1'b0;
+               wr_strt_data_cntr  <= 1'b0;
+               wr_cmd_reg         <= {CMD_WE, 24'h00};
             end
 
-            WR_ASSCS1_S: begin
-                spi_mosi_int <= wr_cmd_reg[31];
-                if (page_count != 0) begin
-                    if (synced_fifo_almostfull[1] == 1'b1)
-                        wr_SpiCsB <= 1'b0;
+            WR_SENDCMD1_S: begin
+                if (page_count != 16'h00) begin
+                    wr_SpiCsB       <= 1'b0;
+                    wr_strt_cmd_cnt <= 1'b1;
+                    if (wr_cmd_cntr != 5'd24)
+                        wr_cmd_reg  <= {wr_cmd_reg[30:0], 1'b0};
                 end else
-                    wr_SpiCsB  <= 1'b0;
+                    write_done      <= 1'b1;
             end
 
-            WR_WRCMD_S: begin
-                spi_mosi_int <= wr_cmd_reg[31];
-                if (wr_cmd_counter != 6'd32) begin
-                    wr_cmd_counter <= wr_cmd_counter - 1'b1;
-                    wr_cmd_reg     <= {wr_cmd_reg[30:0], 1'b0};
-                end else if (page_count != 0) begin
-                    wr_SpiCsB        <= 1'b1;
-                    wr_cmd_counter <= 6'h27;
-                    wr_cmd_reg     <= {CMD_PP, wr_current_addr}; // Program Page at current_addr                    
-                end else begin
-                    wr_SpiCsB        <= 1'b1;
-                    wr_cmd_counter <= 6'h27;
-                    write_done     <= 1'b1;
-                end
+            WR_PPCMD_S: begin
+                wr_SpiCsB         <= 1'b1;
+                wr_strt_cmd_cnt   <= 1'b0;
+                wr_strt_delay_cnt <= 1'b1;
+                wr_cmd_reg        <= {CMD_PP, wr_current_addr};
             end
 
-            WR_ASSCS2_S: begin
-                spi_mosi_int <= wr_cmd_reg[31];
-                wr_SpiCsB      <= 1'b0;            
-            end
-
-            WR_PROGRAM_S: begin
-                spi_mosi_int <= wr_cmd_reg[31];
-                if (wr_cmd_counter != 0) begin
-                    wr_cmd_counter <= wr_cmd_counter - 1'b1;
-                    wr_cmd_reg     <= {wr_cmd_reg[30:0], 1'b0};
-                end else begin
-                    fifo_rden <= 1'b1;
-                    dopin_ts  <= 4'h00;
-                end
+            WR_SENDCMD2_S: begin
+                wr_SpiCsB         <= 1'b0;                            
+                wr_strt_delay_cnt <= 1'b0;   
+                wr_strt_cmd_cnt   <= 1'b1;
+                if (wr_cmd_cntr   != 5'd24)
+                    wr_cmd_reg    <= {wr_cmd_reg[30:0], 1'b0};
             end
 
             WR_DATA_S: begin
-                spi_mosi_int  <= fifo_dout[0];
-                wr_SpiCsB       <= 1'b0;
-                wr_data_count <= wr_data_count + 1'b1;
-                if (wr_data_count == 3'd7) begin// 8x4 bits from FIFO. wr_data_count rolls over to 0
-                    wr_current_addr <= wr_current_addr + 3'd4; // 4 bytes out of 256 bytes per page
-                    if (wr_current_addr[7:0] == 8'd252) begin // every 256 bytes (1 PP) written, only check lower bits = mod 256
-                        wr_SpiCsB        <= 1'b1; 
-                        fifo_rden      <= 1'b0;
-                        dopin_ts       <= 4'h0E;
-                        wr_cmd_counter <= 6'h27;                        
-                        wr_cmd_reg     <= {CMD_RDST, 24'h00};
-                    end
+                fifo_rden           <= 1'b1;
+                wr_strt_data_cntr   <= 1'b1;
+                if (wr_data_cntr    == 3'h07) begin
+                    wr_current_addr <= wr_current_addr + 1'b1; // 1 byte out of 256 bytes per page
                 end
             end
 
+            WR_STATCMD_S: begin
+                fifo_rden         <= 1'b0;
+                wr_SpiCsB         <= 1'b1;
+                wr_strt_data_cntr <= 1'b0;
+                wr_strt_cmd_cnt   <= 1'b0;
+                wr_strt_delay_cnt <= 1'b1;
+                wr_cmd_reg        <= {CMD_RDST, 24'h00};
+            end
+           
+
+            WR_SENDCMD3_S: begin
+                wr_SpiCsB         <= 1'b0;
+                wr_strt_delay_cnt <= 1'b0;
+                wr_strt_cmd_cnt   <= 1'b1;
+                if (wr_cmd_reg    != 5'd24)
+                    wr_cmd_reg    <= {wr_cmd_reg[30:0], 1'b0};
+            end
+
             WR_PPDONE_S: begin
-                spi_mosi_int        <= wr_cmd_reg[31];
-                dopin_ts            <= 4'h0E;
-                wr_SpiCsB             <= 1'b0;
-                wr_data_valid_count <= 3'h00;
-                wr_cmd_counter      <= 6'h27;
+                wr_strt_valid_cnt <= 1'b1;
+                wr_strt_cmd_cnt   <= 1'b0;
+                wr_rd_data        <= {wr_rd_data[1], sSpi_Miso};
             end
 
             WR_PPDONE_WAIT_S: begin
-                spi_mosi_int <= wr_cmd_reg[31];
-                fifo_rden    <= 1'b0;                
-                if (wr_cmd_counter != 6'd31) begin
-                    wr_cmd_counter <= wr_cmd_counter - 1'b1;
-                    wr_cmd_reg     <= {wr_cmd_reg[30:0], 1'b0};
-                end else begin
-                    wr_data_valid_count     <= wr_data_valid_count + 1'b1;
-                    wr_rd_data              <= {wr_rd_data[1], sSpi_Miso}; 
-                    if (wr_data_valid_count == 3'd7) // catch status byte
-                        status_data_valid   <= 1'b1; // copy WE and Write_in_progress one cycle after rddate
-                    else 
-                        status_data_valid   <= 1'b0;
-                    if (status_data_valid   == 1'b1)  spi_status <= wr_rd_data;
-                    if (spi_status          == 2'h00) begin      // Done with page program
-                        wr_SpiCsB             <= 1'b1;
-                        wr_cmd_counter      <= 6'h27;
-                        wr_cmd_reg          <= {CMD_WE, 24'h00};
-                        wr_data_valid_count <= 3'h00;
-                        status_data_valid   <= 1'b0;
-                        spi_status          <= 2'h03;
-                        page_count          <= page_count - 1'b1;
-                    end                    
+                wr_strt_valid_cnt <= 1'b0;
+                //if (wr_data_valid_cntr == 3'h07)
+                status_data_valid <= 1'b1;
+              //  else
+                //    status_data_valid <= 1'b0;
+                //if (status_data_valid == 1'b1)
+                wr_status      <= wr_rd_data;
+                if (wr_status  == 2'h00) begin
+                    wr_SpiCsB  <= 1'b1;
+                    wr_cmd_reg <= {CMD_WE, 24'h00};
+                    page_count <= page_count - 1'b1;
+                    wr_status  <= 2'h03;
                 end
             end
 
             default: begin
-                spi_mosi_int      <= wr_cmd_reg[39];
-                wr_SpiCsB           <= 1'b1;
-                status_data_valid <= 1'b0;
+                wr_SpiCsB  <= 1'b1;
+                page_count <= 16'h00;
             end
         endcase
     end
