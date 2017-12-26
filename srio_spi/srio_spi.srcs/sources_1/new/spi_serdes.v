@@ -16,7 +16,7 @@
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+// MSB to LSB (MOSI <- MSB)
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -43,26 +43,21 @@ module spi_serdes(
     // {{{ Wire declarations ----------------
         reg  [8:0]  ShiftCount = 9'h01;
         reg  [7:0]  ShiftData  = 8'h00;
-        reg         SpiCsB     = 1'b1;
-        reg         SpiMosi    = 1'b1;
+        reg         SpiMosi    = 1'b0;
         reg         dTransDone = 1'b1;
         wire        sTransferDone;
     // }}} End of wire declarations ---------
 
     // {{{ Wire assignment ----------------
-        assign sTransferDone = ShiftCount[0];
+        assign sTransferDone   = ShiftCount[0];
         assign SPI_CLK_O       = (CLK_I | sTransferDone | dTransDone); // BAD IDEA
         assign SPI_MOSI_O      = SpiMosi;
-        assign DONE_TRANS_O    = sTransferDone;
+        assign DONE_TRANS_O    = dTransDone;
         assign DATA_FROM_SPI_O = ShiftData;
     // }}} End of wire assignment ---------
 
     always @(negedge CLK_I) begin // dTransDone delayed by half clock cycle
         dTransDone <= sTransferDone;
-    end
-
-    always @(posedge CLK_I) begin // SPI chip-select is always inverse of RST (?!)
-        SpiCsB <= RST_I; // WTF???
     end
 
     always @(posedge CLK_I) begin  // Track transfer of serial data with barrel shifter
@@ -72,6 +67,7 @@ module spi_serdes(
             ShiftCount <= {ShiftCount[0], ShiftCount[8:1]}; // Barrel shift, rotate right
     end
 
+    // Simultaneous serialize outgoing data & deserialize incoming data. MSB first
     always @(posedge CLK_I) begin
         if (sTransferDone == 1'b0)
             ShiftData <= {ShiftData[6:0], SPI_MISO_I}; // SHIFT-left while not DONE_START
@@ -79,9 +75,10 @@ module spi_serdes(
             ShiftData <= DATA_TO_SPI_I; // Load data to start a new transfer sequence from a done state
     end
 
+    // SPI MOSI register outputs on falling edge of CLK. MSB first
     always @(negedge CLK_I) begin
         if (RST_I)
-            SpiMosi <= 1'b1;
+            SpiMosi <= 1'b0;
         else if (sTransferDone == 1'b0)
             SpiMosi <= ShiftData[7];
     end
