@@ -156,7 +156,7 @@ module spi_loader_top(
             end
             
             DATA_S: begin                               // 4
-                start_write    <= 1'b0;    
+                //start_write    <= 1'b0;    
                 if (fifo_full) begin
                     stop_write <= 1'b1;
                     fifo_wren  <= 1'b0;
@@ -194,8 +194,7 @@ module spi_loader_top(
                               
         .FIFO_WREN_I           ( fifo_wren          ),
         .FIFO_FULL_O           ( fifo_full          ),
-        .FIFO_EMPTY_O          ( fifo_empty         ),
-        .FIFO_WRERR_O          ( overflow           ),
+        .FIFO_EMPTY_O          ( fifo_empty         ),        
         .WRITE_DONE_O          ( write_done         ),
                                       
         .ERASE_I               ( start_erase        ),

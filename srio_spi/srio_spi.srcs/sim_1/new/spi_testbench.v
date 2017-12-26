@@ -24,7 +24,7 @@ module spi_testbench();
 
     reg log_clk_t;
     reg log_rst_t;
-    reg [31:0] data;
+    reg [63:0] data;
     wire CS;
     wire DQ0;
     reg  DQ1;
