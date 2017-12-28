@@ -24,8 +24,9 @@ module spi_testbench();
 
     reg log_clk_t;
     reg log_rst_t;
+    reg check_stop;
     reg [63:0] data;
-    wire CS;
+    wire CS;    
     wire DQ0;
     reg  DQ1;
     
@@ -34,9 +35,9 @@ module spi_testbench();
     initial begin
         log_clk_t            = 1'b0;
         log_rst_t            = 1'b0;
-        count                = 0;
+        count                = 0;    
         DQ1                  = 1'b0;        
-        data                 = 64'h00AABBCCDD;
+        data                 = 64'hFFAABBCCDD;
                         
         $display("<< Running testbench >>");
     end
@@ -57,16 +58,24 @@ module spi_testbench();
             log_rst_t <= 1'b0;
     end
 
+    always @(posedge log_clk_t) begin
+        if (check_stop == 1'b1)
+            data <= 64'h00;
+        else
+            data <= 64'hffffffffaabbccdd;
+    end    
+
     spi_loader_top spi_loader(
-        .CLK_I          ( log_clk_t  ),
-        .SRST_I         ( log_rst_t  ),
-        .DATA_TO_PROG_I ( data       ),    
-        .START_ADDR_I   ( 24'h2EABCD ),
-        .PAGE_COUNT_I   ( 16'h1000   ),
-        .SUBSECTOR_COUNT_I ( 12'h100     ),
-        .SPI_CS_O       ( CS         ),
-        .SPI_MOSI_O     ( DQ0        ),
-        .SPI_MISO_I     ( DQ1        )
+        .CLK_I             ( log_clk_t  ),
+        .SRST_I            ( log_rst_t  ),
+        .DATA_TO_PROG_I    ( data       ),    
+        .START_ADDR_I      ( 24'h2EABCD ),
+        .PAGE_COUNT_I      ( 16'h1000   ),
+        .SUBSECTOR_COUNT_I ( 12'h100    ),
+        .STOP_WRITE_O      ( check_stop ),
+        .SPI_CS_O          ( CS         ),
+        .SPI_MOSI_O        ( DQ0        ),
+        .SPI_MISO_I        ( DQ1        )
     );
 
 endmodule

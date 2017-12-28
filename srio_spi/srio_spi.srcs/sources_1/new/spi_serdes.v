@@ -1,15 +1,16 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: VlSU
+// Engineer: Gustov Vladimir
 // 
 // Create Date: 18.12.2017 15:20:07
-// Design Name: 
+// Design Name: srio_spi
 // Module Name: spi_serdes
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
+// Project Name: spi_flash_programmer
+// Target Devices: XC7K160TFFQ676-2 (Kintex-7)
+// Tool Versions: Vivado 2016.3
+// Description: This module serializes the data to be sent to the SPI Flash memory,
+// and deserializes the data received from the SPI Flash memory
 // 
 // Dependencies: 
 // 

@@ -45,7 +45,7 @@ module top_project(
     reg         log_rst = 1'b1;
     wire        spi_clk;    
     
-    wire [63:0] data = 64'h00AABBCCDD;
+    //wire [63:0] data = 64'h00AABBCCDD;
         
     localparam RES_WIDTH = 4;    
     reg [RES_WIDTH-1:0] reset_pipe = {RES_WIDTH{1'b1}};        

@@ -23,11 +23,15 @@
 module spi_loader_top(
     input         CLK_I,            // Synchro signal
     input         SRST_I,           // Reset synchro signal
+
     input  [63:0] DATA_TO_PROG_I,   // Data to write into SPI Flash
+    
     input  [23:0] START_ADDR_I,     // Address of SPI Flash for write
     input  [15:0] PAGE_COUNT_I,     // Count of page of SPI Flash for write
     input  [11:0] SUBSECTOR_COUNT_I,// Count of subsector of SPI Flash for write
+
     output        STOP_WRITE_O,     // FIFO is full, must wait while it will be release    
+    
     output        SPI_CS_O,         // Chip Select signal for SPI Flash
     output        SPI_MOSI_O,       // Master Ouput Slave Input
     input         SPI_MISO_I        // Master Input Slave Output
@@ -45,7 +49,7 @@ module spi_loader_top(
     // {{{ Wire declarations ----------------
         reg  [2:0]  state, next_state;
         reg  [4:0]  counter;
-        reg  [4:0]  data_counter;
+        reg  [5:0]  data_counter;
         wire        write_done;
         
         //wire [23:0] start_addr;
@@ -80,7 +84,7 @@ module spi_loader_top(
     
     always @(posedge CLK_I) begin
         if (SRST_I)
-            data_counter <= 5'h00;
+            data_counter <= 6'h00;
         else if (stop_write)
             data_counter <= data_counter + 1'b1;
     end
@@ -128,7 +132,7 @@ module spi_loader_top(
         endcase
     end
     
-    always @(state) begin
+    always @(state, fifo_full, data_counter) begin
         case (state)    
             IDLE_S: begin                               // 0
                 subsector_count_valid <= 1'b1;
@@ -160,7 +164,7 @@ module spi_loader_top(
                 if (fifo_full) begin
                     stop_write <= 1'b1;
                     fifo_wren  <= 1'b0;
-                end else if (data_counter == 5'h1F)begin
+                end else if (data_counter == 6'h3F)begin
                     stop_write <= 1'b0;
                     fifo_wren  <= 1'b1;
                 end 

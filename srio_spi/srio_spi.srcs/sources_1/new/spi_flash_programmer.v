@@ -530,10 +530,13 @@ module spi_flash_programmer(
             end
 
             WR_DATA_S: begin                                    // 4
-                wr_strt_cmd_cnt     <= 1'b0;
-                fifo_rden           <= 1'b1;
+                wr_strt_cmd_cnt     <= 1'b0;                
                 wr_strt_data_cntr   <= 1'b1;
                 wr_cmd_reg          <= {fifo_dout, 24'h00};
+                if (wr_data_cntr    == 3'h00)
+                    fifo_rden       <= 1'b1;
+                else
+                    fifo_rden       <= 1'b0;
                 if (wr_data_cntr    == 3'h07) begin
                     wr_current_addr <= wr_current_addr + 2'h03; // 3 byte out of 256 bytes per page
                 end
@@ -559,17 +562,13 @@ module spi_flash_programmer(
                 wr_strt_valid_cnt <= 1'b1;
                 wr_strt_cmd_cnt   <= 1'b0;
                 wr_rd_data        <= {wr_rd_data[1], sSpi_Miso};
+                wr_status         <= wr_rd_data;
             end
 
             // TODO: may be need rewrite
             WR_PPDONE_WAIT_S: begin                             // 8 
-                wr_strt_valid_cnt <= 1'b0; 
-                //if (wr_data_valid_cntr == 3'h07)
-                status_data_valid <= 1'b1;
-              //  else
-                //    status_data_valid <= 1'b0;
-                //if (status_data_valid == 1'b1)
-                wr_status      <= wr_rd_data;
+                wr_strt_valid_cnt <= 1'b0;                 
+                status_data_valid <= 1'b1;            
                 if (wr_status  == 2'h00) begin
                     wr_SpiCsB  <= 1'b1;
                     wr_cmd_reg <= {CMD_WE, 24'h00};
