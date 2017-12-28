@@ -51,7 +51,7 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_DIN_WIDTH_WDCH">64</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_DIN_WIDTH_WRCH">2</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_DOUT_RST_VAL">0</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_DOUT_WIDTH">32</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_DOUT_WIDTH">8</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_ENABLE_RLOCS">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_ENABLE_RST_SYNC">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_EN_SAFETY_CKT">0</spirit:configurableElementValue>
@@ -166,10 +166,10 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_PROG_FULL_TYPE_WRCH">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RACH_TYPE">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RDCH_TYPE">0</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_DATA_COUNT_WIDTH">16</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_DEPTH">32768</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_DATA_COUNT_WIDTH">18</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_DEPTH">131072</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_FREQ">1</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_PNTR_WIDTH">15</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_RD_PNTR_WIDTH">17</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_REG_SLICE_MODE_AXIS">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_REG_SLICE_MODE_RACH">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_REG_SLICE_MODE_RDCH">0</spirit:configurableElementValue>
@@ -311,8 +311,8 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Input_Depth_wdch">1024</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Input_Depth_wrch">16</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Master_interface_Clock_enable_memory_mapped">false</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Output_Data_Width">32</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Output_Depth">32768</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Output_Data_Width">8</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Output_Depth">131072</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Output_Register_Type">Embedded_Reg</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Overflow_Flag">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Overflow_Flag_AXI">false</spirit:configurableElementValue>
@@ -338,7 +338,7 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.RUSER_Width">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Read_Clock_Frequency">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Read_Data_Count">false</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Read_Data_Count_Width">16</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Read_Data_Count_Width">18</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Register_Slice_Mode_axis">Fully_Registered</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Register_Slice_Mode_rach">Fully_Registered</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Register_Slice_Mode_rdch">Fully_Registered</spirit:configurableElementValue>

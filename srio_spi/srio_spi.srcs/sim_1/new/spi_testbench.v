@@ -61,7 +61,7 @@ module spi_testbench();
         .CLK_I          ( log_clk_t  ),
         .SRST_I         ( log_rst_t  ),
         .DATA_TO_PROG_I ( data       ),    
-        .START_ADDR_I   ( 24'hABCD   ),
+        .START_ADDR_I   ( 24'h2EABCD ),
         .PAGE_COUNT_I   ( 16'h1000   ),
         .SUBSECTOR_COUNT_I ( 12'h100     ),
         .SPI_CS_O       ( CS         ),

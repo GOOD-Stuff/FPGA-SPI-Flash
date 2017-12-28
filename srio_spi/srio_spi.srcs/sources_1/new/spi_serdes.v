@@ -47,17 +47,15 @@ module spi_serdes(
         reg  [7:0]  ShiftData;
         reg         SpiMosi    = 1'b0;
         reg         dTransDone = 1'b1; // Start and End of transaction            
-        reg         spi_cs_n   = 1'b1;        
-        wire        tmp_done;
+        reg         spi_cs_n   = 1'b1;                
     // }}} End of wire declarations ---------
 
     // {{{ Wire assignment ----------------        
         assign SPI_CLK_O       = (CLK_I || spi_cs_n || dTransDone); // may be BAD IDEA
-        assign SPI_MOSI_O      = SpiMosi;
-        assign tmp_done        = SPI_CS_I & dTransDone;
+        assign SPI_MOSI_O      = SpiMosi;        
         assign DONE_TRANS_O    = dTransDone;
         assign DATA_FROM_SPI_O = ShiftData;
-        assign SPI_CS_N_O      = spi_cs_n; //& tmp_done;
+        assign SPI_CS_N_O      = spi_cs_n;
     // }}} End of wire assignment ---------
 
     // Set CS signal
@@ -75,10 +73,11 @@ module spi_serdes(
     always @(posedge CLK_I) begin  // Track transfer of serial data with barrel shifter
         if (RST_I)
             ShiftCount <= C_SHIFT_COUNT_INIT;
-        else if ((tmp_done == 1'b0) || (START_TRANS_I == 1'b1))
-            ShiftCount <= {ShiftCount[0], ShiftCount[7:1]}; // Barrel shift, rotate right
-        else if (tmp_done == 1'b1)
+        else if (spi_cs_n == 1'b1)
             ShiftCount <= C_SHIFT_COUNT_INIT;
+        else if ((spi_cs_n == 1'b0) || (START_TRANS_I == 1'b1))
+            ShiftCount <= {ShiftCount[0], ShiftCount[7:1]}; // Barrel shift, rotate right
+        
     end
 
     // Simultaneous serialize outgoing data & deserialize incoming data. MSB first
@@ -95,7 +94,9 @@ module spi_serdes(
     always @(negedge CLK_I) begin
         if (RST_I)
             SpiMosi <= 1'b0;        
-        else if (tmp_done == 1'b0)
+        else if (spi_cs_n)
+            SpiMosi <= 1'b0;
+        else if (spi_cs_n == 1'b0)
             SpiMosi <= ShiftData[7];               
     end
 
