@@ -85,11 +85,15 @@ module top_project(
 spi_loader_top spi_loader(
     .CLK_I             ( log_clk ),
     .SRST_I            ( log_rst ),
+
     .DATA_TO_PROG_I    ( data       ),    
     .START_ADDR_I      ( 24'hABCD   ),
     .PAGE_COUNT_I      ( 16'h1000   ),
-    .SUBSECTOR_COUNT_I ( 12'h10     ),
+    .SECTOR_COUNT_I ( 12'h10     ),
+
     .STOP_WRITE_O      (   ),
+
+    
     .SPI_CS_O          ( CS         ),    
     .SPI_MOSI_O        ( DQ0        ),
     .SPI_MISO_I        ( DQ1        )

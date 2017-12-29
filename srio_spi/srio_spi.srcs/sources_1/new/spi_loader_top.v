@@ -28,10 +28,12 @@ module spi_loader_top(
     
     input  [23:0] START_ADDR_I,     // Address of SPI Flash for write
     input  [15:0] PAGE_COUNT_I,     // Count of page of SPI Flash for write
-    input  [11:0] SUBSECTOR_COUNT_I,// Count of subsector of SPI Flash for write
+    input  [11:0] SECTOR_COUNT_I,   // Count of sector of SPI Flash for write
 
+    input         START_LOAD_I,
     output        STOP_WRITE_O,     // FIFO is full, must wait while it will be release    
-    
+    output        WRITE_DONE_O,
+
     output        SPI_CS_O,         // Chip Select signal for SPI Flash
     output        SPI_MOSI_O,       // Master Ouput Slave Input
     input         SPI_MISO_I        // Master Input Slave Output
@@ -51,30 +53,32 @@ module spi_loader_top(
         reg  [4:0]  counter;
         reg  [5:0]  data_counter;
         wire        write_done;
+        wire        load_valid;
         
         //wire [23:0] start_addr;
-        reg         start_addr_valid = 1'b0;
+        reg         start_addr_valid      = 1'b0;
         //wire [15:0] page_count;
-        reg         page_count_valid = 1'b0;
+        reg         page_count_valid      = 1'b0;
         //wire [11:0] sector_count;
-        reg         subsector_count_valid = 1'b0;
-        reg         start_erase = 1'b0;
-        reg         start_write = 1'b0;
-        reg         stop_write  = 1'b0;
+        reg         sector_count_valid = 1'b0;
+        reg         start_erase           = 1'b0;
+        reg         start_write           = 1'b0;
+        reg         stop_write            = 1'b1;
         wire        erasing_spi;
         
-        reg         fifo_wren = 1'b0;
+        reg         fifo_wren             = 1'b0;
         wire        fifo_full;
-        wire        fifo_empty;
-        wire        overflow;
+        wire        fifo_empty;        
     // }}} End of wire declarations ------------
         
         
     // {{{ Wire initializations ------------ 
-        assign STOP_WRITE_O = stop_write;        
+        assign load_valid   = START_LOAD_I && (!write_done);
+        assign STOP_WRITE_O = stop_write;     
+        assign WRITE_DONE_O = write_done & (!load_valid);        
         //assign STOP_WRITE_O = (fifo_full) ? 0 : 1;
     // }}} End of wire initializations ------------
-    
+
     always @(posedge CLK_I) begin
         if (SRST_I)
             counter <= 5'h00;
@@ -85,8 +89,10 @@ module spi_loader_top(
     always @(posedge CLK_I) begin
         if (SRST_I)
             data_counter <= 6'h00;
-        else if (stop_write)
-            data_counter <= data_counter + 1'b1;
+        else if (!stop_write)
+            data_counter <= 6'h00;
+        else
+            data_counter <= data_counter + 1'b1;            
     end
 
     // {{{ FSM logic ------------    
@@ -101,7 +107,10 @@ module spi_loader_top(
         next_state = IDLE_S;    
         case (state)
             IDLE_S: begin                               // 0
-                next_state = ERASE_S;
+                if (load_valid)
+                    next_state = ERASE_S;
+                else 
+                    next_state = IDLE_S;
             end
             
             ERASE_S: begin                              // 1
@@ -135,13 +144,19 @@ module spi_loader_top(
     always @(state, fifo_full, data_counter) begin
         case (state)    
             IDLE_S: begin                               // 0
-                subsector_count_valid <= 1'b1;
-                start_addr_valid      <= 1'b1;                
-                page_count_valid      <= 1'b1;
+                if (load_valid) begin
+                    sector_count_valid <= 1'b1;
+                    start_addr_valid      <= 1'b1;                
+                    page_count_valid      <= 1'b1;
+                end else begin
+                    sector_count_valid <= 1'b0;
+                    start_addr_valid      <= 1'b0;                
+                    page_count_valid      <= 1'b0;
+                end
                 fifo_wren             <= 1'b0;
                 start_erase           <= 1'b0;
                 start_write           <= 1'b0;
-                stop_write            <= 1'b0;                
+                stop_write            <= 1'b1;                
             end
                 
             ERASE_S: begin                              // 1
@@ -151,11 +166,14 @@ module spi_loader_top(
             WAIT_ERASE_S: begin                         // 2
                 start_erase               <= 1'b0;
                 if (!erasing_spi) 
-                    subsector_count_valid <= 1'b0;            
+                    sector_count_valid <= 1'b0;            
+                else
+                    stop_write            <= 1'b0;
             end
 
             ALIGN_S: begin                              // 3
                 fifo_wren             <= 1'b1;
+                stop_write            <= 1'b0;
                 start_write           <= 1'b1;
             end
             
@@ -172,7 +190,7 @@ module spi_loader_top(
             
             default: begin
                 start_erase           <= 1'b0;
-                subsector_count_valid <= 1'b0;
+                sector_count_valid <= 1'b0;
                 start_addr_valid      <= 1'b0;                
                 page_count_valid      <= 1'b0;
                 stop_write            <= 1'b1;
@@ -193,8 +211,8 @@ module spi_loader_top(
         .START_ADDR_VALID_I    ( start_addr_valid   ),
         .PAGE_COUNT_I          ( PAGE_COUNT_I       ),
         .PAGE_COUNT_VALID_I    ( page_count_valid   ),
-        .SECTOR_COUNT_I        ( SUBSECTOR_COUNT_I     ),
-        .SECTOR_COUNT_VALID_I  ( subsector_count_valid ),
+        .SECTOR_COUNT_I        ( SECTOR_COUNT_I     ),
+        .SECTOR_COUNT_VALID_I  ( sector_count_valid ),
                               
         .FIFO_WREN_I           ( fifo_wren          ),
         .FIFO_FULL_O           ( fifo_full          ),
