@@ -145,11 +145,11 @@ module spi_loader_top(
         case (state)    
             IDLE_S: begin                               // 0
                 if (load_valid) begin
-                    sector_count_valid <= 1'b1;
+                    sector_count_valid    <= 1'b1;
                     start_addr_valid      <= 1'b1;                
                     page_count_valid      <= 1'b1;
                 end else begin
-                    sector_count_valid <= 1'b0;
+                    sector_count_valid    <= 1'b0;
                     start_addr_valid      <= 1'b0;                
                     page_count_valid      <= 1'b0;
                 end
@@ -160,15 +160,15 @@ module spi_loader_top(
             end
                 
             ERASE_S: begin                              // 1
-                start_erase               <= 1'b1;
+                start_erase            <= 1'b1;
             end
             
             WAIT_ERASE_S: begin                         // 2
-                start_erase               <= 1'b0;
+                start_erase            <= 1'b0;
                 if (!erasing_spi) 
                     sector_count_valid <= 1'b0;            
                 else
-                    stop_write            <= 1'b0;
+                    stop_write         <= 1'b0;
             end
 
             ALIGN_S: begin                              // 3
@@ -190,7 +190,7 @@ module spi_loader_top(
             
             default: begin
                 start_erase           <= 1'b0;
-                sector_count_valid <= 1'b0;
+                sector_count_valid    <= 1'b0;
                 start_addr_valid      <= 1'b0;                
                 page_count_valid      <= 1'b0;
                 stop_write            <= 1'b1;
@@ -204,7 +204,7 @@ module spi_loader_top(
     // {{{ Include other modules ------------
     spi_flash_programmer spi_prog(
         .LOG_CLK_I             ( CLK_I              ),               
-        .LOG_RST_I             ( SRST_I              ),
+        .LOG_RST_I             ( SRST_I             ),
                                       
         .DATA_TO_FIFO_I        ( DATA_TO_PROG_I     ),
         .START_ADDR_I          ( START_ADDR_I       ),
