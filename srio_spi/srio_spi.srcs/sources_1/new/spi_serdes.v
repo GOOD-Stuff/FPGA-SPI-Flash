@@ -44,8 +44,8 @@ module spi_serdes(
 
 
     // {{{ Wire declarations ----------------
-        reg  [7:0]  ShiftCount;
-        reg  [7:0]  ShiftData;
+        reg  [7:0]  ShiftCount = C_SHIFT_COUNT_INIT;
+        reg  [7:0]  ShiftData  = 8'h00;
         reg         SpiMosi    = 1'b0;
         reg         dTransDone = 1'b1; // Start and End of transaction            
         reg         spi_cs_n   = 1'b1;                
@@ -61,7 +61,10 @@ module spi_serdes(
 
     // Set CS signal
     always @(negedge CLK_I) begin
-        spi_cs_n <= SPI_CS_I;
+        if (RST_I)
+            spi_cs_n <= 1'b1;
+        else
+            spi_cs_n <= SPI_CS_I;
     end
 
     always @(posedge CLK_I) begin // dTransDone delayed by half clock cycle

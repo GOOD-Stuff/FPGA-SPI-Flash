@@ -50,8 +50,8 @@ module spi_loader_top(
     
     // {{{ Wire declarations ----------------
         reg  [2:0]  state, next_state;
-        reg  [4:0]  counter;
-        reg  [5:0]  data_counter;
+        reg  [4:0]  counter               = 5'h00;
+        reg  [5:0]  data_counter          = 6'h00;
         wire        write_done;
         wire        load_valid;
         

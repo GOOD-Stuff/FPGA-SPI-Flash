@@ -110,11 +110,11 @@ module spi_flash_programmer(
 // {{{ Wire declarations ----------------
     //----- write -----
     reg  [5:0]       wr_cmd_cntr;
-    reg  [31:0]      wr_cmd_reg;
+    reg  [31:0]      wr_cmd_reg             = 32'h00;
     reg  [1:0]       wr_rd_data             = 2'h00;
     reg  [2:0]       wr_data_valid_cntr     = 3'h00;
     reg  [3:0]       wr_delay_cntr;
-    reg  [2:0]       wr_data_cntr           = 3'h00; // SPI from FIFO Nibble count
+    reg  [3:0]       wr_data_cntr           = 4'h00; // SPI from FIFO Nibble count
     reg  [WIDTH-1:0] wr_current_addr        = 24'h00;
     reg              wr_SpiCsB              = 1'b1;                 // Chip Select (inversion: 1 - device is deselected, 0 - enables the device)
     reg  [31:0]      spi_wrdata             = 32'h00;
@@ -125,12 +125,13 @@ module spi_flash_programmer(
     reg              wr_strt_valid_cnt      = 1'b0;
     reg              wr_strt_delay_cnt      = 1'b0;
     reg              wr_strt_data_cntr      = 1'b0;
+    reg              d_wr_strt_data_cntr    = 1'b0;
     wire             write_start;
-    reg              write_done;   
+    reg              write_done             = 1'b0;   
     reg  [3:0]       wr_state, wr_next_state;    
     //----- erase -----
     reg  [5:0]       er_cmd_cntr;
-    reg  [31:0]      er_cmd_reg;
+    reg  [31:0]      er_cmd_reg             = 32'h00;
     reg  [1:0]       er_rd_data;
     reg  [2:0]       er_data_valid_cntr;
     reg  [3:0]       er_delay_cntr;
@@ -139,7 +140,7 @@ module spi_flash_programmer(
     wire [WIDTH-1:0] sCurrent_addr;
     wire [11:0]      sSector_count;
     wire [15:0]      sPage_count;
-    reg              er_SpiCsB;
+    reg              er_SpiCsB               = 1'b1;
     reg  [1:0]       er_status;
     reg              er_strt_cmd_cnt;
     reg              er_strt_valid_cnt;
@@ -243,8 +244,17 @@ module spi_flash_programmer(
     end 
 
     always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I || (!wr_strt_data_cntr))
-            wr_data_cntr <= 3'h00;
+        if (LOG_RST_I)
+            d_wr_strt_data_cntr <= 1'b0;
+        else
+            d_wr_strt_data_cntr <= wr_strt_data_cntr;
+    end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I || (!d_wr_strt_data_cntr)) // TODO: YOLO
+            wr_data_cntr <= 4'h08;
+        else if ((wr_data_cntr == 4'h08) || (wr_data_cntr == 4'h07))
+            wr_data_cntr  <= 4'h00;
         else
             wr_data_cntr <= wr_data_cntr + 1'b1;
     end
@@ -373,7 +383,7 @@ module spi_flash_programmer(
 			ER_SENDCMD4_S: begin                                       // 5
                er_strt_delay_cnt          <= 1'b0;                                
                er_SpiCsB                  <= 1'b0;
-               er_strt_cmd_cnt            <= 1'b1;               
+               er_strt_cmd_cnt            <= 1'b1;                              
 			end 
  
 			ER_RDSTAT_S: begin                                        // 6                        
@@ -417,7 +427,8 @@ module spi_flash_programmer(
     end
 
     always @(wr_state, fifo_almostfull, write_start, page_count, wr_cmd_cntr, 
-             wr_delay_cntr, wr_data_valid_cntr, wr_status, wr_current_addr) begin
+             wr_delay_cntr, wr_data_valid_cntr, wr_data_cntr, wr_status, 
+             wr_current_addr) begin
         wr_next_state = WR_IDLE_S;
         case (wr_state) 
             WR_IDLE_S: begin                                    // 0
@@ -507,7 +518,7 @@ module spi_flash_programmer(
             end
 
             WR_SENDCMD1_S: begin                                // 1
-                wr_status  <= 2'h03;
+                wr_status      <= 2'h03;
                 if (page_count != 16'h00) begin
                     wr_SpiCsB       <= 1'b0;
                     wr_strt_cmd_cnt <= 1'b1;
@@ -523,31 +534,37 @@ module spi_flash_programmer(
             end
 
             WR_SENDCMD2_S: begin                                // 3                                    
-                wr_strt_delay_cnt <= 1'b0;   
                 wr_strt_cmd_cnt   <= 1'b1;
+                wr_strt_delay_cnt <= 1'b0;                   
                 wr_SpiCsB         <= 1'b0;      
-                if ((wr_cmd_cntr == 5'd08) || (wr_cmd_cntr == 5'd16) || (wr_cmd_cntr == 5'd24))
+                if ((wr_cmd_cntr  == 5'd08) || (wr_cmd_cntr == 5'd16) || (wr_cmd_cntr == 5'd24))
                     wr_cmd_reg    <= {wr_cmd_reg[23:0], 8'b0};
             end
 
             WR_DATA_S: begin                                    // 4
                 wr_strt_cmd_cnt     <= 1'b0;                
                 wr_strt_data_cntr   <= 1'b1;                
-                if (wr_data_cntr    == 3'h00)
+                if ((wr_data_cntr   == 3'h00) //|| (wr_data_cntr == 4'h08))
+                       && (d_wr_strt_data_cntr == 1'b1))
                     fifo_rden       <= 1'b1;
                 else
                     fifo_rden       <= 1'b0;
+
                 wr_cmd_reg          <= {fifo_dout, 24'h00};
-                if (wr_data_cntr    == 3'h07) begin
-                    wr_current_addr <= wr_current_addr + 2'h03; // 3 byte out of 256 bytes per page
+
+                if (wr_data_cntr    == 3'h07) begin // TODO: YOLO
+                    if (wr_current_addr[7:0] != 24'd255)
+                        wr_current_addr <= wr_current_addr + 2'h03; // 3 byte out of 256 bytes per page
+                    else
+                        wr_current_addr <= wr_current_addr + 1'h01;
                 end
             end
 
             WR_STATCMD_S: begin                                 // 5
                 fifo_rden         <= 1'b0;
                 wr_SpiCsB         <= 1'b1;
-                wr_strt_data_cntr <= 1'b0;
                 wr_strt_cmd_cnt   <= 1'b0;
+                wr_strt_data_cntr <= 1'b0;                
                 wr_strt_delay_cnt <= 1'b1;
                 wr_cmd_reg        <= {CMD_RDST, 24'h00};
             end
