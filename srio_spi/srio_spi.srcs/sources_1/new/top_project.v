@@ -35,16 +35,16 @@ module top_project(
     reg         log_rst = 1'b1;
     wire        spi_clk;    
     
-    wire [63:0] data = 64'h00AABBCCDD;
+    wire [7:0] data = 8'hDD;
         
     localparam RES_WIDTH = 4;    
     reg [RES_WIDTH-1:0] reset_pipe = {RES_WIDTH{1'b1}};        
     always @(posedge log_clk) {log_rst, reset_pipe} <= {reset_pipe, 1'b0};
     
     IBUFDS #(
-       .DIFF_TERM     ( "FALSE"  ),       // Differential Termination
-       .IBUF_LOW_PWR  ( "TRUE"   ),     // Low power="TRUE", Highest performance="FALSE" 
-       .IOSTANDARD    ( "LVDS"   )     // Specify the input I/O standard
+       .DIFF_TERM     ( "FALSE"  ),  // Differential Termination
+       .IBUF_LOW_PWR  ( "TRUE"   ),  // Low power="TRUE", Highest performance="FALSE" 
+       .IOSTANDARD    ( "LVDS"   )   // Specify the input I/O standard
     ) IBUFDS_inst (
        .O             ( log_clk  ),  // Buffer output
        .I             ( SYSCLK_P ),  // Diff_p buffer input (connect directly to top-level port)
@@ -58,7 +58,7 @@ module top_project(
         .DATA_TO_PROG_I    ( data       ),    
         .START_ADDR_I      ( 24'h000100 ),
         .PAGE_COUNT_I      ( 16'd168    ),
-        .SECTOR_COUNT_I    ( 12'd80     ),
+        .SECTOR_COUNT_I    ( 8'd80     ),
     
         .START_LOAD_I      ( start_load ),
         .STOP_WRITE_O      ( check_stop ),

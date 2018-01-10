@@ -1,10 +1,10 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.3 (win64) Build 1682563 Mon Oct 10 19:07:27 MDT 2016
-// Date        : Wed Jan 10 10:53:52 2018
+// Date        : Wed Jan 10 10:53:51 2018
 // Host        : vldmr-PC running 64-bit Service Pack 1  (build 7601)
-// Command     : write_verilog -force -mode synth_stub
-//               C:/Projects/srio_spi/srio_spi.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0_stub.v
+// Command     : write_verilog -force -mode synth_stub -rename_top decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix -prefix
+//               decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_ fifo_generator_0_stub.v
 // Design      : fifo_generator_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7k160tffg676-2
@@ -14,7 +14,7 @@
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
 (* x_core_info = "fifo_generator_v13_1_2,Vivado 2016.3" *)
-module fifo_generator_0(clk, srst, din, wr_en, rd_en, dout, full, almost_full, 
+module decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix(clk, srst, din, wr_en, rd_en, dout, full, almost_full, 
   empty, almost_empty)
 /* synthesis syn_black_box black_box_pad_pin="clk,srst,din[7:0],wr_en,rd_en,dout[7:0],full,almost_full,empty,almost_empty" */;
   input clk;

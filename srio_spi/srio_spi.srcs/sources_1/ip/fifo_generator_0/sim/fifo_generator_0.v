@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -70,7 +70,7 @@ module fifo_generator_0 (
 input wire clk;
 input wire srst;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
-input wire [63 : 0] din;
+input wire [7 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
 input wire wr_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *)
@@ -90,9 +90,9 @@ output wire almost_empty;
     .C_COMMON_CLOCK(1),
     .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),
-    .C_DATA_COUNT_WIDTH(15),
+    .C_DATA_COUNT_WIDTH(16),
     .C_DEFAULT_VALUE("BlankString"),
-    .C_DIN_WIDTH(64),
+    .C_DIN_WIDTH(8),
     .C_DOUT_RST_VAL("0"),
     .C_DOUT_WIDTH(8),
     .C_ENABLE_RLOCS(0),
@@ -126,13 +126,13 @@ output wire almost_empty;
     .C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
     .C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
     .C_PROG_EMPTY_TYPE(0),
-    .C_PROG_FULL_THRESH_ASSERT_VAL(16381),
-    .C_PROG_FULL_THRESH_NEGATE_VAL(16380),
+    .C_PROG_FULL_THRESH_ASSERT_VAL(32767),
+    .C_PROG_FULL_THRESH_NEGATE_VAL(32766),
     .C_PROG_FULL_TYPE(0),
-    .C_RD_DATA_COUNT_WIDTH(18),
-    .C_RD_DEPTH(131072),
+    .C_RD_DATA_COUNT_WIDTH(16),
+    .C_RD_DEPTH(32768),
     .C_RD_FREQ(1),
-    .C_RD_PNTR_WIDTH(17),
+    .C_RD_PNTR_WIDTH(15),
     .C_UNDERFLOW_LOW(0),
     .C_USE_DOUT_RST(1),
     .C_USE_ECC(0),
@@ -143,10 +143,10 @@ output wire almost_empty;
     .C_USE_FWFT_DATA_COUNT(1),
     .C_VALID_LOW(0),
     .C_WR_ACK_LOW(0),
-    .C_WR_DATA_COUNT_WIDTH(15),
-    .C_WR_DEPTH(16384),
+    .C_WR_DATA_COUNT_WIDTH(16),
+    .C_WR_DEPTH(32768),
     .C_WR_FREQ(1),
-    .C_WR_PNTR_WIDTH(14),
+    .C_WR_PNTR_WIDTH(15),
     .C_WR_RESPONSE_LATENCY(1),
     .C_MSGON_VAL(1),
     .C_ENABLE_RST_SYNC(1),
@@ -302,12 +302,12 @@ output wire almost_empty;
     .din(din),
     .wr_en(wr_en),
     .rd_en(rd_en),
-    .prog_empty_thresh(17'B0),
-    .prog_empty_thresh_assert(17'B0),
-    .prog_empty_thresh_negate(17'B0),
-    .prog_full_thresh(14'B0),
-    .prog_full_thresh_assert(14'B0),
-    .prog_full_thresh_negate(14'B0),
+    .prog_empty_thresh(15'B0),
+    .prog_empty_thresh_assert(15'B0),
+    .prog_empty_thresh_negate(15'B0),
+    .prog_full_thresh(15'B0),
+    .prog_full_thresh_assert(15'B0),
+    .prog_full_thresh_negate(15'B0),
     .int_clk(1'D0),
     .injectdbiterr(1'D0),
     .injectsbiterr(1'D0),

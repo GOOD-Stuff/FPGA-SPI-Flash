@@ -27,7 +27,7 @@ module spi_testbench();
     reg  start_load;
     wire check_stop;
     wire write_done;
-    reg [63:0] data;
+    reg [7:0] data;
     wire CS;    
     wire DQ0;
     reg  DQ1;
@@ -40,7 +40,7 @@ module spi_testbench();
         start_load           = 1'b1;
         count                = 0;    
         DQ1                  = 1'b0;        
-        data                 = 64'hFFAABBCCDD;
+        data                 = 8'hCD;
                         
         $display("<< Running testbench >>");
     end
@@ -63,9 +63,9 @@ module spi_testbench();
 
     always @(posedge log_clk_t) begin
         if (check_stop == 1'b1)
-            data <= 64'h00;
+            data <= 8'h00;
         else
-            data <= 64'hffffffffaabbccdd;
+            data <= 8'hcd;
     end    
 
     always @(posedge log_clk_t) begin
@@ -84,7 +84,7 @@ module spi_testbench();
         .DATA_TO_PROG_I    ( data       ),    
         .START_ADDR_I      ( 24'h000100 ),
         .PAGE_COUNT_I      ( 16'd168  ),
-        .SECTOR_COUNT_I    ( 12'd80     ),
+        .SECTOR_COUNT_I    ( 8'd80     ),
 
         .START_LOAD_I      ( start_load ),
         .STOP_WRITE_O      ( check_stop ),

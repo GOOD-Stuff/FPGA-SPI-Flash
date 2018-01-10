@@ -2,8 +2,8 @@
 # Vivado v2016.3 (64-bit)
 # SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
 # IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
-# Start of session at: Tue Jan 09 15:48:44 2018
-# Process ID: 2380
+# Start of session at: Wed Jan 10 10:57:27 2018
+# Process ID: 3636
 # Current directory: C:/Projects/srio_spi/srio_spi.runs/synth_4
 # Command line: vivado.exe -log top_project.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_project.tcl
 # Log file: C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.vds
@@ -15,9 +15,9 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 2652 
+INFO: Helper process launched with PID 3772 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 289.102 ; gain = 78.781
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 288.914 ; gain = 79.465
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'top_project' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
 	Parameter RES_WIDTH bound to: 4 - type: integer 
@@ -34,7 +34,7 @@ INFO: [Synth 8-638] synthesizing module 'spi_loader_top' [C:/Projects/srio_spi/s
 	Parameter IDLE_S bound to: 3'b000 
 	Parameter ERASE_S bound to: 3'b001 
 	Parameter WAIT_ERASE_S bound to: 3'b010 
-	Parameter ALIGN_S bound to: 3'b011 
+	Parameter START_S bound to: 3'b011 
 	Parameter DATA_S bound to: 3'b100 
 WARNING: [Synth 8-567] referenced signal 'load_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:106]
 WARNING: [Synth 8-567] referenced signal 'load_valid' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:144]
@@ -74,12 +74,12 @@ INFO: [Synth 8-638] synthesizing module 'spi_flash_programmer' [C:/Projects/srio
 	Parameter WR_PPDONE_WAIT_S bound to: 4'b1000 
 	Parameter ER_IDLE_S bound to: 3'b000 
 	Parameter ER_SENDCMD1_S bound to: 3'b001 
-	Parameter ER_SSECMD_S bound to: 3'b010 
-	Parameter ER_SENDCMD3_S bound to: 3'b011 
+	Parameter ER_SECMD_S bound to: 3'b010 
+	Parameter ER_SENDCMD2_S bound to: 3'b011 
 	Parameter ER_STATCMD_S bound to: 3'b100 
-	Parameter ER_SENDCMD4_S bound to: 3'b101 
+	Parameter ER_SENDCMD3_S bound to: 3'b101 
 	Parameter ER_RDSTAT_S bound to: 3'b110 
-	Parameter ER_SENDCMD5_S bound to: 3'b111 
+	Parameter ER_SENDCMD4_S bound to: 3'b111 
 INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:260]
 INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:327]
 WARNING: [Synth 8-567] referenced signal 'sSector_count' should be on the sensitivity list [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:326]
@@ -101,13 +101,13 @@ WARNING: [Synth 8-567] referenced signal 'wr_status' should be on the sensitivit
 INFO: [Synth 8-638] synthesizing module 'spi_serdes' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v:24]
 	Parameter C_SHIFT_COUNT_INIT bound to: 8'b00000001 
 INFO: [Synth 8-256] done synthesizing module 'spi_serdes' (2#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v:24]
-WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:613]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:611]
 INFO: [Synth 8-638] synthesizing module 'STARTUPE2' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43498]
 	Parameter PROG_USR bound to: FALSE - type: string 
 	Parameter SIM_CCLK_FREQ bound to: 0.000000 - type: float 
 INFO: [Synth 8-256] done synthesizing module 'STARTUPE2' (3#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43498]
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_0' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2380-vldmr-PC/realtime/fifo_generator_0_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_0' (4#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2380-vldmr-PC/realtime/fifo_generator_0_stub.v:6]
+INFO: [Synth 8-638] synthesizing module 'fifo_generator_0' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3636-vldmr-PC/realtime/fifo_generator_0_stub.v:6]
+INFO: [Synth 8-256] done synthesizing module 'fifo_generator_0' (4#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3636-vldmr-PC/realtime/fifo_generator_0_stub.v:6]
 INFO: [Synth 8-256] done synthesizing module 'spi_flash_programmer' (5#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:22]
 INFO: [Synth 8-256] done synthesizing module 'spi_loader_top' (6#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:23]
 WARNING: [Synth 8-3848] Net log_clk_t in module/entity top_project does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:55]
@@ -115,7 +115,7 @@ WARNING: [Synth 8-3848] Net log_rst_t in module/entity top_project does not have
 WARNING: [Synth 8-3848] Net start_load in module/entity top_project does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:63]
 INFO: [Synth 8-256] done synthesizing module 'top_project' (7#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 326.559 ; gain = 116.238
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 326.328 ; gain = 116.879
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -128,9 +128,9 @@ WARNING: [Synth 8-3295] tying undriven pin spi_loader:CLK_I to constant 0 [C:/Pr
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:SRST_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:54]
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:START_LOAD_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:54]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 326.559 ; gain = 116.238
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 326.328 ; gain = 116.879
 ---------------------------------------------------------------------------------
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'fifo_generator_0' instantiated as 'spi_loader/spi_prog/fifo_spi' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:629]
+WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'fifo_generator_0' instantiated as 'spi_loader/spi_prog/fifo_spi' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:627]
 INFO: [Netlist 29-17] Analyzing 2 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Device 21-403] Loading part xc7k160tffg676-2
@@ -138,8 +138,8 @@ INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
-Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2380-vldmr-PC/dcp/fifo_generator_0_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
-Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2380-vldmr-PC/dcp/fifo_generator_0_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
+Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3636-vldmr-PC/dcp/fifo_generator_0_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
+Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-3636-vldmr-PC/dcp/fifo_generator_0_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
 Parsing XDC File [C:/Projects/srio_test/srio_test/top.xdc]
 Finished Parsing XDC File [C:/Projects/srio_test/srio_test/top.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Projects/srio_test/srio_test/top.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_project_propImpl.xdc].
@@ -149,28 +149,28 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 650.219 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 648.656 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tffg676-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'er_state_reg' in module 'spi_flash_programmer'
 INFO: [Synth 8-802] inferred FSM for state register 'wr_state_reg' in module 'spi_flash_programmer'
 INFO: [Synth 8-5546] ROM "erase_inprogress" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "wr_current_addr" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "page_count" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "wr_current_addr" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "er_status" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
@@ -227,17 +227,17 @@ WARNING: [Synth 8-327] inferring latch for variable 'erase_inprogress_reg' [C:/P
 ---------------------------------------------------------------------------------------------------
                ER_IDLE_S |                              000 |                              000
            ER_SENDCMD1_S |                              001 |                              001
-             ER_SSECMD_S |                              010 |                              010
-           ER_SENDCMD3_S |                              011 |                              011
+              ER_SECMD_S |                              010 |                              010
+           ER_SENDCMD2_S |                              011 |                              011
             ER_STATCMD_S |                              100 |                              100
-           ER_SENDCMD4_S |                              101 |                              101
+           ER_SENDCMD3_S |                              101 |                              101
              ER_RDSTAT_S |                              110 |                              110
-           ER_SENDCMD5_S |                              111 |                              111
+           ER_SENDCMD4_S |                              111 |                              111
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'er_state_reg' using encoding 'sequential' in module 'spi_flash_programmer'
 WARNING: [Synth 8-327] inferring latch for variable 'fifo_rden_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:536]
 WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_data_cntr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:503]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_rd_data_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:568]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_rd_data_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:565]
 WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:500]
 WARNING: [Synth 8-327] inferring latch for variable 'wr_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:508]
 WARNING: [Synth 8-327] inferring latch for variable 'wr_current_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:496]
@@ -262,7 +262,7 @@ WARNING: [Synth 8-327] inferring latch for variable 'stop_write_reg' [C:/Project
                   IDLE_S |                              000 |                              000
                  ERASE_S |                              001 |                              001
             WAIT_ERASE_S |                              010 |                              010
-                 ALIGN_S |                              011 |                              011
+                 START_S |                              011 |                              011
                   DATA_S |                              100 |                              100
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'spi_loader_top'
@@ -272,7 +272,7 @@ WARNING: [Synth 8-327] inferring latch for variable 'fifo_wren_reg' [C:/Projects
 WARNING: [Synth 8-327] inferring latch for variable 'start_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:157]
 WARNING: [Synth 8-327] inferring latch for variable 'start_write_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:158]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:15 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -287,7 +287,7 @@ Detailed RTL Component Info :
 +---Adders : 
 	   2 Input     24 Bit       Adders := 3     
 	   2 Input     16 Bit       Adders := 1     
-	   2 Input     12 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 1     
 	   2 Input      6 Bit       Adders := 3     
 	   2 Input      5 Bit       Adders := 1     
 	   2 Input      4 Bit       Adders := 3     
@@ -302,15 +302,13 @@ Detailed RTL Component Info :
 +---Muxes : 
 	   9 Input     32 Bit        Muxes := 1     
 	   8 Input     32 Bit        Muxes := 1     
-	   2 Input     24 Bit        Muxes := 1     
 	   9 Input     24 Bit        Muxes := 1     
 	   8 Input     24 Bit        Muxes := 1     
 	   2 Input     16 Bit        Muxes := 1     
 	   9 Input     16 Bit        Muxes := 1     
-	   2 Input     12 Bit        Muxes := 1     
-	   8 Input     12 Bit        Muxes := 1     
 	  20 Input      9 Bit        Muxes := 1     
-	   2 Input      8 Bit        Muxes := 2     
+	   2 Input      8 Bit        Muxes := 3     
+	   8 Input      8 Bit        Muxes := 1     
 	   2 Input      4 Bit        Muxes := 1     
 	   2 Input      3 Bit        Muxes := 1     
 	  17 Input      3 Bit        Muxes := 1     
@@ -342,7 +340,7 @@ Detailed RTL Component Info :
 +---Adders : 
 	   2 Input     24 Bit       Adders := 3     
 	   2 Input     16 Bit       Adders := 1     
-	   2 Input     12 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 1     
 	   2 Input      6 Bit       Adders := 2     
 	   2 Input      4 Bit       Adders := 3     
 	   2 Input      3 Bit       Adders := 2     
@@ -354,15 +352,13 @@ Detailed RTL Component Info :
 +---Muxes : 
 	   9 Input     32 Bit        Muxes := 1     
 	   8 Input     32 Bit        Muxes := 1     
-	   2 Input     24 Bit        Muxes := 1     
 	   9 Input     24 Bit        Muxes := 1     
 	   8 Input     24 Bit        Muxes := 1     
 	   2 Input     16 Bit        Muxes := 1     
 	   9 Input     16 Bit        Muxes := 1     
-	   2 Input     12 Bit        Muxes := 1     
-	   8 Input     12 Bit        Muxes := 1     
 	  20 Input      9 Bit        Muxes := 1     
-	   2 Input      8 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 2     
+	   8 Input      8 Bit        Muxes := 1     
 	   2 Input      4 Bit        Muxes := 1     
 	   2 Input      3 Bit        Muxes := 1     
 	  17 Input      3 Bit        Muxes := 1     
@@ -406,7 +402,7 @@ INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_load
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[1]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/start_addr_valid_reg) is unused and will be removed from module top_project.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -421,10 +417,10 @@ Start Timing Optimization
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Timing Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -535,7 +531,7 @@ WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_cmd_reg_reg[2
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_cmd_reg_reg[21]) is unused and will be removed from module top_project.
 INFO: [Common 17-14] Message 'Synth 8-3332' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Technology Mapping : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -558,9 +554,9 @@ Start Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-5396] Clock pin G has keep related attribute (keep/mark_debug/dont_touch) which could create extra logic on its net [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:568]
+WARNING: [Synth 8-5396] Clock pin G has keep related attribute (keep/mark_debug/dont_touch) which could create extra logic on its net [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:565]
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished IO Insertion : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -573,7 +569,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -585,25 +581,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -621,16 +617,16 @@ Report Cell Usage:
 |      |Cell             |Count |
 +------+-----------------+------+
 |1     |fifo_generator_0 |     1|
-|2     |CARRY4           |     7|
-|3     |LUT1             |    27|
-|4     |LUT2             |    25|
-|5     |LUT3             |    19|
+|2     |CARRY4           |     4|
+|3     |LUT1             |    16|
+|4     |LUT2             |    23|
+|5     |LUT3             |    11|
 |6     |LUT4             |    10|
-|7     |LUT5             |     4|
-|8     |LUT6             |    15|
+|7     |LUT5             |     7|
+|8     |LUT6             |    16|
 |9     |STARTUPE2        |     1|
 |10    |FDRE             |    15|
-|11    |LD               |    40|
+|11    |LD               |    36|
 |12    |IBUF             |     1|
 |13    |IBUFDS           |     1|
 |14    |OBUF             |     2|
@@ -640,29 +636,29 @@ Report Instance Areas:
 +------+-------------+---------------------+------+
 |      |Instance     |Module               |Cells |
 +------+-------------+---------------------+------+
-|1     |top          |                     |   179|
-|2     |  spi_loader |spi_loader_top       |   175|
-|3     |    spi_prog |spi_flash_programmer |   161|
+|1     |top          |                     |   155|
+|2     |  spi_loader |spi_loader_top       |   151|
+|3     |    spi_prog |spi_flash_programmer |   137|
 +------+-------------+---------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 215 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 650.219 ; gain = 111.691
-Synthesis Optimization Complete : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 650.219 ; gain = 439.898
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 648.656 ; gain = 111.594
+Synthesis Optimization Complete : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 648.656 ; gain = 439.207
 INFO: [Project 1-571] Translating synthesized netlist
-INFO: [Netlist 29-17] Analyzing 50 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 43 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 40 instances were transformed.
-  LD => LDCE: 40 instances
+  A total of 36 instances were transformed.
+  LD => LDCE: 36 instances
 
 INFO: [Common 17-83] Releasing license: Synthesis
 81 Infos, 156 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:24 ; elapsed = 00:00:24 . Memory (MB): peak = 650.219 ; gain = 439.898
+synth_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 648.656 ; gain = 439.008
 INFO: [Common 17-1381] The checkpoint 'C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.dcp' has been generated.
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 650.219 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Tue Jan 09 15:49:12 2018...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 648.656 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Wed Jan 10 10:57:54 2018...

@@ -4,13 +4,13 @@
 // Engineer: Gustov Vladimir
 // 
 // Create Date: 12.12.2017 10:56:54
-// Design Name: 
+// Design Name: srio_spi
 // Module Name: spi_flash_programmer
-// Project Name: srio_spi
-// Target Devices: Kintex-7
+// Project Name: spi_flash_programmer
+// Target Devices: XC7K160TFFQ676-2 (Kintex-7)
 // Tool Versions: Vivado 2016.3
-// Description: 
-// 
+// Description: This module work with SPI Flash memory N25Q128.
+//  In current time, only erase and write into (doesn't read from) flash.
 // Dependencies: 
 // 
 // Revision:
@@ -23,12 +23,12 @@ module spi_flash_programmer(
     input         LOG_CLK_I,            // Clock signal
     input         LOG_RST_I,            // Active-high, synchronous reset
     //
-    input [63:0]  DATA_TO_FIFO_I,       // 64-bit data to FIFO
+    input [7:0]   DATA_TO_FIFO_I,       // 8-bit data to FIFO
     input [23:0]  START_ADDR_I,         // Start address for write into SPI memory
     input         START_ADDR_VALID_I,   // Valid signal of start address
     input [15:0]  PAGE_COUNT_I,         // Count of pages for write into SPI memory
     input         PAGE_COUNT_VALID_I,   // Valid signal of page counts
-    input [11:0]  SECTOR_COUNT_I,       // Count of sectors for erase into SPI memory
+    input [7:0]   SECTOR_COUNT_I,       // Count of sectors for erase into SPI memory
     input         SECTOR_COUNT_VALID_I, // Valid signal of sector counts
     //
     input         FIFO_WREN_I,          // Write Enable signal for FIFO
@@ -48,9 +48,9 @@ module spi_flash_programmer(
 /*
     SPI Flash Memory - Micron N25Q128A:
         All size        - 16777216 bytes (16 MB);
-        65536 Pages     - by 256 bytes;
-        256 Sectors     - by 65536 bytes; 
-        4096 Subsectors - by 4096 bytes; 
+        65536 Pages     - each by 256 bytes;
+        256 Sectors     - each by 65536 bytes; 
+        4096 Subsectors - each by 4096 bytes; 
         24 (3 byte addr mode)
         CPOL = 0 - Сигнал синхронизации начинается с низкого уровня
         CPHA = 0 - Выборка данных производится по переднему фронту сигнала синхронизации
@@ -99,12 +99,12 @@ module spi_flash_programmer(
     // Erase    
     localparam [2:0] ER_IDLE_S         = 3'h00;   // Get start_address and count of sector, and set WE command
     localparam [2:0] ER_SENDCMD1_S     = 3'h01;   // Send WE command
-    localparam [2:0] ER_SSECMD_S       = 3'h02;   // Set SSE command
-    localparam [2:0] ER_SENDCMD3_S     = 3'h03;   // Send SSE command
+    localparam [2:0] ER_SECMD_S        = 3'h02;   // Set SE command
+    localparam [2:0] ER_SENDCMD2_S     = 3'h03;   // Send SE command
     localparam [2:0] ER_STATCMD_S      = 3'h04;   // Set READDSTAT command
-    localparam [2:0] ER_SENDCMD4_S     = 3'h05;   // Send READSTAT command
+    localparam [2:0] ER_SENDCMD3_S     = 3'h05;   // Send READSTAT command
     localparam [2:0] ER_RDSTAT_S       = 3'h06;   // Get status
-    localparam [2:0] ER_SENDCMD5_S     = 3'h07;   // Check received status and set WE command
+    localparam [2:0] ER_SENDCMD4_S     = 3'h07;   // Check received status and set WE command
 // }}} End local parameters -------------
 
 // {{{ Wire declarations ----------------
@@ -135,10 +135,10 @@ module spi_flash_programmer(
     reg  [1:0]       er_rd_data;
     reg  [2:0]       er_data_valid_cntr;
     reg  [3:0]       er_delay_cntr;
-    reg  [11:0]      er_sector_count;
+    reg  [7:0]       er_sector_count;
     reg  [WIDTH-1:0] er_curr_sect_addr;
     wire [WIDTH-1:0] sCurrent_addr;
-    wire [11:0]      sSector_count;
+    wire [7:0]       sSector_count;
     wire [15:0]      sPage_count;
     reg              er_SpiCsB              = 1'b1;
     reg  [1:0]       er_status              = 2'h03;
@@ -159,7 +159,7 @@ module spi_flash_programmer(
     wire             fifo_almostfull;
     wire             fifo_almostempty;
     wire [7:0]       fifo_dout;
-    wire [63:0]      fifo_unconned;   
+    wire [7:0]       fifo_unconned;   
     //----- Other -----              
     wire             sSpi_clk;
     wire  [7:0]      data_to_spi;
@@ -169,7 +169,7 @@ module spi_flash_programmer(
 // {{{ Wire initializations ------------ 
     assign data_to_spi   = (erase_inprogress)      ? er_cmd_reg[31:24] : wr_cmd_reg[31:24];
     assign sCurrent_addr = (START_ADDR_VALID_I)    ? START_ADDR_I      : 24'h00;
-    assign sSector_count = (SECTOR_COUNT_VALID_I)  ? SECTOR_COUNT_I    : 12'hFFF;
+    assign sSector_count = (SECTOR_COUNT_VALID_I)  ? SECTOR_COUNT_I    : 8'hFF;
     assign sPage_count   = (PAGE_COUNT_VALID_I)    ? PAGE_COUNT_I      : 16'h00;
     assign sSpi_cs       = (erase_inprogress)      ? er_SpiCsB         : wr_SpiCsB;
     assign sSpi_Miso     = SPI_MISO_I;    
@@ -211,7 +211,7 @@ module spi_flash_programmer(
     // Write phase counters
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I || (!wr_strt_cmd_cnt))
-            wr_cmd_cntr <= 6'h20; // d31: 8 bit cmd and 24 bit address
+            wr_cmd_cntr <= 6'h20; // d32: 8 bit cmd and 24 bit address
         else
             wr_cmd_cntr <= wr_cmd_cntr - 1'b1;
     end
@@ -238,7 +238,7 @@ module spi_flash_programmer(
     end
 
     always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I || (!d_wr_strt_data_cntr)) // TODO: YOLO
+        if (LOG_RST_I || (!d_wr_strt_data_cntr)) 
             wr_data_cntr  <= 4'h08;
         else if ((wr_data_cntr == 4'h08) || (wr_data_cntr == 4'h07))
             wr_data_cntr  <= 4'h00;
@@ -258,58 +258,58 @@ module spi_flash_programmer(
              er_status, er_sector_count) begin
 		er_next_state = ER_IDLE_S;
 		case (er_state)
-			ER_IDLE_S: begin                             // 0
+			ER_IDLE_S: begin                              // 0
                 if (erase_start)
                     er_next_state = ER_SENDCMD1_S;
                 else 
                     er_next_state = ER_IDLE_S;
 			end
 
-			ER_SENDCMD1_S: begin                           // 1
+			ER_SENDCMD1_S: begin                          // 1
                 if (er_cmd_cntr == 5'd24)
-                    er_next_state = ER_SSECMD_S;
+                    er_next_state = ER_SECMD_S;
                 else
                     er_next_state = ER_SENDCMD1_S;
 			end
 
-			ER_SSECMD_S: begin                          // 2 
+			ER_SECMD_S: begin                             // 2 
                 if (er_delay_cntr == 4'h03)
-                    er_next_state = ER_SENDCMD3_S;
+                    er_next_state = ER_SENDCMD2_S;
                 else
-                    er_next_state = ER_SSECMD_S;
+                    er_next_state = ER_SECMD_S;
 			end
 
-			ER_SENDCMD3_S: begin                          // 3
+			ER_SENDCMD2_S: begin                          // 3
                 if (er_cmd_cntr == 5'd00)
                     er_next_state = ER_STATCMD_S;
                 else 
-                    er_next_state = ER_SENDCMD3_S;
+                    er_next_state = ER_SENDCMD2_S;
 			end
 
-			ER_STATCMD_S: begin                         // 4                
+			ER_STATCMD_S: begin                           // 4                
                 if (er_delay_cntr == 4'h03)  
-                    er_next_state = ER_SENDCMD4_S;                    
+                    er_next_state = ER_SENDCMD3_S;                    
                 else
                     er_next_state = ER_STATCMD_S;
 			end
 
-			ER_SENDCMD4_S: begin                          // 5
+			ER_SENDCMD3_S: begin                          // 5
                 if (er_cmd_cntr == 5'd24)
                     er_next_state = ER_RDSTAT_S;
                 else
-                    er_next_state = ER_SENDCMD4_S;
+                    er_next_state = ER_SENDCMD3_S;
 			end
 
 			ER_RDSTAT_S: begin                          // 6                
                 if (er_data_valid_cntr == 3'd07) 
-                    er_next_state = ER_SENDCMD5_S;
+                    er_next_state = ER_SENDCMD4_S;
                 else
                     er_next_state = ER_RDSTAT_S;
 			end
 
-            ER_SENDCMD5_S: begin                        // 7
+            ER_SENDCMD4_S: begin                        // 7
                 if (er_status == 2'h00) begin
-                    if (er_sector_count == 14'h00)
+                    if (er_sector_count == 8'h00)
                         er_next_state = ER_IDLE_S;
                     else                    
                         er_next_state = ER_SENDCMD1_S;
@@ -345,18 +345,19 @@ module spi_flash_programmer(
                 er_strt_cmd_cnt           <= 1'b1;
 			end
 			
-			ER_SSECMD_S: begin                                      // 2                             
+			ER_SECMD_S: begin                                      // 2                             
                 er_strt_cmd_cnt           <= 1'b0;                    
                 er_strt_delay_cnt         <= 1'b1;                                
                 er_SpiCsB                 <= 1'b1;                
                 er_cmd_reg                <= {CMD_SE, er_curr_sect_addr}; // erase 64 KB sector                                                    
 			end
 
-			ER_SENDCMD3_S: begin                                     // 3
+			ER_SENDCMD2_S: begin                                     // 3
                 er_strt_delay_cnt         <= 1'b0;                                                
                 er_strt_cmd_cnt           <= 1'b1;
                 er_SpiCsB                 <= 1'b0;
-                if ((er_cmd_cntr == 5'd08) || (er_cmd_cntr == 5'd16) || (er_cmd_cntr == 5'd24))
+                if ((er_cmd_cntr == 5'd08) || (er_cmd_cntr == 5'd16) 
+                 || (er_cmd_cntr == 5'd24))
                     er_cmd_reg            <= {er_cmd_reg[23:0], 8'b0};
 			end 
  
@@ -367,7 +368,7 @@ module spi_flash_programmer(
                 er_strt_delay_cnt         <= 1'b1;                                
 			end 
  
-			ER_SENDCMD4_S: begin                                       // 5
+			ER_SENDCMD3_S: begin                                       // 5
                er_strt_delay_cnt          <= 1'b0;                                
                er_SpiCsB                  <= 1'b0;
                er_strt_cmd_cnt            <= 1'b1;                              
@@ -378,14 +379,14 @@ module spi_flash_programmer(
                 er_strt_cmd_cnt           <= 1'b0;
                 er_rd_data                <= {er_rd_data[1], sSpi_Miso};
                 er_status                 <= er_rd_data;   // Check WE and ERASE in progress one cycle after er_rd_date
-                er_cmd_reg                <= 32'h00;
+                //er_cmd_reg                <= 32'h00;
             end
                 			
-            ER_SENDCMD5_S: begin                                    // 7
+            ER_SENDCMD4_S: begin                                    // 7
                 er_strt_valid_cnt <= 1'b0;                                                
                 // Check Status after 8 bits (+1) of status read                                    
                 if (er_status == 2'h00) begin
-                    if (er_sector_count == 14'h00)
+                    if (er_sector_count == 8'h00)
                        erase_inprogress <= 1'b0;
                     else begin
                         er_SpiCsB         <= 1'b1;                                
@@ -397,7 +398,7 @@ module spi_flash_programmer(
             end
 
 			default: begin
-                er_sector_count        <= 12'h00;
+                er_sector_count        <= 8'h00;
                 er_curr_sect_addr      <= 24'h00;            
             end
 		endcase
@@ -481,7 +482,7 @@ module spi_flash_programmer(
                 if (wr_status == 2'h00) 
                     wr_next_state = WR_SENDCMD1_S;
                 else
-                    wr_next_state = WR_PPDONE_WAIT_S;
+                    wr_next_state = WR_PPDONE_S;
             end
 
             default: begin
@@ -524,14 +525,15 @@ module spi_flash_programmer(
                 wr_strt_cmd_cnt   <= 1'b1;
                 wr_strt_delay_cnt <= 1'b0;                   
                 wr_SpiCsB         <= 1'b0;      
-                if ((wr_cmd_cntr  == 5'd08) || (wr_cmd_cntr == 5'd16) || (wr_cmd_cntr == 5'd24))
+                if ((wr_cmd_cntr  == 5'd08) || (wr_cmd_cntr == 5'd16) 
+                  || (wr_cmd_cntr == 5'd24))
                     wr_cmd_reg    <= {wr_cmd_reg[23:0], 8'b0};
             end
 
             WR_DATA_S: begin                                    // 4
                 wr_strt_cmd_cnt     <= 1'b0;                
                 wr_strt_data_cntr   <= 1'b1;                
-                if ((wr_data_cntr   == 3'h00) //|| (wr_data_cntr == 4'h08))
+                if ((wr_data_cntr   == 3'h00)
                        && (d_wr_strt_data_cntr == 1'b1))
                     fifo_rden       <= 1'b1;
                 else
@@ -539,7 +541,7 @@ module spi_flash_programmer(
 
                 wr_cmd_reg          <= {fifo_dout, 24'h00};
 
-                if (wr_data_cntr    == 4'h07) begin // TODO: YOLO
+                if (wr_data_cntr    == 4'h07) begin 
                     wr_current_addr <= wr_current_addr + 2'h03; // 3 byte out of 256 bytes per page                    
                 end
             end
@@ -571,9 +573,9 @@ module spi_flash_programmer(
                 wr_strt_valid_cnt <= 1'b0;                 
                 status_data_valid <= 1'b1;            
                 if (wr_status  == 2'h00) begin
-                    wr_SpiCsB  <= 1'b1;
-                    wr_cmd_reg <= {CMD_WE, 24'h00};
-                    page_count <= page_count - 1'b1;  
+                    wr_SpiCsB       <= 1'b1;
+                    wr_cmd_reg      <= {CMD_WE, 24'h00};
+                    page_count      <= page_count - 1'b1;  
                     wr_current_addr <= wr_current_addr + 1'h01;                  
                 end
             end

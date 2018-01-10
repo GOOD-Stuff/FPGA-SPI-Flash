@@ -24,11 +24,11 @@ module spi_loader_top(
     input         CLK_I,            // Synchro signal
     input         SRST_I,           // Reset synchro signal
 
-    input  [63:0] DATA_TO_PROG_I,   // Data to write into SPI Flash
+    input  [7:0]  DATA_TO_PROG_I,   // Data to write into SPI Flash
     
     input  [23:0] START_ADDR_I,     // Address of SPI Flash for write
     input  [15:0] PAGE_COUNT_I,     // Count of page of SPI Flash for write
-    input  [11:0] SECTOR_COUNT_I,   // Count of sector of SPI Flash for write
+    input  [7:0]  SECTOR_COUNT_I,   // Count of sector of SPI Flash for write
 
     input         START_LOAD_I,
     output        STOP_WRITE_O,     // FIFO is full, must wait while it will be release    
@@ -44,7 +44,7 @@ module spi_loader_top(
         localparam [2:0] IDLE_S       = 3'h00;  // Set validation of data
         localparam [2:0] ERASE_S      = 3'h01;  // Start erase process
         localparam [2:0] WAIT_ERASE_S = 3'h02;  // Wait while SPI Flash erasing
-        localparam [2:0] ALIGN_S      = 3'h03;  // Segmentation data to SPI
+        localparam [2:0] START_S      = 3'h03;  // Segmentation data to SPI
         localparam [2:0] DATA_S       = 3'h04;  // Send data to SPI
     // }}} End local parameters -------------
     
@@ -119,12 +119,12 @@ module spi_loader_top(
 
             WAIT_ERASE_S: begin                         // 2
                 if (!erasing_spi && (counter == 5'd31))
-                    next_state = ALIGN_S;
+                    next_state = START_S;
                 else
                     next_state = WAIT_ERASE_S;
             end
             
-            ALIGN_S: begin                              // 3
+            START_S: begin                              // 3
                 next_state = DATA_S;
             end
             
@@ -171,7 +171,7 @@ module spi_loader_top(
                     stop_write         <= 1'b0;
             end
 
-            ALIGN_S: begin                              // 3
+            START_S: begin                              // 3
                 fifo_wren             <= 1'b1;
                 stop_write            <= 1'b0;
                 start_write           <= 1'b1;
