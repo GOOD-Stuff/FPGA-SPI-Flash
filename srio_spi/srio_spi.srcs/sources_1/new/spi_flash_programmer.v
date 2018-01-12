@@ -22,7 +22,7 @@
 module spi_flash_programmer(
     input         LOG_CLK_I,            // Clock signal
     input         LOG_RST_I,            // Active-high, synchronous reset
-    //
+    // Flash
     input [7:0]   DATA_TO_FIFO_I,       // 8-bit data to FIFO
     input [23:0]  START_ADDR_I,         // Start address for write into SPI memory
     input         START_ADDR_VALID_I,   // Valid signal of start address
@@ -30,16 +30,18 @@ module spi_flash_programmer(
     input         PAGE_COUNT_VALID_I,   // Valid signal of page counts
     input [7:0]   SECTOR_COUNT_I,       // Count of sectors for erase into SPI memory
     input         SECTOR_COUNT_VALID_I, // Valid signal of sector counts
-    //
+    // FIFO
     input         FIFO_WREN_I,          // Write Enable signal for FIFO
     output        FIFO_FULL_O,          // Signal of full from FIFO
     output        FIFO_EMPTY_O,         // Signal of empty from FIFO
     output        WRITE_DONE_O,         // Flash of SPI memory was done
-    //        
-    input         ERASE_I,              // Signal of start erasing
+    // Control signals       
+    input         SECT_ERASE_I,         // Signal of start erasing sectors
+    input         SSECT_ERASE_I,        // Signal of start erasing subsectors
     input         WRITE_I,              // Signal of start writing
+    input         READ_I,               // Signal of start read phase
     output        ERASEING_O,           // Finish of erase phase
-    //
+    // SPI 
     output        SPI_CS_O,             // SPI Chip Select for phy transaction
     output        SPI_MOSI_O,           // SPI MOSI for phy transation
     input         SPI_MISO_I            // SPI MISO for phy transaction
@@ -59,53 +61,61 @@ module spi_flash_programmer(
 
 // {{{ local parameters (constants) --------    
     // SPI Address Width
-    localparam       WIDTH          = 24;     // 3 bytes address
+    localparam       WIDTH            = 24;     // 3 bytes address
     // SPI sector size (in bits)
-    localparam       SECTOR_SIZE    = 65536;  // 64 Kbits
-    localparam       SUBSECTOR_SIZE = 4096;   // 4 Kbits
-    localparam       PAGE_SIZE      = 256;    // 256 
-    localparam       SECTOR_COUNT   = 256;
-    localparam       PAGE_COUNT     = 65536;
-    localparam       START_ADDR     = 32'h00000000; // First address in SPI
-    localparam       END_ADDR       = 32'h00FFFFFF; // Last address in SPI (128 Mb)
+    localparam       SECTOR_SIZE      = 65536;  // 64 Kbits
+    localparam       SUBSECTOR_SIZE   = 4096;   // 4 Kbits
+    localparam       PAGE_SIZE        = 256;    // 256 
+    localparam       SECTOR_COUNT     = 256;
+    localparam       PAGE_COUNT       = 65536;
+    localparam       START_ADDR       = 32'h00000000; // First address in SPI
+    localparam       END_ADDR         = 32'h00FFFFFF; // Last address in SPI (128 Mb)
     // SPI ID Code
-    localparam       IDCODE_25NQ128 = 24'h20BA18;   // RDID N25Q128A 36 page   
+    localparam       IDCODE_25NQ128   = 24'h20BA18;   // RDID N25Q128A 36 page   
     // SPI commands
-    localparam [7:0] CMD_RD         = 8'h03; // Read
-    localparam [7:0] CMD_FASTREAD   = 8'h0B; // Fast Read
-    localparam [7:0] CMD_RDID       = 8'h9F; // Read ID
-    localparam [7:0] CMD_FLAGSTAT   = 8'h70; // Read Flag Status Register
-    localparam [7:0] CMD_CLEARSTAT  = 8'h50; // Clear Flag Status Register
-    localparam [7:0] CMD_RDST       = 8'h05; // Read Status Register, стр 21
-    localparam [7:0] CMD_WE         = 8'h06; // Write Enable
-    localparam [7:0] CMD_WD         = 8'h04; // Write Disable
-    localparam [7:0] CMD_SE         = 8'hD8; // Sector Erase;   64 KB
-    localparam [7:0] CMD_SSE        = 8'h20; // SubSector Erase; 4 KB
-    localparam [7:0] CMD_BE         = 8'hC7; // Bulk Erase
-    localparam [7:0] CMD_PP         = 8'h02; // Page Program
-    localparam [7:0] CMD_PPDUAL     = 8'hA2; // Dual Input Fast Program
-    localparam [7:0] CMD_PPQUAD     = 8'h32; // Quad Input Fast Program    
+    localparam [7:0] CMD_RD           = 8'h03; // Read
+    localparam [7:0] CMD_FASTREAD     = 8'h0B; // Fast Read
+    localparam [7:0] CMD_RDID         = 8'h9F; // Read ID
+    localparam [7:0] CMD_FLAGSTAT     = 8'h70; // Read Flag Status Register
+    localparam [7:0] CMD_CLEARSTAT    = 8'h50; // Clear Flag Status Register
+    localparam [7:0] CMD_RDST         = 8'h05; // Read Status Register, стр 21
+    localparam [7:0] CMD_WE           = 8'h06; // Write Enable
+    localparam [7:0] CMD_WD           = 8'h04; // Write Disable
+    localparam [7:0] CMD_SE           = 8'hD8; // Sector Erase;   64 KB
+    localparam [7:0] CMD_SSE          = 8'h20; // SubSector Erase; 4 KB
+    localparam [7:0] CMD_BE           = 8'hC7; // Bulk Erase
+    localparam [7:0] CMD_PP           = 8'h02; // Page Program
+    localparam [7:0] CMD_PPDUAL       = 8'hA2; // Dual Input Fast Program
+    localparam [7:0] CMD_PPQUAD       = 8'h32; // Quad Input Fast Program    
     // FSM
+    // Read
+    /*
+    localparam [?:0] RD_IDLE_S        = ?'h00;
+    localparam [?:0] RD_SENDCMD1_S    = ?'h01;
+    localparam [?:0] RD_RDCMD_S       = ?'h02;
+    ...
+    */
     // Write
-    localparam [3:0] WR_IDLE_S         = 4'h00;   // Get start_address and count of page, and set WE command
-    localparam [3:0] WR_SENDCMD1_S     = 4'h01;   // Send WE command
-    localparam [3:0] WR_PPCMD_S        = 4'h02;   // Set PP command
-    localparam [3:0] WR_SENDCMD2_S     = 4'h03;   // Send PP command
-    localparam [3:0] WR_DATA_S         = 4'h04;   // Send (?) data from FIFO 
-    localparam [3:0] WR_STATCMD_S      = 4'h05;   // Set READSTAT command
-    localparam [3:0] WR_SENDCMD3_S     = 4'h06;   // Send READSTAT command
-    localparam [3:0] WR_PPDONE_S       = 4'h07;   // Get status
-    localparam [3:0] WR_PPDONE_WAIT_S  = 4'h08;   // Check status and set WE command
+    localparam [3:0] WR_IDLE_S        = 4'h00; // Get start_address and count of page, and set WE command
+    localparam [3:0] WR_SENDCMD1_S    = 4'h01; // Send WE command
+    localparam [3:0] WR_PPCMD_S       = 4'h02; // Set PP command
+    localparam [3:0] WR_SENDCMD2_S    = 4'h03; // Send PP command
+    localparam [3:0] WR_DATA_S        = 4'h04; // Send (?) data from FIFO 
+    localparam [3:0] WR_STATCMD_S     = 4'h05; // Set READSTAT command
+    localparam [3:0] WR_SENDCMD3_S    = 4'h06; // Send READSTAT command
+    localparam [3:0] WR_PPDONE_S      = 4'h07; // Get status
+    localparam [3:0] WR_PPDONE_WAIT_S = 4'h08; // Check status and set WE command
     // Erase    
-    localparam [2:0] ER_IDLE_S         = 3'h00;   // Get start_address and count of sector, and set WE command
-    localparam [2:0] ER_SENDCMD1_S     = 3'h01;   // Send WE command
-    localparam [2:0] ER_SECMD_S        = 3'h02;   // Set SE command
-    localparam [2:0] ER_SENDCMD2_S     = 3'h03;   // Send SE command
-    localparam [2:0] ER_STATCMD_S      = 3'h04;   // Set READDSTAT command
-    localparam [2:0] ER_SENDCMD3_S     = 3'h05;   // Send READSTAT command
-    localparam [2:0] ER_RDSTAT_S       = 3'h06;   // Get status
-    localparam [2:0] ER_SENDCMD4_S     = 3'h07;   // Check received status and set WE command
+    localparam [2:0] ER_IDLE_S        = 3'h00; // Get start_address and count of sector, and set WE command
+    localparam [2:0] ER_SENDCMD1_S    = 3'h01; // Send WE command
+    localparam [2:0] ER_SECMD_S       = 3'h02; // Set SE command    
+    localparam [2:0] ER_SENDCMD2_S    = 3'h03; // Send SE command
+    localparam [2:0] ER_STATCMD_S     = 3'h04; // Set READDSTAT command
+    localparam [2:0] ER_SENDCMD3_S    = 3'h05; // Send READSTAT command
+    localparam [2:0] ER_RDSTAT_S      = 3'h06; // Get status
+    localparam [2:0] ER_CHKSTAT_S     = 3'h07; // Check received status and set WE command
 // }}} End local parameters -------------
+
 
 // {{{ Wire declarations ----------------
     //----- write -----
@@ -130,7 +140,7 @@ module spi_flash_programmer(
     reg              write_done             = 1'b0;   
     reg  [3:0]       wr_state, wr_next_state;    
     //----- erase -----
-    reg  [5:0]       er_cmd_cntr;
+    reg  [5:0]       er_cmd_cntr;           = 6'h20;
     reg  [31:0]      er_cmd_reg             = 32'h00;
     reg  [1:0]       er_rd_data;
     reg  [2:0]       er_data_valid_cntr;
@@ -146,7 +156,10 @@ module spi_flash_programmer(
     reg              er_strt_valid_cnt;
     reg              er_strt_delay_cnt;    
     reg              erase_inprogress;
-    wire             erase_start;
+    reg              serase_inprogress;
+    reg              sserase_inprogress;
+    wire             serase_start;
+    wire             sserase_start;
     reg  [2:0]       er_state, er_next_state;
     //----- Startupe2 signals -----
     wire             sSpi_Miso;    
@@ -167,16 +180,17 @@ module spi_flash_programmer(
 
 
 // {{{ Wire initializations ------------ 
-    assign data_to_spi   = (erase_inprogress)      ? er_cmd_reg[31:24] : wr_cmd_reg[31:24];
-    assign sCurrent_addr = (START_ADDR_VALID_I)    ? START_ADDR_I      : 24'h00;
-    assign sSector_count = (SECTOR_COUNT_VALID_I)  ? SECTOR_COUNT_I    : 8'hFF;
-    assign sPage_count   = (PAGE_COUNT_VALID_I)    ? PAGE_COUNT_I      : 16'h00;
-    assign sSpi_cs       = (erase_inprogress)      ? er_SpiCsB         : wr_SpiCsB;
+    assign data_to_spi   = (erase_inprogress)     ? er_cmd_reg[31:24] : wr_cmd_reg[31:24];
+    assign sCurrent_addr = (START_ADDR_VALID_I)   ? START_ADDR_I      : 24'h00;
+    assign sSector_count = (SECTOR_COUNT_VALID_I) ? SECTOR_COUNT_I    : 8'hFF;
+    assign sPage_count   = (PAGE_COUNT_VALID_I)   ? PAGE_COUNT_I      : 16'h00;
+    assign sSpi_cs       = (erase_inprogress)     ? er_SpiCsB         : wr_SpiCsB;
     assign sSpi_Miso     = SPI_MISO_I;    
     
     assign fifo_unconned = DATA_TO_FIFO_I;
     
-    assign erase_start   = ERASE_I;
+    assign serase_start  = SECT_ERASE_I;
+    assign sserase_start = SSECT_ERASE_I;
     assign write_start   = WRITE_I;
 
     assign FIFO_FULL_O   = fifo_almostfull;
@@ -185,6 +199,7 @@ module spi_flash_programmer(
     assign WRITE_DONE_O  = write_done;
     assign SPI_CS_O      = sSpi_cs_n;
 // }}} End of wire initializations ------------	
+
 
     // Erase phase counters
     always @(posedge LOG_CLK_I) begin
@@ -231,13 +246,6 @@ module spi_flash_programmer(
     end 
 
     always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I)
-            d_wr_strt_data_cntr <= 1'b0;
-        else
-            d_wr_strt_data_cntr <= wr_strt_data_cntr;
-    end
-
-    always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I || (!d_wr_strt_data_cntr)) 
             wr_data_cntr  <= 4'h08;
         else if ((wr_data_cntr == 4'h08) || (wr_data_cntr == 4'h07))
@@ -245,6 +253,32 @@ module spi_flash_programmer(
         else
             wr_data_cntr  <= wr_data_cntr + 1'b1;
     end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I)
+            d_wr_strt_data_cntr <= 1'b0;
+        else
+            d_wr_strt_data_cntr <= wr_strt_data_cntr;
+    end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I)
+            serase_inprogress <= 1'b0;
+        else if (serase_start == 1'b0 && erase_inprogress == 1'b0)
+            serase_inprogress <= 1'b0;
+        else if (serase_start)
+            serase_inprogress <= 1'b1;
+    end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I)
+            sserase_inprogress <= 1'b0;
+        else if (sserase_start == 1'b0 && erase_inprogress == 1'b0)
+            sserase_inprogress <= 1'b0;
+        else if (sserase_start)
+            sserase_inprogress <= 1'b1;
+    end
+
 
 // {{{ Erase Sectors FSM ------------ 
 	always @(posedge LOG_CLK_I) begin
@@ -254,21 +288,21 @@ module spi_flash_programmer(
 			er_state <= er_next_state;
 	end
 
-	always @(er_state, erase_start, er_cmd_cntr, er_delay_cntr, er_data_valid_cntr, 
-             er_status, er_sector_count) begin
+	always @(er_state, serase_start, sserase_start, er_cmd_cntr, er_delay_cntr,
+             er_data_valid_cntr, er_status, er_sector_count) begin
 		er_next_state = ER_IDLE_S;
 		case (er_state)
 			ER_IDLE_S: begin                              // 0
-                if (erase_start)
+                if (serase_start || sserase_start)
                     er_next_state = ER_SENDCMD1_S;
                 else 
                     er_next_state = ER_IDLE_S;
 			end
 
 			ER_SENDCMD1_S: begin                          // 1
-                if (er_cmd_cntr == 5'd24)
+                if (er_cmd_cntr == 5'd24) begin
                     er_next_state = ER_SECMD_S;
-                else
+                end else
                     er_next_state = ER_SENDCMD1_S;
 			end
 
@@ -277,37 +311,37 @@ module spi_flash_programmer(
                     er_next_state = ER_SENDCMD2_S;
                 else
                     er_next_state = ER_SECMD_S;
-			end
+			end     
 
-			ER_SENDCMD2_S: begin                          // 3
+			ER_SENDCMD2_S: begin                          // 4
                 if (er_cmd_cntr == 5'd00)
                     er_next_state = ER_STATCMD_S;
                 else 
                     er_next_state = ER_SENDCMD2_S;
 			end
 
-			ER_STATCMD_S: begin                           // 4                
+			ER_STATCMD_S: begin                           // 5                
                 if (er_delay_cntr == 4'h03)  
                     er_next_state = ER_SENDCMD3_S;                    
                 else
                     er_next_state = ER_STATCMD_S;
 			end
 
-			ER_SENDCMD3_S: begin                          // 5
+			ER_SENDCMD3_S: begin                          // 6
                 if (er_cmd_cntr == 5'd24)
                     er_next_state = ER_RDSTAT_S;
                 else
                     er_next_state = ER_SENDCMD3_S;
 			end
 
-			ER_RDSTAT_S: begin                          // 6                
+			ER_RDSTAT_S: begin                          // 7               
                 if (er_data_valid_cntr == 3'd07) 
-                    er_next_state = ER_SENDCMD4_S;
+                    er_next_state = ER_CHKSTAT_S;
                 else
                     er_next_state = ER_RDSTAT_S;
 			end
 
-            ER_SENDCMD4_S: begin                        // 7
+            ER_CHKSTAT_S: begin                        // 8
                 if (er_status == 2'h00) begin
                     if (er_sector_count == 8'h00)
                         er_next_state = ER_IDLE_S;
@@ -348,8 +382,11 @@ module spi_flash_programmer(
 			ER_SECMD_S: begin                                      // 2                             
                 er_strt_cmd_cnt           <= 1'b0;                    
                 er_strt_delay_cnt         <= 1'b1;                                
-                er_SpiCsB                 <= 1'b1;                
-                er_cmd_reg                <= {CMD_SE, er_curr_sect_addr}; // erase 64 KB sector                                                    
+                er_SpiCsB                 <= 1'b1;          
+                if (serase_inprogress)      
+                    er_cmd_reg            <= {CMD_SE, er_curr_sect_addr}; // erase 64 KB sector                                                    
+                else if (sserase_inprogress)
+                    er_cmd_reg            <= {CMD_SSE, er_curr_sect_addr}; // erase 64 KB sector                                                    
 			end
 
 			ER_SENDCMD2_S: begin                                     // 3
@@ -382,7 +419,7 @@ module spi_flash_programmer(
                 //er_cmd_reg                <= 32'h00;
             end
                 			
-            ER_SENDCMD4_S: begin                                    // 7
+            ER_CHKSTAT_S: begin                                    // 7
                 er_strt_valid_cnt <= 1'b0;                                                
                 // Check Status after 8 bits (+1) of status read                                    
                 if (er_status == 2'h00) begin
@@ -587,6 +624,7 @@ module spi_flash_programmer(
         endcase
     end
 // }}} End of write data FSM---------------
+
 
 // {{{ Include other modules ------------
     spi_serdes SerDes (

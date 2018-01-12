@@ -55,13 +55,17 @@ module top_project(
         .CLK_I             ( log_clk_t  ),
         .SRST_I            ( log_rst_t  ),
     
+        .CMD_I             ( ),
+
         .DATA_TO_PROG_I    ( data       ),    
-        .START_ADDR_I      ( 24'h000100 ),
+        .START_ADDR_I      ( 24'h000100 ),  
         .PAGE_COUNT_I      ( 16'd168    ),
         .SECTOR_COUNT_I    ( 8'd80     ),
     
-        .START_LOAD_I      ( start_load ),
+        .START_FLASH_I     ( start_load ),
         .STOP_WRITE_O      ( check_stop ),
+        .ERASE_BUSY_O      ( ),
+        .ERASE_DONE_O      ( ),
         .WRITE_DONE_O      ( write_done ),
     
         .SPI_CS_O          ( CS         ),
