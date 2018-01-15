@@ -149,8 +149,8 @@ module spi_flash_programmer(
     reg  [31:0]      er_cmd_reg             = 32'h00;
     reg  [1:0]       er_rd_data;
 
-    reg  [2:0]       er_data_valid_cntr;
-    reg  [3:0]       er_delay_cntr;
+    reg  [2:0]       er_data_valid_cntr     = 3'h00;
+    reg  [3:0]       er_delay_cntr          = 4'h00;
 
     reg  [7:0]       er_sector_count;
     reg  [WIDTH-1:0] er_curr_sect_addr;
@@ -377,7 +377,7 @@ module spi_flash_programmer(
 			end
 
 			ER_SENDCMD1_S: begin                          // 1
-                if (er_cmd_cntr == 5'd24) begin
+                if (er_cmd_cntr == 6'd24) begin
                     er_next_state = ER_SECMD_S;
                 end else
                     er_next_state = ER_SENDCMD1_S;
@@ -391,7 +391,7 @@ module spi_flash_programmer(
 			end     
 
 			ER_SENDCMD2_S: begin                          // 4
-                if (er_cmd_cntr == 5'd00)
+                if (er_cmd_cntr == 6'd00)
                     er_next_state = ER_STATCMD_S;
                 else 
                     er_next_state = ER_SENDCMD2_S;
@@ -405,7 +405,7 @@ module spi_flash_programmer(
 			end
 
 			ER_SENDCMD3_S: begin                          // 6
-                if (er_cmd_cntr == 5'd24)
+                if (er_cmd_cntr == 6'd24)
                     er_next_state = ER_RDSTAT_S;
                 else
                     er_next_state = ER_SENDCMD3_S;
@@ -470,8 +470,8 @@ module spi_flash_programmer(
                 er_strt_delay_cnt         = 1'b0;                                                
                 er_strt_cmd_cnt           = 1'b1;
                 er_SpiCsB                 = 1'b0;
-                if ((er_cmd_cntr == 5'd08) || (er_cmd_cntr == 5'd16) 
-                 || (er_cmd_cntr == 5'd24))
+                if ((er_cmd_cntr == 6'd08) || (er_cmd_cntr == 6'd16) 
+                 || (er_cmd_cntr == 6'd24))
                     er_cmd_reg            = {er_cmd_reg[23:0], 8'b0};
 			end 
  
@@ -503,8 +503,11 @@ module spi_flash_programmer(
                     if (er_sector_count == 8'h00)
                        erase_inprogress   = 1'b0;
                     else begin
-                        er_SpiCsB         = 1'b1;                                
-                        er_curr_sect_addr = er_curr_sect_addr + SECTOR_SIZE;
+                        er_SpiCsB         = 1'b1;                         
+                        if (serase_inprogress)        
+                            er_curr_sect_addr = er_curr_sect_addr + SECTOR_SIZE;
+                        else if (sserase_inprogress)
+                            er_curr_sect_addr = er_curr_sect_addr + SUBSECTOR_SIZE;
                         er_sector_count   = er_sector_count - 1'b1;
                         er_cmd_reg        = {CMD_WE, 24'h00};                        
                     end
