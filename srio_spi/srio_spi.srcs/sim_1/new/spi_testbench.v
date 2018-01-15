@@ -96,7 +96,7 @@ module spi_testbench();
         .START_ADDR_I      ( 24'h000100 ),
         .PAGE_COUNT_I      ( 16'd168    ),
         .SECTOR_COUNT_I    ( 8'd80      ),
-        .DATA_FROM_SPI_O   (            ),
+        .DATA_OUT_O        (            ),
 
         .START_FLASH_I     ( start_load ),
         .STOP_WRITE_O      ( check_stop ),

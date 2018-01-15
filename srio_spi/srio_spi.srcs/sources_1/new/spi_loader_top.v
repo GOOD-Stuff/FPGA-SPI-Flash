@@ -31,7 +31,7 @@ module spi_loader_top(
     input  [23:0] START_ADDR_I,     // Address of SPI Flash for write
     input  [15:0] PAGE_COUNT_I,     // Count of page of SPI Flash for write
     input  [7:0]  SECTOR_COUNT_I,   // Count of sector of SPI Flash for write
-    output [7:0]  DATA_FROM_SPI_O,  // Received data from SPI memory
+    output [7:0]  DATA_OUT_O,       // Received data from SPI memory
 
     input         START_FLASH_I,    // Start of program (and erase)  
     output        STOP_WRITE_O,     // FIFO is full, must wait while it will be release    
@@ -273,7 +273,7 @@ module spi_loader_top(
         .PAGE_COUNT_VALID_I    ( page_count_valid   ),
         .SECTOR_COUNT_I        ( SECTOR_COUNT_I     ),
         .SECTOR_COUNT_VALID_I  ( sector_count_valid ),
-        .DATA_FROM_SPI_O       ( DATA_FROM_SPI_O    ),
+        .DATA_FROM_SPI_O       ( DATA_OUT_O         ),
                                       
         .FIFO_WREN_I           ( fifo_wren          ),
         .FIFO_FULL_O           ( fifo_full          ),
