@@ -787,8 +787,7 @@ module spi_flash_programmer(
 
             default: begin
                 rd_SpiCsB         <= 1'b1;
-                read_done         <= 1'b0;
-                rd_cmd_cntr       <= 6'h20;
+                read_done         <= 1'b0;                
                 rd_cmd_reg        <= 32'h00;
                 rd_current_addr   <= 24'h00;
                 rd_data_count     <= 16'h00;
