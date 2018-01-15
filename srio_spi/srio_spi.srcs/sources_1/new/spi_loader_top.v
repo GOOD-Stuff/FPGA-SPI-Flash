@@ -31,12 +31,14 @@ module spi_loader_top(
     input  [23:0] START_ADDR_I,     // Address of SPI Flash for write
     input  [15:0] PAGE_COUNT_I,     // Count of page of SPI Flash for write
     input  [7:0]  SECTOR_COUNT_I,   // Count of sector of SPI Flash for write
+    output [7:0]  DATA_FROM_SPI_O,  // Received data from SPI memory
 
     input         START_FLASH_I,    // Start of program (and erase)  
     output        STOP_WRITE_O,     // FIFO is full, must wait while it will be release    
     output        ERASE_BUSY_O,     // The signal of module when it busy erasing memory
     output        ERASE_DONE_O,     // The signal of module when it has completed erasing
     output        WRITE_DONE_O,     // The signal of module when it has completed writing
+    output        READ_DONE_O,
 
     output        SPI_CS_O,         // Chip Select signal for SPI Flash
     output        SPI_MOSI_O,       // Master Ouput Slave Input
@@ -57,7 +59,7 @@ module spi_loader_top(
         localparam [3:0] ERASE_S      = 4'h02; // Wait while SPI Flash erasing
         localparam [3:0] ERASE_DONE_S = 4'h03; // Start erase subsector        
         localparam [3:0] WRITE_DATA_S = 4'h04; // Send data to SPI
-        //localparam [3:0] READ_S     = 4'h05; // XXX: on future
+        localparam [3:0] READ_S       = 4'h05; // XXX: on future
     // }}} End local parameters -------------
     
     // {{{ Wire declarations ----------------
@@ -79,6 +81,7 @@ module spi_loader_top(
         reg         stop_write         = 1'b1;
         reg         erase_busy         = 1'b0;
         wire        erasing_spi;
+        reg         start_read         = 1'b0;
     // Memory signals (address, pages, etc.)
         reg         start_addr_valid   = 1'b0;
         reg         page_count_valid   = 1'b0;
@@ -92,10 +95,11 @@ module spi_loader_top(
         
     // {{{ Wire initializations ------------ 
         assign load_valid   = START_FLASH_I && (!write_done);
-        assign cmd          = CMD_I;
+        assign cmd          = CMD_I;                
         assign STOP_WRITE_O = stop_write;   
         assign ERASE_DONE_O = erase_done;  
         assign WRITE_DONE_O = write_done & (!load_valid);        
+        assign READ_DONE_O  = read_done;
         assign ERASE_BUSY_O = erase_busy;
         //assign STOP_WRITE_O = (fifo_full) ? 0 : 1;
     // }}} End of wire initializations ------------
@@ -126,7 +130,7 @@ module spi_loader_top(
             state <= next_state;
     end
     
-    always @(state, counter, erasing_spi, write_done) begin
+    always @(state, load_valid, cmd, counter, erasing_spi, write_done, read_done) begin
         next_state = IDLE_S;    
         case (state)
             IDLE_S: begin                                   // 0
@@ -141,6 +145,8 @@ module spi_loader_top(
                     next_state = ERASE_S;
                 else if (cmd == WRITE_DATA)
                     next_state = WRITE_DATA_S;
+                else if (cmd == READ_DATA)
+                    next_state = READ_S;
                 else
                     next_state = PARSE_CMD_S;
             end
@@ -163,13 +169,20 @@ module spi_loader_top(
                     next_state = WRITE_DATA_S;
             end     
 
+            READ_S: begin
+                if (read_done)
+                    next_state = IDLE_S;
+                else
+                    next_state = READ_S;
+            end
+
             default: begin
                 next_state = IDLE_S;
             end       
         endcase
     end
     
-    always @(state, fifo_full, data_counter) begin
+    always @(state, fifo_full, data_counter, load_valid) begin
         case (state)    
             IDLE_S: begin                               // 0
                 if (load_valid) begin
@@ -185,6 +198,7 @@ module spi_loader_top(
                 strt_sect_erase        <= 1'b0;
                 strt_subs_erase        <= 1'b0;                                
                 start_write            <= 1'b0;
+                start_read             <= 1'b0;
                 stop_write             <= 1'b1;                
                 erase_busy             <= 1'b0;
                 fifo_wren              <= 1'b0;
@@ -202,7 +216,9 @@ module spi_loader_top(
                     fifo_wren              <= 1'b1;
                     stop_write             <= 1'b0;
                     start_write            <= 1'b1;
-                end                
+                end else if (cmd == READ_DATA) begin
+                    start_read             <= 1'b1;
+                end
             end    
 
             ERASE_S: begin                             // 2
@@ -228,6 +244,10 @@ module spi_loader_top(
                 end 
             end
             
+            READ_S: begin
+
+            end
+
             default: begin
                 strt_sect_erase       <= 1'b0;
                 sector_count_valid    <= 1'b0;
@@ -253,7 +273,8 @@ module spi_loader_top(
         .PAGE_COUNT_VALID_I    ( page_count_valid   ),
         .SECTOR_COUNT_I        ( SECTOR_COUNT_I     ),
         .SECTOR_COUNT_VALID_I  ( sector_count_valid ),
-                              
+        .DATA_FROM_SPI_O       ( DATA_FROM_SPI_O    ),
+                                      
         .FIFO_WREN_I           ( fifo_wren          ),
         .FIFO_FULL_O           ( fifo_full          ),
         .FIFO_EMPTY_O          ( fifo_empty         ),        
@@ -262,8 +283,9 @@ module spi_loader_top(
         .SECT_ERASE_I          ( strt_sect_erase    ),
         .SSECT_ERASE_I         ( strt_subs_erase    ),
         .WRITE_I               ( start_write        ),
-        .READ_I                ( 1'b0               ),
+        .READ_I                ( start_read         ),
         .ERASEING_O            ( erasing_spi        ),
+        .READ_DONE_O           ( read_done          ),
 
         .SPI_CS_O              ( SPI_CS_O           ),
         .SPI_MOSI_O            ( SPI_MOSI_O         ),

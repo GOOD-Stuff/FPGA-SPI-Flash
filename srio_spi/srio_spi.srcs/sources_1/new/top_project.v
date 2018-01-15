@@ -61,13 +61,15 @@ module top_project(
         .START_ADDR_I      ( 24'h000100 ),  
         .PAGE_COUNT_I      ( 16'd168    ),
         .SECTOR_COUNT_I    ( 8'd80     ),
-    
+        .DATA_FROM_SPI_O   ( ),
+
         .START_FLASH_I     ( start_load ),
         .STOP_WRITE_O      ( check_stop ),
         .ERASE_BUSY_O      ( ),
         .ERASE_DONE_O      ( ),
         .WRITE_DONE_O      ( write_done ),
-    
+        .READ_DONE_O       ( ),
+
         .SPI_CS_O          ( CS         ),
         .SPI_MOSI_O        ( DQ0        ),
         .SPI_MISO_I        ( DQ1        )

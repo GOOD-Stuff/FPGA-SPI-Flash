@@ -28,6 +28,7 @@ module spi_testbench();
     reg [2:0] cmd;
     wire check_stop;
     wire write_done;
+    wire read_done;
     wire erase_done;
     reg [7:0] data;
     wire CS;    
@@ -74,10 +75,12 @@ module spi_testbench();
     always @(posedge log_clk_t) begin
         if (erase_done)
             cmd <= 3'h03;
+        if (write_done)
+            cmd <= 3'h05;
     end
 
     always @(posedge log_clk_t) begin
-        if (write_done == 1'b1) begin
+        if (read_done == 1'b1) begin
             start_load <= 1'b0;
             $finish;                              
         end
@@ -91,14 +94,16 @@ module spi_testbench();
 
         .DATA_TO_PROG_I    ( data       ),    
         .START_ADDR_I      ( 24'h000100 ),
-        .PAGE_COUNT_I      ( 16'd168  ),
-        .SECTOR_COUNT_I    ( 8'd80     ),
+        .PAGE_COUNT_I      ( 16'd168    ),
+        .SECTOR_COUNT_I    ( 8'd80      ),
+        .DATA_FROM_SPI_O   (            ),
 
         .START_FLASH_I     ( start_load ),
         .STOP_WRITE_O      ( check_stop ),
         .ERASE_DONE_O      ( erase_done ),
         .WRITE_DONE_O      ( write_done ),
-
+        .READ_DONE_O       ( read_done ),
+        
         .SPI_CS_O          ( CS         ),
         .SPI_MOSI_O        ( DQ0        ),
         .SPI_MISO_I        ( DQ1        )
