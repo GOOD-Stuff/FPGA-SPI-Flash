@@ -101,7 +101,6 @@ module spi_loader_top(
         assign WRITE_DONE_O = write_done & (!load_valid);        
         assign READ_DONE_O  = read_done;
         assign ERASE_BUSY_O = erase_busy;
-        //assign STOP_WRITE_O = (fifo_full) ? 0 : 1;
     // }}} End of wire initializations ------------
 
 
@@ -130,7 +129,7 @@ module spi_loader_top(
             state <= next_state;
     end
     
-    always @(state, load_valid, cmd, counter, erasing_spi, write_done, read_done) begin
+    always @(*) begin
         next_state = IDLE_S;    
         case (state)
             IDLE_S: begin                                   // 0
@@ -159,7 +158,7 @@ module spi_loader_top(
             end
             
             ERASE_DONE_S: begin                              // 3   
-                next_state = IDLE_S;
+                next_state     = IDLE_S;
             end
             
             WRITE_DATA_S: begin                              // 4
@@ -177,70 +176,70 @@ module spi_loader_top(
             end
 
             default: begin
-                next_state = IDLE_S;
+                next_state     = IDLE_S;
             end       
         endcase
     end
     
-    always @(state, fifo_full, data_counter, load_valid) begin
+    always @(*) begin
         case (state)    
             IDLE_S: begin                               // 0
                 if (load_valid) begin
-                    sector_count_valid <= 1'b1;
-                    start_addr_valid   <= 1'b1;                
-                    page_count_valid   <= 1'b1;
+                    sector_count_valid = 1'b1;
+                    start_addr_valid   = 1'b1;                
+                    page_count_valid   = 1'b1;
                 end else begin
-                    sector_count_valid <= 1'b0;
-                    start_addr_valid   <= 1'b0;                
-                    page_count_valid   <= 1'b0;
+                    sector_count_valid = 1'b0;
+                    start_addr_valid   = 1'b0;                
+                    page_count_valid   = 1'b0;
                 end
-                erase_done             <= 1'b0;
-                strt_sect_erase        <= 1'b0;
-                strt_subs_erase        <= 1'b0;                                
-                start_write            <= 1'b0;
-                start_read             <= 1'b0;
-                stop_write             <= 1'b1;                
-                erase_busy             <= 1'b0;
-                fifo_wren              <= 1'b0;
+                erase_done             = 1'b0;
+                strt_sect_erase        = 1'b0;
+                strt_subs_erase        = 1'b0;                                
+                start_write            = 1'b0;
+                start_read             = 1'b0;
+                stop_write             = 1'b1;                
+                erase_busy             = 1'b0;
+                fifo_wren              = 1'b0;
             end
                
             PARSE_CMD_S: begin                          // 1
                 if (cmd == ERASE_SEC) begin                    
-                    strt_sect_erase <= 1'b1;
+                    strt_sect_erase    = 1'b1;
                 end else if (cmd == ERASE_SUB)  begin                    
-                    strt_subs_erase <= 1'b1;
+                    strt_subs_erase    = 1'b1;
                 end else if (cmd == ERASE_CHIP) begin
-                    strt_sect_erase <= 1'b1;
-                    sector_count_valid <= 1'b0;
+                    strt_sect_erase    = 1'b1;
+                    sector_count_valid = 1'b0;
                 end else if (cmd == WRITE_DATA) begin
-                    fifo_wren              <= 1'b1;
-                    stop_write             <= 1'b0;
-                    start_write            <= 1'b1;
+                    fifo_wren          = 1'b1;
+                    stop_write         = 1'b0;
+                    start_write        = 1'b1;
                 end else if (cmd == READ_DATA) begin
-                    start_read             <= 1'b1;
+                    start_read         = 1'b1;
                 end
             end    
 
             ERASE_S: begin                             // 2
-                erase_busy             <= 1'b1;
-                strt_sect_erase        <= 1'b0;
-                strt_subs_erase        <= 1'b0;
+                erase_busy             = 1'b1;
+                strt_sect_erase        = 1'b0;
+                strt_subs_erase        = 1'b0;
             end
 
             ERASE_DONE_S: begin                        // 3
-                erase_busy <= 1'b0;
-                erase_done <= 1'b1;
-                stop_write <= 1'b0;
+                erase_busy             = 1'b0;
+                erase_done             = 1'b1;
+                stop_write             = 1'b0;
             end
           
             WRITE_DATA_S: begin                        // 4
                 //start_write    <= 1'b0;    
                 if (fifo_full) begin
-                    stop_write <= 1'b1;
-                    fifo_wren  <= 1'b0;
+                    stop_write         = 1'b1;
+                    fifo_wren          = 1'b0;
                 end else if (data_counter == 6'h3F)begin
-                    stop_write <= 1'b0;
-                    fifo_wren  <= 1'b1;
+                    stop_write         = 1'b0;
+                    fifo_wren          = 1'b1;
                 end 
             end
             
@@ -249,12 +248,12 @@ module spi_loader_top(
             end
 
             default: begin
-                strt_sect_erase       <= 1'b0;
-                sector_count_valid    <= 1'b0;
-                start_addr_valid      <= 1'b0;                
-                page_count_valid      <= 1'b0;
-                stop_write            <= 1'b1;
-                fifo_wren             <= 1'b0;
+                strt_sect_erase        = 1'b0;
+                sector_count_valid     = 1'b0;
+                start_addr_valid       = 1'b0;                
+                page_count_valid       = 1'b0;
+                stop_write             = 1'b1;
+                fifo_wren              = 1'b0;
             end
         endcase
     end
