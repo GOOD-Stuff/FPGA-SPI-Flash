@@ -36,7 +36,8 @@ module top_project(
     wire        spi_clk;    
     
     wire [7:0] data = 8'hDD;
-        
+
+    // tmp. For reset.        
     localparam RES_WIDTH = 4;    
     reg [RES_WIDTH-1:0] reset_pipe = {RES_WIDTH{1'b1}};        
     always @(posedge log_clk) {log_rst, reset_pipe} <= {reset_pipe, 1'b0};
@@ -50,7 +51,8 @@ module top_project(
        .I             ( SYSCLK_P ),  // Diff_p buffer input (connect directly to top-level port)
        .IB            ( SYSCLK_N )   // Diff_n buffer input (connect directly to top-level port)
     );
-           
+     
+    // example instance       
     spi_loader_top spi_loader(
         .CLK_I             ( log_clk_t  ),
         .SRST_I            ( log_rst_t  ),

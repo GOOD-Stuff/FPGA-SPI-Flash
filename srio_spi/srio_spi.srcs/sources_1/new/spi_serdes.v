@@ -45,7 +45,7 @@ module spi_serdes(
 
     // {{{ Wire declarations ----------------
         reg  [7:0]  ShiftCount = C_SHIFT_COUNT_INIT;
-        reg  [7:0]  ShiftData  = 8'h00;
+        reg  [7:0]  ShiftData  = 8'h00;        
         reg         SpiMosi    = 1'b0;
         reg         dTransDone = 1'b1; // Start and End of transaction            
         reg         spi_cs_n   = 1'b1;                
@@ -80,8 +80,7 @@ module spi_serdes(
         else if (spi_cs_n == 1'b1)
             ShiftCount <= C_SHIFT_COUNT_INIT;
         else if ((spi_cs_n == 1'b0) || (START_TRANS_I == 1'b1))
-            ShiftCount <= {ShiftCount[0], ShiftCount[7:1]}; // Barrel shift, rotate right
-        
+            ShiftCount <= {ShiftCount[0], ShiftCount[7:1]}; // Barrel shift, rotate right        
     end
 
     // Simultaneous serialize outgoing data & deserialize incoming data. MSB first

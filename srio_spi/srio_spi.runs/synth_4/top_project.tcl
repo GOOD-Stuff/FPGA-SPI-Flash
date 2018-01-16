@@ -5,8 +5,6 @@
 set_msg_config -id {Common 17-41} -limit 10000000
 set_msg_config -id {HDL 9-1061} -limit 100000
 set_msg_config -id {HDL 9-1654} -limit 100000
-set_msg_config -id {Synth 8-256} -limit 10000
-set_msg_config -id {Synth 8-638} -limit 10000
 create_project -in_memory -part xc7k160tffg676-2
 
 set_param project.singleFileAddWarning.threshold 0
@@ -30,8 +28,8 @@ read_verilog -library xil_defaultlib {
 foreach dcp [get_files -quiet -all *.dcp] {
   set_property used_in_implementation false $dcp
 }
-read_xdc C:/Projects/srio_test/srio_test/top.xdc
-set_property used_in_implementation false [get_files C:/Projects/srio_test/srio_test/top.xdc]
+read_xdc C:/Projects/srio_spi/srio_spi.srcs/constrs_1/new/top.xdc
+set_property used_in_implementation false [get_files C:/Projects/srio_spi/srio_spi.srcs/constrs_1/new/top.xdc]
 
 
 synth_design -top top_project -part xc7k160tffg676-2

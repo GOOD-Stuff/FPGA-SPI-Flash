@@ -122,16 +122,15 @@ module spi_flash_programmer(
     //----- write -----
     reg  [5:0]       wr_cmd_cntr            = 6'h20;
     reg  [31:0]      wr_cmd_reg             = 32'h00;
-    reg  [1:0]       wr_rd_data             = 2'h00;
+    reg  [7:0]       wr_rd_data             = 8'h00;
 
     reg  [2:0]       wr_data_valid_cntr     = 3'h00;
     reg  [3:0]       wr_delay_cntr          = 4'h00;
     reg  [3:0]       wr_data_cntr           = 4'h08;    // SPI from FIFO Nibble count
 
     reg  [WIDTH-1:0] wr_current_addr        = 24'h00;
-    reg              wr_SpiCsB              = 1'b1;     // Chip Select (inversion: 1 - device is deselected, 0 - enables the device)
-    reg  [31:0]      spi_wrdata             = 32'h00;
-    reg  [15:0]      page_count             = 16'hFFFF;    
+    reg              wr_SpiCsB              = 1'b1;     // Chip Select (inversion: 1 - device is deselected, 0 - enables the device)    
+    reg  [15:0]      page_count             = 16'h00;    
     reg  [1:0]       wr_status              = 2'h03;
     reg              status_data_valid      = 1'b0;
 
@@ -147,7 +146,7 @@ module spi_flash_programmer(
     //----- erase -----
     reg  [5:0]       er_cmd_cntr            = 6'h20;
     reg  [31:0]      er_cmd_reg             = 32'h00;
-    reg  [1:0]       er_rd_data;
+    reg  [7:0]       er_rd_data;
 
     reg  [2:0]       er_data_valid_cntr     = 3'h00;
     reg  [3:0]       er_delay_cntr          = 4'h00;
@@ -267,6 +266,15 @@ module spi_flash_programmer(
 
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
+            er_rd_data <= 8'h00;
+        else if (!er_strt_valid_cnt)
+            er_rd_data <= 8'h00;
+        else if (er_strt_valid_cnt) // may be some bug with timing
+            er_rd_data <= {er_rd_data[6:0], sSpi_Miso};
+    end
+
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I)
             serase_inprogress <= 1'b0;
         else if (serase_start == 1'b0 && erase_inprogress == 1'b0)
             serase_inprogress <= 1'b0;
@@ -329,6 +337,16 @@ module spi_flash_programmer(
             d_wr_strt_data_cntr <= wr_strt_data_cntr;
     end
 
+    // Serialize status of FLash from SPI MISO
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I)
+            wr_rd_data <= 8'h00;
+        else if (!wr_strt_valid_cnt)
+            wr_rd_data <= 8'h00;
+        else if (wr_strt_valid_cnt) // may be some bug with timing
+            wr_rd_data <= {wr_rd_data[6:0], sSpi_Miso};
+    end
+
     // Read phase counters
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
@@ -357,6 +375,15 @@ module spi_flash_programmer(
             rd_data_cntr <= rd_data_cntr + 1'b1;
     end
 
+    // Serialize status of FLash from SPI MISO
+    always @(posedge LOG_CLK_I) begin
+        if (LOG_RST_I)
+            rd_rd_data <= 8'h00;
+        else if (!rd_strt_data_cnt)
+            rd_rd_data <= 8'h00;
+        else if (rd_strt_data_cnt)
+            rd_rd_data <= {rd_rd_data[6:0], sSpi_Miso};
+    end
 
 // {{{ Erase Sectors FSM ------------ 
 	always @(posedge LOG_CLK_I) begin
@@ -390,35 +417,35 @@ module spi_flash_programmer(
                     er_next_state = ER_SECMD_S;
 			end     
 
-			ER_SENDCMD2_S: begin                          // 4
+			ER_SENDCMD2_S: begin                          // 3
                 if (er_cmd_cntr == 6'd00)
                     er_next_state = ER_STATCMD_S;
                 else 
                     er_next_state = ER_SENDCMD2_S;
 			end
 
-			ER_STATCMD_S: begin                           // 5                
+			ER_STATCMD_S: begin                           // 4               
                 if (er_delay_cntr == 4'h03)  
                     er_next_state = ER_SENDCMD3_S;                    
                 else
                     er_next_state = ER_STATCMD_S;
 			end
 
-			ER_SENDCMD3_S: begin                          // 6
+			ER_SENDCMD3_S: begin                          // 5
                 if (er_cmd_cntr == 6'd24)
                     er_next_state = ER_RDSTAT_S;
                 else
                     er_next_state = ER_SENDCMD3_S;
 			end
 
-			ER_RDSTAT_S: begin                          // 7               
+			ER_RDSTAT_S: begin                          // 6               
                 if (er_data_valid_cntr == 3'd07) 
                     er_next_state = ER_CHKSTAT_S;
                 else
                     er_next_state = ER_RDSTAT_S;
 			end
 
-            ER_CHKSTAT_S: begin                        // 8
+            ER_CHKSTAT_S: begin                        // 7
                 if (er_status == 2'h00) begin
                     if (er_sector_count == 8'h00)
                         er_next_state = ER_IDLE_S;
@@ -444,8 +471,7 @@ module spi_flash_programmer(
                 er_strt_valid_cnt         = 1'b0;
                 er_strt_delay_cnt         = 1'b0;
                 erase_inprogress          = 1'b0;
-                er_SpiCsB                 = 1'b1;                
-                er_rd_data                = 2'b00;
+                er_SpiCsB                 = 1'b1;                                
                 er_cmd_reg                = {CMD_WE, 24'h00};                
 			end
 
@@ -490,9 +516,8 @@ module spi_flash_programmer(
  
 			ER_RDSTAT_S: begin                                        // 6                        
                 er_strt_valid_cnt         = 1'b1;
-                er_strt_cmd_cnt           = 1'b0;
-                er_rd_data                = {er_rd_data[1], sSpi_Miso};
-                er_status                 = er_rd_data;   // Check WE and ERASE in progress one cycle after er_rd_date
+                er_strt_cmd_cnt           = 1'b0;                
+                er_status                 = er_rd_data[1:0];   // Check WE and ERASE in progress one cycle after er_rd_data
                 //er_cmd_reg                <= 32'h00;
             end
                 			
@@ -653,9 +678,7 @@ module spi_flash_programmer(
                     fifo_rden       = 1'b1;
                 else
                     fifo_rden       = 1'b0;
-
                 wr_cmd_reg          = {fifo_dout, 24'h00};
-
                 if (wr_data_cntr    == 4'h07) begin 
                     wr_current_addr = wr_current_addr + 2'h03; // 3 byte out of 256 bytes per page                    
                 end
@@ -678,8 +701,7 @@ module spi_flash_programmer(
 
             WR_PPDONE_S: begin                                  // 7
                 wr_strt_valid_cnt   = 1'b1;
-                wr_strt_cmd_cnt     = 1'b0;
-                wr_rd_data          = {wr_rd_data[1], sSpi_Miso};
+                wr_strt_cmd_cnt     = 1'b0;                
                 wr_status           = wr_rd_data;
             end
 
@@ -762,8 +784,7 @@ module spi_flash_programmer(
                 rd_SpiCsB         = 1'b1;
                 rd_strt_cmd_cnt   = 1'b0;
                 rd_strt_delay_cnt = 1'b0;
-                rd_strt_data_cnt  = 1'b0;
-                rd_rd_data        = 8'h00;
+                rd_strt_data_cnt  = 1'b0;                
                 rd_data_out       = 8'h00;
                 rd_cmd_reg        = {CMD_FASTREAD, rd_current_addr};
             end
@@ -784,11 +805,10 @@ module spi_flash_programmer(
 
             RD_READ_S: begin                                                // 3
                 rd_strt_delay_cnt = 1'b0;
-                rd_strt_data_cnt  = 1'b1;
-                rd_rd_data        = {rd_rd_data[7:1], sSpi_Miso};
+                rd_strt_data_cnt  = 1'b1;                
                 if (rd_data_cntr == 3'h07) begin
                     rd_data_out   = rd_rd_data;
-                    rd_data_count = rd_data_count - 1'b1;
+                    rd_data_count = rd_data_count - 1'b1;                   
                 end
             end
 
@@ -803,8 +823,7 @@ module spi_flash_programmer(
                 read_done         = 1'b0;                
                 rd_cmd_reg        = 32'h00;
                 rd_current_addr   = 24'h00;
-                rd_data_count     = 16'h00;
-                rd_rd_data        = 8'h00;
+                rd_data_count     = 16'h00;                
                 rd_data_out       = 8'h00;
                 rd_strt_cmd_cnt   = 1'b0;
                 rd_strt_delay_cnt = 1'b0;
