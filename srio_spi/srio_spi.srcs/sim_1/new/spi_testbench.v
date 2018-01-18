@@ -93,7 +93,7 @@ module spi_testbench();
 
 
     always @(posedge log_clk_t) begin
-        if (count > 105 && count < 171)
+        if (count > 105 && count < 233)
             din_dvi <= 1'b1;
         else
             din_dvi <= 1'b0;

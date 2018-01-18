@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="103900000001fs"></ZoomEndTime>
-      <Cursor1Time time="11950000000fs"></Cursor1Time>
+      <ZoomStartTime time="3486843333333fs"></ZoomStartTime>
+      <ZoomEndTime time="3694643333334fs"></ZoomEndTime>
+      <Cursor1Time time="3657443333000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="205"></NameColumnWidth>
       <ValueColumnWidth column_width="88"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="61" />
+   <WVObjectSize size="64" />
    <wave_markers>
       <marker time="440700000000" label="" />
       <marker time="440540500000" label="" />
@@ -106,6 +106,24 @@
    <wvobject fp_name="/spi_testbench/spi_loader/DATA_DVO_O" type="logic">
       <obj_property name="ElementShortName">DATA_DVO_O</obj_property>
       <obj_property name="ObjectShortName">DATA_DVO_O</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/CMD_FIFO_EMPTY_O" type="logic">
+      <obj_property name="ElementShortName">CMD_FIFO_EMPTY_O</obj_property>
+      <obj_property name="ObjectShortName">CMD_FIFO_EMPTY_O</obj_property>
+      <obj_property name="CustomSignalColor">#808080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/CMD_FIFO_FULL_O" type="logic">
+      <obj_property name="ElementShortName">CMD_FIFO_FULL_O</obj_property>
+      <obj_property name="ObjectShortName">CMD_FIFO_FULL_O</obj_property>
+      <obj_property name="CustomSignalColor">#808080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/DATA_FIFO_PFULL_O" type="logic">
+      <obj_property name="ElementShortName">DATA_FIFO_PFULL_O</obj_property>
+      <obj_property name="ObjectShortName">DATA_FIFO_PFULL_O</obj_property>
+      <obj_property name="CustomSignalColor">#808080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/spi_testbench/spi_loader/SPI_CS_O" type="logic">
       <obj_property name="ElementShortName">SPI_CS_O</obj_property>

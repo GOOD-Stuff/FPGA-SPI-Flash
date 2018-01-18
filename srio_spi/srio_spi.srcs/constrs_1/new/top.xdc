@@ -32,8 +32,8 @@ set_property LOC B24 [get_ports DQ0]
 set_property LOC A25 [get_ports DQ1]
 set_property LOC C23 [get_ports CS]
 
-set_property IOSTANDARD LVCMOS25 [get_ports DQ0]
-set_property IOSTANDARD LVCMOS25 [get_ports DQ1]
-set_property IOSTANDARD LVCMOS25 [get_ports CS]
+set_property IOSTANDARD LVCMOS18 [get_ports DQ0]
+set_property IOSTANDARD LVCMOS18 [get_ports DQ1]
+set_property IOSTANDARD LVCMOS18 [get_ports CS]
 
 set_property CONFIG_MODE SPIx1 [current_design]

@@ -53,7 +53,7 @@ module top_project(
     );
      
     // example instance       
-    spi_loader_top spi_loader(
+    spi_loader_top spi_loader (
         .CLK_I             ( log_clk_t  ),
         .SRST_I            ( log_rst_t  ),
     
@@ -68,9 +68,9 @@ module top_project(
         .DATA_DVI_I        ( ),
         .DATA_TO_PROG_I    ( data       ), 
 
-        .CMD_FIFO_EMPTY_O       ( ),
-        .CMD_FIFO_FULL_O        ( check_stop ),        
-        .DATA_FIFO_PFULL_O      ( ),
+        .CMD_FIFO_EMPTY_O  ( ),
+        .CMD_FIFO_FULL_O   ( check_stop ),        
+        .DATA_FIFO_PFULL_O ( ),
 
         .SPI_CS_O          ( CS         ),
         .SPI_MOSI_O        ( DQ0        ),

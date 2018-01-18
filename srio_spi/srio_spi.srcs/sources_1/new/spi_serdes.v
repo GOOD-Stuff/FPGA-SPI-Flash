@@ -38,6 +38,7 @@ module spi_serdes(
     input         SPI_MISO_I          // SPI master-in, slave-out from SPI device
     );
 
+
     // {{{ Constant declarations ----------------
         localparam [7:0] C_SHIFT_COUNT_INIT = 8'h01;        
     // }}} End of constant declarations ---------
@@ -51,13 +52,15 @@ module spi_serdes(
         reg         spi_cs_n   = 1'b1;                
     // }}} End of wire declarations ---------
 
+
     // {{{ Wire assignment ----------------        
-        assign SPI_CLK_O       = (CLK_I || spi_cs_n || dTransDone); // may be BAD IDEA
+        assign SPI_CLK_O       = (CLK_I || spi_cs_n || dTransDone); 
         assign SPI_MOSI_O      = SpiMosi;        
         assign DONE_TRANS_O    = dTransDone;
         assign DATA_FROM_SPI_O = ShiftData;
         assign SPI_CS_N_O      = spi_cs_n;
     // }}} End of wire assignment ---------
+
 
     // Set CS signal
     always @(negedge CLK_I) begin
