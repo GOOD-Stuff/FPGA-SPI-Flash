@@ -16,14 +16,14 @@
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+// TODO: prog_empty до 256 Б
 //////////////////////////////////////////////////////////////////////////////////
 
 module spi_flash_programmer(
     input         LOG_CLK_I,            // Clock signal
     input         LOG_RST_I,            // Active-high, synchronous reset
     // Flash
-    input [7:0]   DATA_TO_FIFO_I,       // 8-bit data to FIFO
+    input [31:0]  DATA_TO_FIFO_I,       // 8-bit data to FIFO
     input [23:0]  START_ADDR_I,         // Start address for write into SPI memory
     input         START_ADDR_VALID_I,   // Valid signal of start address
     input [15:0]  PAGE_COUNT_I,         // Count of pages for write into SPI memory
@@ -42,6 +42,7 @@ module spi_flash_programmer(
     input         WRITE_I,              // Signal of start writing
     input         READ_I,               // Signal of start read phase
     output        ERASEING_O,           // Finish of erase phase
+    output        READ_BUSY_O,
     output        READ_DONE_O,          // Signal of end of read phase
     // SPI 
     output        SPI_CS_O,             // SPI Chip Select for phy transaction
@@ -125,7 +126,7 @@ module spi_flash_programmer(
     reg  [7:0]       wr_rd_data             = 8'h00;
 
     reg  [2:0]       wr_data_valid_cntr     = 3'h00;
-    reg  [3:0]       wr_delay_cntr          = 4'h00;
+    reg  [7:0]       wr_delay_cntr          = 8'h00;
     reg  [3:0]       wr_data_cntr           = 4'h08;    // SPI from FIFO Nibble count
 
     reg  [WIDTH-1:0] wr_current_addr        = 24'h00;
@@ -149,7 +150,7 @@ module spi_flash_programmer(
     reg  [7:0]       er_rd_data;
 
     reg  [2:0]       er_data_valid_cntr     = 3'h00;
-    reg  [3:0]       er_delay_cntr          = 4'h00;
+    reg  [7:0]       er_delay_cntr          = 8'h00;
 
     reg  [7:0]       er_sector_count;
     reg  [WIDTH-1:0] er_curr_sect_addr;
@@ -189,7 +190,7 @@ module spi_flash_programmer(
     reg              rd_SpiCsB              = 1'b1;
     wire             read_start;
     reg              read_done              = 1'b0;
-    reg              read_busy              = 1'b0;
+    reg              read_valid              = 1'b0;
     reg [2:0]        rd_state, rd_next_state;
     //----- Startupe2 signals -----
     wire             sSpi_Miso;    
@@ -202,7 +203,9 @@ module spi_flash_programmer(
     wire             fifo_almostfull;
     wire             fifo_almostempty;
     wire [7:0]       fifo_dout;
-    wire [7:0]       fifo_unconned;   
+    wire [31:0]      fifo_unconned;   
+    wire             fifo_progfull;
+    wire             fifo_progempty;
     //----- Other -----              
     wire             sSpi_clk;
     wire  [7:0]      data_to_spi;
@@ -230,6 +233,7 @@ module spi_flash_programmer(
     assign FIFO_FULL_O     = fifo_almostfull;
     assign FIFO_EMPTY_O    = fifo_empty;
     assign ERASEING_O      = erase_inprogress;
+    assign READ_BUSY_O     = read_valid;
     assign READ_DONE_O     = read_done;
     assign WRITE_DONE_O    = write_done;
     assign SPI_CS_O        = sSpi_cs_n;
@@ -248,9 +252,9 @@ module spi_flash_programmer(
 
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
-            er_delay_cntr <= 4'h00;
+            er_delay_cntr <= 8'h00;
         else if (!er_strt_delay_cnt)
-            er_delay_cntr <= 4'h00;
+            er_delay_cntr <= 8'h00;
         else 
             er_delay_cntr <= er_delay_cntr + 1'b1;
     end
@@ -303,9 +307,9 @@ module spi_flash_programmer(
 
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
-            wr_delay_cntr <= 4'h00;
+            wr_delay_cntr <= 8'h00;
         else if (!wr_strt_delay_cnt)
-            wr_delay_cntr <= 4'h00;
+            wr_delay_cntr <= 8'h00;
         else
             wr_delay_cntr <= wr_delay_cntr + 1'b1;
     end
@@ -560,7 +564,7 @@ module spi_flash_programmer(
         wr_next_state = WR_IDLE_S;
         case (wr_state) 
             WR_IDLE_S: begin                                    // 0
-                if (fifo_almostfull && write_start)
+                if (!fifo_progempty && write_start)
                     wr_next_state = WR_SENDCMD1_S;
                 else
                     wr_next_state = WR_IDLE_S;
@@ -782,6 +786,7 @@ module spi_flash_programmer(
                 rd_data_count     = sPage_count;
                 read_done         = 1'b0;
                 rd_SpiCsB         = 1'b1;
+                read_valid         = 1'b0;
                 rd_strt_cmd_cnt   = 1'b0;
                 rd_strt_delay_cnt = 1'b0;
                 rd_strt_data_cnt  = 1'b0;                
@@ -804,9 +809,11 @@ module spi_flash_programmer(
             end
 
             RD_READ_S: begin                                                // 3
+                read_valid        = 1'b0;
                 rd_strt_delay_cnt = 1'b0;
-                rd_strt_data_cnt  = 1'b1;                
+                rd_strt_data_cnt  = 1'b1;                           
                 if (rd_data_cntr == 3'h07) begin
+                    read_valid    = 1'b1;     
                     rd_data_out   = rd_rd_data;
                     rd_data_count = rd_data_count - 1'b1;                   
                 end
@@ -815,6 +822,7 @@ module spi_flash_programmer(
             RD_DONE_S: begin                                                // 4
                 rd_strt_data_cnt = 1'b0;
                 rd_SpiCsB        = 1'b1;
+                read_valid       = 1'b0;
                 read_done        = 1'b1;
             end
 
@@ -872,7 +880,7 @@ module spi_flash_programmer(
         .USRDONETS          ( 1'b0    )    // 1-bit input: User DONE 3-state enable output
     );
     
-    fifo_generator_0 fifo_spi (
+    fifo_spi_data fifo_spi (
         .clk                ( LOG_CLK_I        ),
         .srst               ( LOG_RST_I        ),
         .din                ( fifo_unconned    ),
@@ -882,7 +890,9 @@ module spi_flash_programmer(
         .full               ( fifo_full        ),
         .almost_full        ( fifo_almostfull  ),
         .empty              ( fifo_empty       ),
-        .almost_empty       ( fifo_almostempty )
+        .almost_empty       ( fifo_almostempty ),
+        .prog_full          ( fifo_progfull    ),
+        .prog_empty         ( fifo_progempty   )
     );     
 // }}} End of Include other modules ------------
 

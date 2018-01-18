@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="spi_testbench_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="spi_testbench" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="103900000001fs"></ZoomEndTime>
+      <Cursor1Time time="11950000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="205"></NameColumnWidth>
+      <ValueColumnWidth column_width="88"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="61" />
+   <wave_markers>
+      <marker time="440700000000" label="" />
+      <marker time="440540500000" label="" />
+      <marker time="441500000000" label="" />
+      <marker time="441660000000" label="" />
+      <marker time="440860000000" label="" />
+      <marker time="441822500000" label="" />
+      <marker time="442620200000" label="" />
+      <marker time="442920000000" label="" />
+      <marker time="452860000000" label="" />
+      <marker time="441180000000" label="" />
+      <marker time="440220000000" label="" />
+      <marker time="440380000000" label="" />
+      <marker time="442777700000" label="" />
+      <marker time="453340000000" label="" />
+      <marker time="441340000000" label="" />
+      <marker time="452380000000" label="" />
+      <marker time="439410000000" label="" />
+      <marker time="441020000000" label="" />
+      <marker time="442920000000" label="" />
+      <marker time="453820000000" label="" />
+      <marker time="453178000000" label="" />
+      <marker time="453500000000" label="" />
+      <marker time="453659500000" label="" />
+      <marker time="455340000000" label="" />
+      <marker time="3307530000000" label="" />
+      <marker time="3307370000000" label="" />
+      <marker time="3307430333000" label="" />
+      <marker time="440060000000" label="" />
+      <marker time="3371833000" label="" />
+      <marker time="2130000000" label="" />
+      <marker time="2510100000" label="" />
+      <marker time="2770000000" label="" />
+      <marker time="3410000000" label="" />
+   </wave_markers>
+   <wvobject fp_name="/spi_testbench/spi_loader/SRST_I" type="logic">
+      <obj_property name="ElementShortName">SRST_I</obj_property>
+      <obj_property name="ObjectShortName">SRST_I</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/count" type="array">
+      <obj_property name="ElementShortName">count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">count[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#800000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/delay_count" type="array">
+      <obj_property name="ElementShortName">delay_count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">delay_count[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#800000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/CMD_DVI_I" type="logic">
+      <obj_property name="ElementShortName">CMD_DVI_I</obj_property>
+      <obj_property name="ObjectShortName">CMD_DVI_I</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/CMD_I" type="array">
+      <obj_property name="ElementShortName">CMD_I[2:0]</obj_property>
+      <obj_property name="ObjectShortName">CMD_I[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/START_ADDR_I" type="array">
+      <obj_property name="ElementShortName">START_ADDR_I[23:0]</obj_property>
+      <obj_property name="ObjectShortName">START_ADDR_I[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/PAGE_COUNT_I" type="array">
+      <obj_property name="ElementShortName">PAGE_COUNT_I[15:0]</obj_property>
+      <obj_property name="ObjectShortName">PAGE_COUNT_I[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/SECTOR_COUNT_I" type="array">
+      <obj_property name="ElementShortName">SECTOR_COUNT_I[7:0]</obj_property>
+      <obj_property name="ObjectShortName">SECTOR_COUNT_I[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/DATA_TO_PROG_I" type="array">
+      <obj_property name="ElementShortName">DATA_TO_PROG_I[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_TO_PROG_I[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/DATA_OUT_O" type="array">
+      <obj_property name="ElementShortName">DATA_OUT_O[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_OUT_O[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/DATA_DVO_O" type="logic">
+      <obj_property name="ElementShortName">DATA_DVO_O</obj_property>
+      <obj_property name="ObjectShortName">DATA_DVO_O</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/SPI_CS_O" type="logic">
+      <obj_property name="ElementShortName">SPI_CS_O</obj_property>
+      <obj_property name="ObjectShortName">SPI_CS_O</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/SPI_MOSI_O" type="logic">
+      <obj_property name="ElementShortName">SPI_MOSI_O</obj_property>
+      <obj_property name="ObjectShortName">SPI_MOSI_O</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/SPI_MISO_I" type="logic">
+      <obj_property name="ElementShortName">SPI_MISO_I</obj_property>
+      <obj_property name="ObjectShortName">SPI_MISO_I</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/state" type="array">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/next_state" type="array">
+      <obj_property name="ElementShortName">next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/erase_done" type="logic">
+      <obj_property name="ElementShortName">erase_done</obj_property>
+      <obj_property name="ObjectShortName">erase_done</obj_property>
+      <obj_property name="CustomSignalColor">#008080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/write_done" type="logic">
+      <obj_property name="ElementShortName">write_done</obj_property>
+      <obj_property name="ObjectShortName">write_done</obj_property>
+      <obj_property name="CustomSignalColor">#008080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/read_done" type="logic">
+      <obj_property name="ElementShortName">read_done</obj_property>
+      <obj_property name="ObjectShortName">read_done</obj_property>
+      <obj_property name="CustomSignalColor">#008080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/load_valid" type="logic">
+      <obj_property name="ElementShortName">load_valid</obj_property>
+      <obj_property name="ObjectShortName">load_valid</obj_property>
+      <obj_property name="CustomSignalColor">#008080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd_fifo_full" type="logic">
+      <obj_property name="ElementShortName">cmd_fifo_full</obj_property>
+      <obj_property name="ObjectShortName">cmd_fifo_full</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd_fifo_empty" type="logic">
+      <obj_property name="ElementShortName">cmd_fifo_empty</obj_property>
+      <obj_property name="ObjectShortName">cmd_fifo_empty</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd_fifo_dout" type="array">
+      <obj_property name="ElementShortName">cmd_fifo_dout[51:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd_fifo_dout[51:0]</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd_fifo_din" type="array">
+      <obj_property name="ElementShortName">cmd_fifo_din[51:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd_fifo_din[51:0]</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd_dvi" type="logic">
+      <obj_property name="ElementShortName">cmd_dvi</obj_property>
+      <obj_property name="ObjectShortName">cmd_dvi</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd" type="array">
+      <obj_property name="ElementShortName">cmd[2:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/start_address" type="array">
+      <obj_property name="ElementShortName">start_address[23:0]</obj_property>
+      <obj_property name="ObjectShortName">start_address[23:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/page_count" type="array">
+      <obj_property name="ElementShortName">page_count[15:0]</obj_property>
+      <obj_property name="ObjectShortName">page_count[15:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/sector_count" type="array">
+      <obj_property name="ElementShortName">sector_count[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sector_count[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/cmd_fifo_rdend" type="logic">
+      <obj_property name="ElementShortName">cmd_fifo_rdend</obj_property>
+      <obj_property name="ObjectShortName">cmd_fifo_rdend</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/data_fifo_wren" type="logic">
+      <obj_property name="ElementShortName">data_fifo_wren</obj_property>
+      <obj_property name="ObjectShortName">data_fifo_wren</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/data_fifo_full" type="logic">
+      <obj_property name="ElementShortName">data_fifo_full</obj_property>
+      <obj_property name="ObjectShortName">data_fifo_full</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/data_fifo_empty" type="logic">
+      <obj_property name="ElementShortName">data_fifo_empty</obj_property>
+      <obj_property name="ObjectShortName">data_fifo_empty</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/fifo_progfull" type="logic">
+      <obj_property name="ElementShortName">fifo_progfull</obj_property>
+      <obj_property name="ObjectShortName">fifo_progfull</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/CLK_I" type="logic">
+      <obj_property name="ElementShortName">CLK_I</obj_property>
+      <obj_property name="ObjectShortName">CLK_I</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/DATA_DVI_I" type="logic">
+      <obj_property name="ElementShortName">DATA_DVI_I</obj_property>
+      <obj_property name="ObjectShortName">DATA_DVI_I</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/fifo_progempty" type="logic">
+      <obj_property name="ElementShortName">fifo_progempty</obj_property>
+      <obj_property name="ObjectShortName">fifo_progempty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/wr_state" type="array">
+      <obj_property name="ElementShortName">wr_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_state[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/wr_next_state" type="array">
+      <obj_property name="ElementShortName">wr_next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_next_state[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/wr_cmd_cntr" type="array">
+      <obj_property name="ElementShortName">wr_cmd_cntr[5:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_cmd_cntr[5:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/wr_cmd_reg" type="array">
+      <obj_property name="ElementShortName">wr_cmd_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_cmd_reg[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/wr_data_cntr" type="array">
+      <obj_property name="ElementShortName">wr_data_cntr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_data_cntr[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/sCurrent_addr" type="array">
+      <obj_property name="ElementShortName">sCurrent_addr[23:0]</obj_property>
+      <obj_property name="ObjectShortName">sCurrent_addr[23:0]</obj_property>
+      <obj_property name="CustomSignalColor">#D2691E</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/sPage_count" type="array">
+      <obj_property name="ElementShortName">sPage_count[15:0]</obj_property>
+      <obj_property name="ObjectShortName">sPage_count[15:0]</obj_property>
+      <obj_property name="CustomSignalColor">#D2691E</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/sSector_count" type="array">
+      <obj_property name="ElementShortName">sSector_count[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sSector_count[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#D2691E</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/page_count" type="array">
+      <obj_property name="ElementShortName">page_count[15:0]</obj_property>
+      <obj_property name="ObjectShortName">page_count[15:0]</obj_property>
+      <obj_property name="CustomSignalColor">#D2691E</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/wr_current_addr" type="array">
+      <obj_property name="ElementShortName">wr_current_addr[23:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_current_addr[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/er_curr_sect_addr" type="array">
+      <obj_property name="ElementShortName">er_curr_sect_addr[23:0]</obj_property>
+      <obj_property name="ObjectShortName">er_curr_sect_addr[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/er_state" type="array">
+      <obj_property name="ElementShortName">er_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">er_state[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#008080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/er_next_state" type="array">
+      <obj_property name="ElementShortName">er_next_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">er_next_state[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#008080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/rd_state" type="array">
+      <obj_property name="ElementShortName">rd_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_state[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/rd_next_state" type="array">
+      <obj_property name="ElementShortName">rd_next_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_next_state[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/DATA_TO_SPI_I" type="array">
+      <obj_property name="ElementShortName">DATA_TO_SPI_I[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_TO_SPI_I[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/DATA_FROM_SPI_O" type="array">
+      <obj_property name="ElementShortName">DATA_FROM_SPI_O[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_FROM_SPI_O[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/SPI_CLK_O" type="logic">
+      <obj_property name="ElementShortName">SPI_CLK_O</obj_property>
+      <obj_property name="ObjectShortName">SPI_CLK_O</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/SPI_CS_N_O" type="logic">
+      <obj_property name="ElementShortName">SPI_CS_N_O</obj_property>
+      <obj_property name="ObjectShortName">SPI_CS_N_O</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/dTransDone" type="logic">
+      <obj_property name="ElementShortName">dTransDone</obj_property>
+      <obj_property name="ObjectShortName">dTransDone</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/SPI_MOSI_O" type="logic">
+      <obj_property name="ElementShortName">SPI_MOSI_O</obj_property>
+      <obj_property name="ObjectShortName">SPI_MOSI_O</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/SPI_MISO_I" type="logic">
+      <obj_property name="ElementShortName">SPI_MISO_I</obj_property>
+      <obj_property name="ObjectShortName">SPI_MISO_I</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/ShiftCount" type="array">
+      <obj_property name="ElementShortName">ShiftCount[7:0]</obj_property>
+      <obj_property name="ObjectShortName">ShiftCount[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/spi_testbench/spi_loader/spi_prog/SerDes/ShiftData" type="array">
+      <obj_property name="ElementShortName">ShiftData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">ShiftData[7:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+</wave_config>

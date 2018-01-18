@@ -2,8 +2,8 @@
 # Vivado v2016.3 (64-bit)
 # SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
 # IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
-# Start of session at: Tue Jan 16 13:40:12 2018
-# Process ID: 2372
+# Start of session at: Thu Jan 18 10:08:20 2018
+# Process ID: 2096
 # Current directory: C:/Projects/srio_spi/srio_spi.runs/synth_4
 # Command line: vivado.exe -log top_project.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top_project.tcl
 # Log file: C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.vds
@@ -15,9 +15,9 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7k160t'
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 4060 
+INFO: Helper process launched with PID 3476 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 288.844 ; gain = 79.020
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 305.781 ; gain = 95.453
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'top_project' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
 	Parameter RES_WIDTH bound to: 4 - type: integer 
@@ -30,7 +30,7 @@ INFO: [Synth 8-638] synthesizing module 'IBUFDS' [C:/Xilinx/Vivado/2016.3/script
 	Parameter IFD_DELAY_VALUE bound to: AUTO - type: string 
 	Parameter IOSTANDARD bound to: LVDS - type: string 
 INFO: [Synth 8-256] done synthesizing module 'IBUFDS' (1#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:14161]
-INFO: [Synth 8-638] synthesizing module 'spi_loader_top' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:23]
+INFO: [Synth 8-638] synthesizing module 'spi_loader_top' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:42]
 	Parameter ERASE_SUB bound to: 3'b000 
 	Parameter ERASE_SEC bound to: 3'b001 
 	Parameter ERASE_CHIP bound to: 3'b010 
@@ -38,11 +38,12 @@ INFO: [Synth 8-638] synthesizing module 'spi_loader_top' [C:/Projects/srio_spi/s
 	Parameter WRITE_HEADER bound to: 3'b100 
 	Parameter READ_DATA bound to: 3'b101 
 	Parameter IDLE_S bound to: 4'b0000 
-	Parameter PARSE_CMD_S bound to: 4'b0001 
-	Parameter ERASE_S bound to: 4'b0010 
-	Parameter ERASE_DONE_S bound to: 4'b0011 
-	Parameter WRITE_DATA_S bound to: 4'b0100 
-	Parameter READ_S bound to: 4'b0101 
+	Parameter GET_FIFO_S bound to: 4'b0001 
+	Parameter PARSE_CMD_S bound to: 4'b0010 
+	Parameter ERASE_S bound to: 4'b0011 
+	Parameter ERASE_DONE_S bound to: 4'b0100 
+	Parameter WRITE_DATA_S bound to: 4'b0101 
+	Parameter READ_S bound to: 4'b0110 
 INFO: [Synth 8-638] synthesizing module 'spi_flash_programmer' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:22]
 	Parameter WIDTH bound to: 24 - type: integer 
 	Parameter SECTOR_SIZE bound to: 65536 - type: integer 
@@ -89,26 +90,28 @@ INFO: [Synth 8-638] synthesizing module 'spi_flash_programmer' [C:/Projects/srio
 	Parameter ER_SENDCMD3_S bound to: 3'b101 
 	Parameter ER_RDSTAT_S bound to: 3'b110 
 	Parameter ER_CHKSTAT_S bound to: 3'b111 
-INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:398]
-INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:465]
+INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:402]
+INFO: [Synth 8-226] default block is never used [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:469]
 INFO: [Synth 8-638] synthesizing module 'spi_serdes' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v:24]
 	Parameter C_SHIFT_COUNT_INIT bound to: 8'b00000001 
 INFO: [Synth 8-256] done synthesizing module 'spi_serdes' (2#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_serdes.v:24]
-WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:859]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:867]
 INFO: [Synth 8-638] synthesizing module 'STARTUPE2' [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43498]
 	Parameter PROG_USR bound to: FALSE - type: string 
 	Parameter SIM_CCLK_FREQ bound to: 0.000000 - type: float 
 INFO: [Synth 8-256] done synthesizing module 'STARTUPE2' (3#1) [C:/Xilinx/Vivado/2016.3/scripts/rt/data/unisim_comp.v:43498]
-INFO: [Synth 8-638] synthesizing module 'fifo_generator_0' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2372-vldmr-PC/realtime/fifo_generator_0_stub.v:6]
-INFO: [Synth 8-256] done synthesizing module 'fifo_generator_0' (4#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2372-vldmr-PC/realtime/fifo_generator_0_stub.v:6]
+INFO: [Synth 8-638] synthesizing module 'fifo_spi_data' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/realtime/fifo_spi_data_stub.v:6]
+INFO: [Synth 8-256] done synthesizing module 'fifo_spi_data' (4#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/realtime/fifo_spi_data_stub.v:6]
 INFO: [Synth 8-256] done synthesizing module 'spi_flash_programmer' (5#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:22]
-INFO: [Synth 8-256] done synthesizing module 'spi_loader_top' (6#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:23]
+INFO: [Synth 8-638] synthesizing module 'fifo_cmd' [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/realtime/fifo_cmd_stub.v:6]
+INFO: [Synth 8-256] done synthesizing module 'fifo_cmd' (6#1) [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/realtime/fifo_cmd_stub.v:6]
+INFO: [Synth 8-256] done synthesizing module 'spi_loader_top' (7#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:42]
+WARNING: [Synth 8-350] instance 'spi_loader' of module 'spi_loader_top' requires 17 connections, but only 16 given [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
 WARNING: [Synth 8-3848] Net log_clk_t in module/entity top_project does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:57]
 WARNING: [Synth 8-3848] Net log_rst_t in module/entity top_project does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:58]
-WARNING: [Synth 8-3848] Net start_load in module/entity top_project does not have driver. [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:68]
-INFO: [Synth 8-256] done synthesizing module 'top_project' (7#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
+INFO: [Synth 8-256] done synthesizing module 'top_project' (8#1) [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:23]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 327.086 ; gain = 117.262
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 343.027 ; gain = 132.699
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -119,14 +122,16 @@ Report Check Netlist:
 +------+------------------+-------+---------+-------+------------------+
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:CLK_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:SRST_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
+WARNING: [Synth 8-3295] tying undriven pin spi_loader:CMD_DVI_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:CMD_I[2] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:CMD_I[1] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
 WARNING: [Synth 8-3295] tying undriven pin spi_loader:CMD_I[0] to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
-WARNING: [Synth 8-3295] tying undriven pin spi_loader:START_FLASH_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
+WARNING: [Synth 8-3295] tying undriven pin spi_loader:DATA_DVI_I to constant 0 [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/top_project.v:56]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 327.086 ; gain = 117.262
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 343.027 ; gain = 132.699
 ---------------------------------------------------------------------------------
-WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'fifo_generator_0' instantiated as 'spi_loader/spi_prog/fifo_spi' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:875]
+WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'fifo_cmd' instantiated as 'spi_loader/fifo_cmd' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:341]
+WARNING: [Project 1-486] Could not resolve non-primitive black box cell 'fifo_spi_data' instantiated as 'spi_loader/spi_prog/fifo_spi' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:883]
 INFO: [Netlist 29-17] Analyzing 2 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Device 21-403] Loading part xc7k160tffg676-2
@@ -134,41 +139,46 @@ INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
-Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2372-vldmr-PC/dcp/fifo_generator_0_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
-Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2372-vldmr-PC/dcp/fifo_generator_0_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
+Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/dcp/fifo_spi_data_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
+Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/dcp/fifo_spi_data_in_context.xdc] for cell 'spi_loader/spi_prog/fifo_spi'
+Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/dcp_2/fifo_generator_1_in_context.xdc] for cell 'spi_loader/fifo_cmd'
+Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/.Xil/Vivado-2096-vldmr-PC/dcp_2/fifo_generator_1_in_context.xdc] for cell 'spi_loader/fifo_cmd'
 Parsing XDC File [C:/Projects/srio_spi/srio_spi.srcs/constrs_1/new/top.xdc]
 Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.srcs/constrs_1/new/top.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Projects/srio_spi/srio_spi.srcs/constrs_1/new/top.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_project_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/top_project_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/dont_touch.xdc]
+Finished Parsing XDC File [C:/Projects/srio_spi/srio_spi.runs/synth_4/dont_touch.xdc]
 Completed Processing XDC Constraints
 
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 651.660 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 667.988 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7k160tffg676-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
+Applied set_property DONT_TOUCH = true for spi_loader/fifo_cmd. (constraint file  auto generated constraint, line ).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'wr_state_reg' in module 'spi_flash_programmer'
 INFO: [Synth 8-802] inferred FSM for state register 'rd_state_reg' in module 'spi_flash_programmer'
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5544] ROM "er_next_state" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "er_next_state" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "er_next_state" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "er_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "erase_inprogress" won't be mapped to RAM because it is too sparse
@@ -180,16 +190,17 @@ INFO: [Synth 8-5544] ROM "wr_status" won't be mapped to Block RAM because addres
 INFO: [Synth 8-5544] ROM "wr_strt_data_cntr" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "wr_strt_delay_cnt" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "wr_strt_valid_cnt" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "wr_next_state" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5546] ROM "wr_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "wr_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "wr_next_state" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "wr_next_state" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5546] ROM "wr_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "wr_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "wr_next_state" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "wr_next_state" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "wr_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "read_done" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "rd_SpiCsB" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "read_valid" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "rd_strt_cmd_cnt" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "rd_strt_delay_cnt" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "rd_strt_data_cnt" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
@@ -197,14 +208,12 @@ INFO: [Synth 8-5546] ROM "rd_next_state" won't be mapped to RAM because it is to
 INFO: [Synth 8-5544] ROM "rd_next_state" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "rd_next_state" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'spi_loader_top'
-INFO: [Synth 8-5546] ROM "stop_write" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "start_addr_valid" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "erase_done" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "erase_busy" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "cmd_fifo_rdend" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "next_state" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "next_state" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "next_state" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
-WARNING: [Synth 8-327] inferring latch for variable 'rd_data_out_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:229]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_data_out_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:232]
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
@@ -215,7 +224,7 @@ WARNING: [Synth 8-327] inferring latch for variable 'rd_data_out_reg' [C:/Projec
                RD_DONE_S |                            10000 |                              100
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'rd_state_reg' using encoding 'one-hot' in module 'spi_flash_programmer'
-WARNING: [Synth 8-327] inferring latch for variable 'write_done_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:234]
+WARNING: [Synth 8-327] inferring latch for variable 'write_done_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:238]
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
@@ -230,55 +239,58 @@ WARNING: [Synth 8-327] inferring latch for variable 'write_done_reg' [C:/Project
         WR_PPDONE_WAIT_S |                        100000000 |                             1000
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'wr_state_reg' using encoding 'one-hot' in module 'spi_flash_programmer'
-WARNING: [Synth 8-327] inferring latch for variable 'erase_inprogress_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:473]
-WARNING: [Synth 8-327] inferring latch for variable 'read_done_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:233]
-WARNING: [Synth 8-327] inferring latch for variable 'rd_data_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:782]
-WARNING: [Synth 8-327] inferring latch for variable 'rd_strt_data_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:787]
-WARNING: [Synth 8-327] inferring latch for variable 'rd_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:214]
-WARNING: [Synth 8-327] inferring latch for variable 'rd_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:785]
-WARNING: [Synth 8-327] inferring latch for variable 'rd_strt_delay_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:786]
-WARNING: [Synth 8-327] inferring latch for variable 'fifo_rden_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:678]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_data_cntr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:644]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_valid_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:642]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:641]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:649]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_current_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:637]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:214]
-WARNING: [Synth 8-327] inferring latch for variable 'page_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:638]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_delay_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:643]
-WARNING: [Synth 8-327] inferring latch for variable 'er_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:470]
-WARNING: [Synth 8-327] inferring latch for variable 'er_strt_delay_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:472]
-WARNING: [Synth 8-327] inferring latch for variable 'er_strt_valid_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:471]
-WARNING: [Synth 8-327] inferring latch for variable 'er_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:469]
-WARNING: [Synth 8-327] inferring latch for variable 'er_sector_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:468]
-WARNING: [Synth 8-327] inferring latch for variable 'rd_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:219]
-WARNING: [Synth 8-327] inferring latch for variable 'wr_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:219]
-WARNING: [Synth 8-327] inferring latch for variable 'er_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:218]
-WARNING: [Synth 8-327] inferring latch for variable 'er_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:213]
-WARNING: [Synth 8-327] inferring latch for variable 'er_curr_sect_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:467]
-WARNING: [Synth 8-327] inferring latch for variable 'stop_write_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:201]
+WARNING: [Synth 8-327] inferring latch for variable 'erase_inprogress_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:477]
+WARNING: [Synth 8-327] inferring latch for variable 'read_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:236]
+WARNING: [Synth 8-327] inferring latch for variable 'read_done_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:237]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_data_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:786]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_strt_data_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:792]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:217]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:790]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_strt_delay_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:791]
+WARNING: [Synth 8-327] inferring latch for variable 'fifo_rden_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:682]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_data_cntr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:648]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_valid_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:646]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:645]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:653]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_current_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:641]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:217]
+WARNING: [Synth 8-327] inferring latch for variable 'page_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:642]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_strt_delay_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:647]
+WARNING: [Synth 8-327] inferring latch for variable 'er_strt_cmd_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:474]
+WARNING: [Synth 8-327] inferring latch for variable 'er_strt_delay_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:476]
+WARNING: [Synth 8-327] inferring latch for variable 'er_strt_valid_cnt_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:475]
+WARNING: [Synth 8-327] inferring latch for variable 'er_status_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:473]
+WARNING: [Synth 8-327] inferring latch for variable 'er_sector_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:472]
+WARNING: [Synth 8-327] inferring latch for variable 'rd_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:222]
+WARNING: [Synth 8-327] inferring latch for variable 'wr_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:222]
+WARNING: [Synth 8-327] inferring latch for variable 'er_SpiCsB_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:221]
+WARNING: [Synth 8-327] inferring latch for variable 'er_cmd_reg_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:216]
+WARNING: [Synth 8-327] inferring latch for variable 'er_curr_sect_addr_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:471]
+WARNING: [Synth 8-327] inferring latch for variable 'start_address_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:249]
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
                   IDLE_S |                              000 |                             0000
-             PARSE_CMD_S |                              001 |                             0001
-                 ERASE_S |                              010 |                             0010
-            ERASE_DONE_S |                              011 |                             0011
-            WRITE_DATA_S |                              100 |                             0100
-                  READ_S |                              101 |                             0101
+              GET_FIFO_S |                              001 |                             0001
+             PARSE_CMD_S |                              010 |                             0010
+                 ERASE_S |                              011 |                             0011
+            ERASE_DONE_S |                              100 |                             0100
+            WRITE_DATA_S |                              101 |                             0101
+                  READ_S |                              110 |                             0110
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'spi_loader_top'
-WARNING: [Synth 8-327] inferring latch for variable 'erase_busy_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:103]
-WARNING: [Synth 8-327] inferring latch for variable 'erase_done_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:100]
-WARNING: [Synth 8-327] inferring latch for variable 'start_addr_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:189]
-WARNING: [Synth 8-327] inferring latch for variable 'sector_count_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:188]
-WARNING: [Synth 8-327] inferring latch for variable 'fifo_wren_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:203]
-WARNING: [Synth 8-327] inferring latch for variable 'strt_sect_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:197]
-WARNING: [Synth 8-327] inferring latch for variable 'strt_subs_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:198]
-WARNING: [Synth 8-327] inferring latch for variable 'start_write_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:199]
-WARNING: [Synth 8-327] inferring latch for variable 'start_read_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:200]
+WARNING: [Synth 8-327] inferring latch for variable 'start_addr_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:231]
+WARNING: [Synth 8-327] inferring latch for variable 'page_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:250]
+WARNING: [Synth 8-327] inferring latch for variable 'sector_count_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:251]
+WARNING: [Synth 8-327] inferring latch for variable 'sector_count_valid_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:230]
+WARNING: [Synth 8-327] inferring latch for variable 'strt_sect_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:234]
+WARNING: [Synth 8-327] inferring latch for variable 'strt_subs_erase_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:235]
+WARNING: [Synth 8-327] inferring latch for variable 'start_write_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:236]
+WARNING: [Synth 8-327] inferring latch for variable 'start_read_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:238]
+WARNING: [Synth 8-327] inferring latch for variable 'cmd_fifo_rdend_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:243]
+WARNING: [Synth 8-327] inferring latch for variable 'cmd_reg' [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_loader_top.v:248]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:15 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -293,15 +305,15 @@ Detailed RTL Component Info :
 +---Adders : 
 	   2 Input     24 Bit       Adders := 3     
 	   2 Input     16 Bit       Adders := 2     
-	   2 Input      8 Bit       Adders := 1     
-	   2 Input      6 Bit       Adders := 4     
-	   2 Input      4 Bit       Adders := 3     
+	   2 Input      8 Bit       Adders := 3     
+	   2 Input      6 Bit       Adders := 3     
+	   2 Input      4 Bit       Adders := 1     
 	   2 Input      3 Bit       Adders := 4     
 	   2 Input      2 Bit       Adders := 1     
 +---Registers : 
-	                8 Bit    Registers := 5     
-	                6 Bit    Registers := 4     
-	                4 Bit    Registers := 3     
+	                8 Bit    Registers := 7     
+	                6 Bit    Registers := 3     
+	                4 Bit    Registers := 1     
 	                3 Bit    Registers := 5     
 	                2 Bit    Registers := 1     
 	                1 Bit    Registers := 4     
@@ -322,17 +334,18 @@ Detailed RTL Component Info :
 	  10 Input      5 Bit        Muxes := 1     
 	   2 Input      4 Bit        Muxes := 2     
 	   2 Input      3 Bit        Muxes := 6     
-	  14 Input      3 Bit        Muxes := 1     
+	  15 Input      3 Bit        Muxes := 1     
 	   9 Input      2 Bit        Muxes := 1     
 	   2 Input      2 Bit        Muxes := 2     
 	   8 Input      2 Bit        Muxes := 1     
-	   2 Input      1 Bit        Muxes := 34    
-	   5 Input      1 Bit        Muxes := 8     
+	   2 Input      1 Bit        Muxes := 33    
+	   5 Input      1 Bit        Muxes := 10    
 	   9 Input      1 Bit        Muxes := 15    
 	   8 Input      1 Bit        Muxes := 13    
-	   3 Input      1 Bit        Muxes := 2     
+	   3 Input      1 Bit        Muxes := 1     
 	   4 Input      1 Bit        Muxes := 1     
-	   6 Input      1 Bit        Muxes := 20    
+	   6 Input      1 Bit        Muxes := 1     
+	   7 Input      1 Bit        Muxes := 14    
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -353,14 +366,14 @@ Detailed RTL Component Info :
 +---Adders : 
 	   2 Input     24 Bit       Adders := 3     
 	   2 Input     16 Bit       Adders := 2     
-	   2 Input      8 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 3     
 	   2 Input      6 Bit       Adders := 3     
-	   2 Input      4 Bit       Adders := 3     
+	   2 Input      4 Bit       Adders := 1     
 	   2 Input      3 Bit       Adders := 4     
 +---Registers : 
-	                8 Bit    Registers := 3     
+	                8 Bit    Registers := 5     
 	                6 Bit    Registers := 3     
-	                4 Bit    Registers := 3     
+	                4 Bit    Registers := 1     
 	                3 Bit    Registers := 5     
 	                1 Bit    Registers := 3     
 +---Muxes : 
@@ -384,23 +397,22 @@ Detailed RTL Component Info :
 	   2 Input      2 Bit        Muxes := 2     
 	   8 Input      2 Bit        Muxes := 1     
 	   2 Input      1 Bit        Muxes := 24    
-	   5 Input      1 Bit        Muxes := 8     
+	   5 Input      1 Bit        Muxes := 10    
 	   9 Input      1 Bit        Muxes := 15    
 	   8 Input      1 Bit        Muxes := 13    
 Module spi_loader_top 
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input      6 Bit       Adders := 1     
 	   2 Input      2 Bit       Adders := 1     
 +---Registers : 
-	                6 Bit    Registers := 1     
 	                2 Bit    Registers := 1     
 +---Muxes : 
-	  14 Input      3 Bit        Muxes := 1     
-	   2 Input      1 Bit        Muxes := 7     
-	   3 Input      1 Bit        Muxes := 2     
+	  15 Input      3 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 6     
+	   3 Input      1 Bit        Muxes := 1     
 	   4 Input      1 Bit        Muxes := 1     
-	   6 Input      1 Bit        Muxes := 20    
+	   6 Input      1 Bit        Muxes := 1     
+	   7 Input      1 Bit        Muxes := 14    
 ---------------------------------------------------------------------------------
 Finished RTL Hierarchical Component Statistics
 ---------------------------------------------------------------------------------
@@ -416,42 +428,8 @@ Finished Part Resource Summary
 ---------------------------------------------------------------------------------
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[0]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[1]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[2]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[3]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[4]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[5]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[6]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[7]'
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/rd_cmd_reg_reg[7] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/start_addr_valid_reg )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/sector_count_valid_reg )
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[8]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[7]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[9]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[10]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[11]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[12]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[13]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[14]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[15]'
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/rd_cmd_reg_reg[15] )
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[16]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[15]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[17]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[18]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[19]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[20]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[21]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[22]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[23]'
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/rd_cmd_reg_reg[23] )
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[24]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[25]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[25]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[27]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[26]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[31]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[23]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[31]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[28]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[31]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[29]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[31]'
-INFO: [Synth 8-3886] merging instance 'spi_loader/spi_prog/rd_cmd_reg_reg[30]' (LD) to 'spi_loader/spi_prog/rd_cmd_reg_reg[31]'
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (\spi_loader/spi_prog/rd_cmd_reg_reg[31] )
+INFO: [Synth 8-5546] ROM "spi_loader/spi_prog/er_next_state" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "spi_loader/spi_prog/er_next_state" won't be mapped to RAM because it is too sparse
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[7]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[6]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[5]) is unused and will be removed from module top_project.
@@ -460,11 +438,7 @@ WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[2]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[1]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_data_out_reg[0]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[31]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/erase_busy_reg) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/erase_done_reg) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/start_addr_valid_reg) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/sector_count_valid_reg) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/read_valid_reg) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_rd_data_reg[7]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_rd_data_reg[6]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_rd_data_reg[5]) is unused and will be removed from module top_project.
@@ -485,9 +459,8 @@ WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[5
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[4]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[3]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/er_rd_data_reg[2]) is unused and will be removed from module top_project.
-INFO: [Synth 8-3886] merging instance 'spi_loader/start_read_reg' (LD) to 'spi_loader/start_write_reg'
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -502,10 +475,10 @@ Start Timing Optimization
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:21 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Timing Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -520,7 +493,38 @@ WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/SerDes/spi_cs_n_
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/SerDes/SpiMosi_reg) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/erase_inprogress_reg) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_strt_data_cnt_reg) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[31]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[30]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[29]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[28]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[27]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[26]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[25]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[24]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[23]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[22]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[21]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[20]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[19]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[18]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[17]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[16]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[15]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[14]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[13]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[12]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[11]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[10]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[9]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[8]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[7]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[6]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[5]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[4]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[3]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[2]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[1]) is unused and will be removed from module top_project.
+WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_cmd_reg_reg[0]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/rd_strt_cmd_cnt_reg) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/fifo_rden_reg) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_strt_data_cntr_reg) is unused and will be removed from module top_project.
@@ -556,36 +560,9 @@ WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[2
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[28]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[27]) is unused and will be removed from module top_project.
 WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[26]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[25]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[24]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[23]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[22]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[21]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[20]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[19]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[18]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[17]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[16]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[15]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[14]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[13]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[12]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[11]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[10]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[9]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[8]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[7]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[6]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[5]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[4]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[3]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[2]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[1]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_cmd_reg_reg[0]) is unused and will be removed from module top_project.
-WARNING: [Synth 8-3332] Sequential element (spi_loader/spi_prog/wr_strt_delay_cnt_reg) is unused and will be removed from module top_project.
 INFO: [Common 17-14] Message 'Synth 8-3332' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:21 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Technology Mapping : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -608,9 +585,9 @@ Start Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-5396] Clock pin G has keep related attribute (keep/mark_debug/dont_touch) which could create extra logic on its net [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:782]
+WARNING: [Synth 8-5396] Clock pin G has keep related attribute (keep/mark_debug/dont_touch) which could create extra logic on its net [C:/Projects/srio_spi/srio_spi.srcs/sources_1/new/spi_flash_programmer.v:786]
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished IO Insertion : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -623,7 +600,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -636,83 +613,85 @@ Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-115] binding instance 'i_0' in module 'top_project' to reference 'spi_loader_top' which has no pins
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
 ---------------------------------------------------------------------------------
 
 Report BlackBoxes: 
-+------+-----------------+----------+
-|      |BlackBox name    |Instances |
-+------+-----------------+----------+
-|1     |fifo_generator_0 |         1|
-+------+-----------------+----------+
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |fifo_cmd      |         1|
+|2     |fifo_spi_data |         1|
++------+--------------+----------+
 
 Report Cell Usage: 
-+------+-----------------+------+
-|      |Cell             |Count |
-+------+-----------------+------+
-|1     |fifo_generator_0 |     1|
-|2     |CARRY4           |     8|
-|3     |LUT1             |    30|
-|4     |LUT2             |    23|
-|5     |LUT3             |     6|
-|6     |LUT4             |    26|
-|7     |LUT5             |     4|
-|8     |LUT6             |    13|
-|9     |STARTUPE2        |     1|
-|10    |FDRE             |    20|
-|11    |LD               |    39|
-|12    |IBUFDS           |     1|
-|13    |OBUF             |     2|
-+------+-----------------+------+
++------+--------------+------+
+|      |Cell          |Count |
++------+--------------+------+
+|1     |fifo_cmd      |     1|
+|2     |fifo_spi_data |     1|
+|3     |CARRY4        |     8|
+|4     |LUT1          |    31|
+|5     |LUT2          |     8|
+|6     |LUT3          |     7|
+|7     |LUT4          |    12|
+|8     |LUT5          |    23|
+|9     |LUT6          |    36|
+|10    |STARTUPE2     |     1|
+|11    |FDRE          |    20|
+|12    |LD            |    62|
+|13    |IBUFDS        |     1|
+|14    |OBUF          |     2|
++------+--------------+------+
 
 Report Instance Areas: 
 +------+-------------+---------------------+------+
 |      |Instance     |Module               |Cells |
 +------+-------------+---------------------+------+
-|1     |top          |                     |   185|
-|2     |  spi_loader |spi_loader_top       |   182|
-|3     |    spi_prog |spi_flash_programmer |   171|
+|1     |top          |                     |   279|
+|2     |  spi_loader |spi_loader_top       |   276|
+|3     |    spi_prog |spi_flash_programmer |   181|
 +------+-------------+---------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 667.988 ; gain = 457.660
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 289 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 651.660 ; gain = 112.324
-Synthesis Optimization Complete : Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+Synthesis finished with 0 errors, 0 critical warnings and 350 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 667.988 ; gain = 112.137
+Synthesis Optimization Complete : Time (s): cpu = 00:00:24 ; elapsed = 00:00:26 . Memory (MB): peak = 667.988 ; gain = 457.660
 INFO: [Project 1-571] Translating synthesized netlist
-INFO: [Netlist 29-17] Analyzing 49 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 72 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 39 instances were transformed.
-  LD => LDCE: 39 instances
+  A total of 62 instances were transformed.
+  LD => LDCE: 62 instances
 
 INFO: [Common 17-83] Releasing license: Synthesis
-117 Infos, 151 Warnings, 0 Critical Warnings and 0 Errors encountered.
+83 Infos, 155 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:22 ; elapsed = 00:00:24 . Memory (MB): peak = 651.660 ; gain = 441.836
+synth_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 667.988 ; gain = 446.102
 INFO: [Common 17-1381] The checkpoint 'C:/Projects/srio_spi/srio_spi.runs/synth_4/top_project.dcp' has been generated.
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 651.660 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Tue Jan 16 13:40:38 2018...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 667.988 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Thu Jan 18 10:08:47 2018...

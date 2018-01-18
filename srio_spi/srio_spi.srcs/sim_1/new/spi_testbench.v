@@ -29,8 +29,14 @@ module spi_testbench();
     reg [2:0] cmd;   // command signal
     reg [63:0] dout; // data for MISO
     reg miso;       
-    reg [7:0] din;   // data for write into SPI Flash
-    
+    reg [31:0] din;   // data for write into SPI Flash
+    reg din_dvi;
+    reg cmd_dvi;
+
+    reg [23:0] flash_addr;
+    reg [15:0] page_count;
+    reg [7:0]  sector_count;
+
     wire check_stop; // check busy our interface (for WRITE)
     wire write_done; 
     wire read_done;
@@ -53,8 +59,13 @@ module spi_testbench();
         dout                 = 64'h32bbccddeeff321f;
         cmd                  = 3'h00; // Command of SubSector Erase
         DQ1                  = 1'b0;        
-        din                  = 8'hCD;
-                        
+        din                  = 32'hCDF5CF2A;
+        flash_addr           = 24'h0100;
+        page_count           = 16'h01;
+        sector_count         = 8'h50;                
+        din_dvi              = 1'b0;
+        cmd_dvi              = 1'b0;
+
         $display("<< Running testbench >>");
     end
     
@@ -80,28 +91,48 @@ module spi_testbench();
             log_rst_t <= 1'b0;
     end
 
-    always @(posedge log_clk_t) begin
-        if (check_stop == 1'b1) // If interface is BUSY - don't write into interface
-            din <= 8'h00;
-        else
-            din <= 8'hcd;
-    end    
 
     always @(posedge log_clk_t) begin
-        if (erase_done)
-            cmd <= 3'h03; // command of Write
-        if (write_done)
-            cmd <= 3'h05; // command of Read
+        if (count > 105 && count < 171)
+            din_dvi <= 1'b1;
+        else
+            din_dvi <= 1'b0;
+    end
+
+    always @(posedge log_clk_t) begin
+        if (count == 102) begin
+            cmd_dvi <= 1'b1;
+            cmd     <= 3'h00;
+        end else if (count == /*10500*/105 ) begin
+            cmd_dvi <= 1'b1;
+            cmd     <= 3'h03;
+        end else if (count == 107) begin
+            cmd_dvi <= 1'b1;
+            cmd     <= 3'h03;
+            flash_addr <= 24'h0200;
+        end else if (count == 108) begin
+            cmd_dvi    <= 1'b1;
+            cmd        <= 3'h05;
+            flash_addr <= 24'h0200;
+            page_count <= 16'h020;
+        end else begin
+            cmd_dvi <= 1'b0;            
+        end
+    end
+
+    always @(posedge log_clk_t) begin
+        if (count == 183000)
+            $finish;
     end
 
     // Generate SPI MISO signals
     always @(negedge log_clk_t) begin
-        if (delay_count > 32'h2A) 
+        if (/*delay_count*/count > 7117) 
             dout <= {dout[62:0], miso};            
-        else if (delay_count == 32'h28)  // and commen this (2)
+        else if (count == 7117)  // and commen this (2)
             dout <= 64'h32bbccddeeff321f;         
-        else if (count > 161 && count < 188354) // comment this (1), for work only with READ state
-            dout <= {dout[62:0], miso};            
+        /*else if (count > 161 && count < 188354) // comment this (1), for work only with READ state
+            dout <= {dout[62:0], miso};            */
     end
 
     always @(*) begin
@@ -110,33 +141,33 @@ module spi_testbench();
 
 
     always @(posedge log_clk_t) begin
-        if (read_done == 1'b1) begin
+        /*if (read_done == 1'b1) begin
             start_work <= 1'b0;  // If Read was successful - finish test
             $finish;                              
-        end
+        end*/
     end
 
     spi_loader_top spi_loader(
-        .CLK_I             ( log_clk_t  ),
-        .SRST_I            ( log_rst_t  ),
+        .CLK_I             ( log_clk_t    ),
+        .SRST_I            ( log_rst_t    ),
+  
+        .CMD_DVI_I         ( cmd_dvi      ),
+        .CMD_I             ( cmd          ),    
+        .START_ADDR_I      ( flash_addr   ),
+        .PAGE_COUNT_I      ( page_count   ),
+        .SECTOR_COUNT_I    ( sector_count ),
+        .DATA_OUT_O        (              ),
 
-        .CMD_I             ( cmd ),
-
-        .DATA_TO_PROG_I    ( din       ),    
-        .START_ADDR_I      ( 24'h000100 ),
-        .PAGE_COUNT_I      ( 16'd168    ),
-        .SECTOR_COUNT_I    ( 8'd80      ),
-        .DATA_OUT_O        (            ),
-
-        .START_FLASH_I     ( start_work ),
-        .STOP_WRITE_O      ( check_stop ),
-        .ERASE_DONE_O      ( erase_done ),
-        .WRITE_DONE_O      ( write_done ),
-        .READ_DONE_O       ( read_done ),
+        .DATA_DVI_I        ( din_dvi      ),
+        .DATA_TO_PROG_I    ( din          ),
         
-        .SPI_CS_O          ( CS         ),
-        .SPI_MOSI_O        ( DQ0        ),
-        .SPI_MISO_I        ( miso       )
+        .CMD_FIFO_EMPTY_O  (  ),
+        .CMD_FIFO_FULL_O   (  ),
+        .DATA_FIFO_PFULL_O (  ),
+        
+        .SPI_CS_O          ( CS           ),
+        .SPI_MOSI_O        ( DQ0          ),
+        .SPI_MISO_I        ( miso         )
     );
 
 endmodule

@@ -35,7 +35,7 @@ module top_project(
     reg         log_rst = 1'b1;
     wire        spi_clk;    
     
-    wire [7:0] data = 8'hDD;
+    wire [31:0] data = 32'hDD;
 
     // tmp. For reset.        
     localparam RES_WIDTH = 4;    
@@ -57,20 +57,20 @@ module top_project(
         .CLK_I             ( log_clk_t  ),
         .SRST_I            ( log_rst_t  ),
     
+        .CMD_DVI_I         ( ),
         .CMD_I             ( ),
-
-        .DATA_TO_PROG_I    ( data       ),    
+        
         .START_ADDR_I      ( 24'h000100 ),  
         .PAGE_COUNT_I      ( 16'd168    ),
         .SECTOR_COUNT_I    ( 8'd80     ),
         .DATA_OUT_O        ( ),
 
-        .START_FLASH_I     ( start_load ),
-        .STOP_WRITE_O      ( check_stop ),
-        .ERASE_BUSY_O      ( ),
-        .ERASE_DONE_O      ( ),
-        .WRITE_DONE_O      ( write_done ),
-        .READ_DONE_O       ( ),
+        .DATA_DVI_I        ( ),
+        .DATA_TO_PROG_I    ( data       ), 
+
+        .CMD_FIFO_EMPTY_O       ( ),
+        .CMD_FIFO_FULL_O        ( check_stop ),        
+        .DATA_FIFO_PFULL_O      ( ),
 
         .SPI_CS_O          ( CS         ),
         .SPI_MOSI_O        ( DQ0        ),
