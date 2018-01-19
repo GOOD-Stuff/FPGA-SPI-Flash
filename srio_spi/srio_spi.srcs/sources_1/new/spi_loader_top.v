@@ -16,53 +16,53 @@
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-//                            spi_loader_top
-//               ___________________________________________
-//              |   __________                              |
-// CMD_DVI      |  |          | CMD_FIFO_EMPTY              |
-// -------------|->|          |-----------------------------|--->
-// CMD 3        |  |          | CMD_FIFO_FULL               |
-// ----/--------|->|   FIFO   |-----------------------------|--->
-// ST_ADDR 24   |  |    CMD   |                             |
-// ---------/---|->|          |                             |
-// PG_CNT 16    |  |          |                             |
-// -------/-----|->|          |                             |
-// ST_CNT 8     |  |          |                             |
-// -------/-----|->|          |     _______                 |
-//              |  |__________|    |       |                |
-//              |                  | FIFO  |                |
-// DATA_DVI     |                  | DATA  |DATA_FIFO_PFULL |
-// -------------|----------------->|       |----------------|--->
-// DATA_TO_PROG |                  |       |                |
-// -------------|----------------->|       |                |
-//              |                  |_______|                |
-//              |___________________________________________|
-//
+// 
 //////////////////////////////////////////////////////////////////////////////////
+/*           __________
+CMD_DVI     |          | CMD_FIFO_EMPTY
+----------->|          |--------------------------------->
+CMD 3       |          | CMD_FIFO_FULL
+----/------>|   FIFO   |--------------------------------->
+ST_ADDR 24  |          |
+---------/->|          |
+PG_CNT 16   |          |
+-------/--->|          |
+ST_CNT 8    |          |
+-------/--->|          |        _______
+            |__________|       |       |
+                               | FIFO  |
+DATA_DVI                       |       |DATA_FIFO_PFULL
+------------------------------>|       |----------------->
+DATA_TO_PROG                   |       |
+------------------------------>|       |
+                               |_______|
+*/
 
+// TODO: DVO - 8 тактов; 1 такт == 1 байт
 module spi_loader_top(
-    input         CLK_I,             // Synchro signal
-    input         SRST_I,            // Reset synchro signal
-    // FIFO CMD
+    input         CLK_I,            // Synchro signal
+    input         SRST_I,           // Reset synchro signal
+
     input         CMD_DVI_I,
-    input  [2:0]  CMD_I,             // Command (erase/write/read)            
-    input  [23:0] START_ADDR_I,      // Address of SPI Flash for write
-    input  [15:0] PAGE_COUNT_I,      // Count of page of SPI Flash for write
-    input  [7:0]  SECTOR_COUNT_I,    // Count of sector of SPI Flash for write    
-    // FIFO DATA
+    input  [2:0]  CMD_I,            // Command (erase/write/read)        
+    input  [23:0] START_ADDR_I,     // Address of SPI Flash for write
+    input  [15:0] PAGE_COUNT_I,     // Count of page of SPI Flash for write
+    input  [7:0]  SECTOR_COUNT_I,   // Count of sector of SPI Flash for write    
+
     input         DATA_DVI_I,
-    input  [31:0] DATA_TO_PROG_I,    // Data to write into SPI Flash
-    // Data from SPI Flash memory
+    input  [31:0] DATA_TO_PROG_I,   // Data to write into SPI Flash
+
     output        DATA_DVO_O,
-    output [7:0]  DATA_OUT_O,        // Received data from SPI memory
-    // Output FIFOs signals
+    output [7:0]  DATA_OUT_O,       // Received data from SPI memory
+
     output        CMD_FIFO_EMPTY_O,  // The signal of module when it has completed erasing
     output        CMD_FIFO_FULL_O,   // The signal of module when it has completed writing
     output        DATA_FIFO_PFULL_O, // FIFO is full, must wait while it will be release    
-    // SPI
-    output        SPI_CS_O,          // Chip Select signal for SPI Flash
-    output        SPI_MOSI_O,        // Master Output Slave Input
-    input         SPI_MISO_I         // Master Input Slave Output
+    
+
+    output        SPI_CS_O,         // Chip Select signal for SPI Flash
+    output        SPI_MOSI_O,       // Master Output Slave Input
+    input         SPI_MISO_I        // Master Input Slave Output
     );
     
     // {{{ local parameters (constants) --------
@@ -84,27 +84,32 @@ module spi_loader_top(
     // }}} End local parameters -------------
     
     // {{{ Wire declarations ----------------
+        wire        sSpi_Miso;
     // FSM
-        reg  [3:0]  state              = IDLE_S;
-        reg  [3:0]  next_state;
+        reg  [3:0]  state, next_state;
     // Counters
-        reg  [1:0]  counter            = 2'h00; // for some delay        
-    // Control signals           
+        reg  [1:0]  counter            = 2'h00; // for some delay
+        reg  [5:0]  data_counter       = 6'h00;
+    // Control signals
+        reg         erase_done         = 1'b0;        
         wire        write_done;
-        wire        read_done; 
+        wire        read_done; // XXX: on future
         wire        load_valid;
         reg  [2:0]  cmd                = 3'h00;
-        wire        cmd_dvi;        
+        wire        cmd_dvi;
+        reg         data_dvo           = 1'b0;
     // Continuous signals
-        reg         strt_sect_erase;
-        reg         strt_subs_erase;       
-        reg         start_write;               
-        reg         start_read;
+        reg         strt_sect_erase    = 1'b0;
+        reg         strt_subs_erase    = 1'b0;        
+        reg         start_write        = 1'b0;
+        reg         stop_write         = 1'b1;
+        reg         erase_busy         = 1'b0;
         wire        erasing_spi;
+        reg         start_read         = 1'b0;
     // Memory signals (address, pages, etc.)
-        reg         start_addr_valid;
-        reg         page_count_valid;  
-        reg         sector_count_valid;
+        reg         start_addr_valid   = 1'b0;
+        reg         page_count_valid   = 1'b0;
+        reg         sector_count_valid = 1'b0;
         reg  [23:0] start_address      = 24'h00;
         reg  [15:0] page_count         = 16'h00;
         reg  [7:0]  sector_count       = 8'h00;
@@ -113,8 +118,7 @@ module spi_loader_top(
         wire        cmd_fifo_empty;
         wire [51:0] cmd_fifo_dout;
         wire [51:0] cmd_fifo_din;
-        reg         cmd_fifo_rdend;
-
+        reg         cmd_fifo_rdend     = 1'b0;
         wire        data_fifo_wren;
         wire        data_fifo_full;
         wire        data_fifo_empty;        
@@ -122,19 +126,21 @@ module spi_loader_top(
         
         
     // {{{ Wire initializations ------------ 
-        assign cmd_fifo_din      = {CMD_DVI_I, CMD_I, START_ADDR_I, 
-                                    PAGE_COUNT_I, SECTOR_COUNT_I};
-        assign load_valid        = !cmd_fifo_empty;
-        assign cmd_dvi           = cmd_fifo_dout[51];
+        assign cmd_fifo_din   = {CMD_DVI_I, CMD_I, START_ADDR_I, 
+                                PAGE_COUNT_I, SECTOR_COUNT_I};
+        assign load_valid     = !cmd_fifo_empty;
+        assign cmd_dvi        = cmd_fifo_dout[51];
         /*assign cmd            = cmd_fifo_dout[50:48];                
         assign start_address  = cmd_fifo_dout[47:24];
         assign page_count     = cmd_fifo_dout[23:8];
         assign sector_count   = cmd_fifo_dout[7:0];*/
+        assign sSpi_Miso      = SPI_MISO_I;
+        assign data_fifo_wren = (!data_fifo_full) ? DATA_DVI_I : 1'b0;
 
-        assign data_fifo_wren    = (!data_fifo_full) ? DATA_DVI_I : 1'b0;
-        assign DATA_FIFO_PFULL_O = data_fifo_full;           
-        assign CMD_FIFO_FULL_O   = cmd_fifo_full;
-        assign CMD_FIFO_EMPTY_O  = cmd_fifo_empty;        
+//        assign DATA_DVO_O     = data_dvo;
+        assign DATA_FIFO_PFULL_O   = data_fifo_full;           
+        assign CMD_FIFO_FULL_O     = cmd_fifo_full;
+        assign CMD_FIFO_EMPTY_O   = cmd_fifo_empty;        
     // }}} End of wire initializations ------------
 
 
@@ -145,6 +151,15 @@ module spi_loader_top(
             counter <= counter + 1'b1;
     end
     
+    always @(posedge CLK_I) begin
+        if (SRST_I)
+            data_counter <= 6'h00;
+        else if (!stop_write)
+            data_counter <= 6'h00;
+        else
+            data_counter <= data_counter + 1'b1;            
+    end
+
 
     // {{{ FSM logic ------------    
     always @(posedge CLK_I) begin
@@ -213,14 +228,16 @@ module spi_loader_top(
     always @(*) begin
         case (state)    
             IDLE_S: begin                               // 0               
-                cmd_fifo_rdend         = 1'b0;
                 sector_count_valid     = 1'b0;
                 start_addr_valid       = 1'b0;                
-                page_count_valid       = 1'b0;                
+                page_count_valid       = 1'b0;
+                erase_done             = 1'b0;  // delete?
                 strt_sect_erase        = 1'b0;
                 strt_subs_erase        = 1'b0;                                
-                start_write            = 1'b0;                
-                start_read             = 1'b0;                                            
+                start_write            = 1'b0;
+                data_dvo               = 1'b0;
+                start_read             = 1'b0;                
+                erase_busy             = 1'b0;                
             end
                
             GET_FIFO_S: begin                           // 1
@@ -257,28 +274,32 @@ module spi_loader_top(
                 end
             end    
 
-            ERASE_S: begin                             // 3                
+            ERASE_S: begin                             // 3
+                erase_busy             = 1'b1;
                 strt_sect_erase        = 1'b0;
                 strt_subs_erase        = 1'b0;
             end
 
             ERASE_DONE_S: begin                        // 4
-
+                erase_busy             = 1'b0;
+                erase_done             = 1'b1;               
             end
           
             WRITE_DATA_S: begin                        // 5                
                 
             end
             
-            READ_S: begin                              // 6                
-                    
+            READ_S: begin                              // 6
+                if (read_done)
+                    data_dvo           = 1'b1;
             end
 
             default: begin
                 strt_sect_erase        = 1'b0;
                 sector_count_valid     = 1'b0;
                 start_addr_valid       = 1'b0;                
-                page_count_valid       = 1'b0;                
+                page_count_valid       = 1'b0;
+                stop_write             = 1'b1;                
             end
         endcase
     end
@@ -309,12 +330,12 @@ module spi_loader_top(
         .WRITE_I               ( start_write        ),
         .READ_I                ( start_read         ),
         .ERASEING_O            ( erasing_spi        ),
-        .READ_BUSY_O           ( DATA_DVO_O         ),
+        .READ_VALID_O          ( DATA_DVO_O         ),
         .READ_DONE_O           ( read_done          ),
 
         .SPI_CS_O              ( SPI_CS_O           ),
         .SPI_MOSI_O            ( SPI_MOSI_O         ),
-        .SPI_MISO_I            ( SPI_MISO_I         )
+        .SPI_MISO_I            ( sSpi_Miso          )
     );              
 
 
@@ -327,6 +348,26 @@ module spi_loader_top(
         .dout               ( cmd_fifo_dout    ),
         .full               ( cmd_fifo_full    ),        
         .empty              ( cmd_fifo_empty   )        
+    );
+
+    dbg_spi_cmd dbg_cmd (
+        .clk                ( CLK_I           ),
+  
+        .probe0             ( state           ),
+        .probe1             ( next_state      ),
+  
+        .probe2             ( start_address   ),
+        .probe3             ( page_count      ),
+        .probe4             ( sector_count    ),
+          
+        .probe5             ( cmd_dvi         ),
+        .probe6             ( cmd             ),
+          
+        .probe7             ( write_done      ),
+        .probe8             ( read_done       ),
+        .probe9             ( erasing_spi     ),
+        .probe10            ( strt_subs_erase ),
+        .probe11            ( start_write     )
     );
     // }}} End of Include other modules ------------
 endmodule
