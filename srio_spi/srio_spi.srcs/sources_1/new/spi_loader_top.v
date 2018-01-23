@@ -66,7 +66,7 @@ module spi_loader_top(
     );
     
     // {{{ local parameters (constants) --------
-    // CMD
+    // CMD TODO: change WRITE and READ command value
         localparam [2:0] ERASE_SUB    = 3'h00; // Erase SubSector
         localparam [2:0] ERASE_SEC    = 3'h01; // Erase SEctor
         localparam [2:0] ERASE_CHIP   = 3'h02; // Erase (Bulk) Chip
@@ -99,8 +99,8 @@ module spi_loader_top(
         wire        cmd_dvi;
         reg         data_dvo           = 1'b0;
     // Continuous signals
-        reg         strt_sect_erase    = 1'b0;
-        reg         strt_subs_erase    = 1'b0;        
+        reg         strt_sect_erase;
+        reg         strt_subs_erase;        
         reg         start_write        = 1'b0;
         reg         stop_write         = 1'b1;
         reg         erase_busy         = 1'b0;
@@ -121,7 +121,11 @@ module spi_loader_top(
         reg         cmd_fifo_rdend     = 1'b0;
         wire        data_fifo_wren;
         wire        data_fifo_full;
-        wire        data_fifo_empty;        
+        wire        data_fifo_empty;    
+        
+        wire        tmp_sect_valid;  
+        wire        tmp_sect_erase;  
+        wire        tmp_subs_erase;
     // }}} End of wire declarations ------------
         
         
@@ -140,9 +144,21 @@ module spi_loader_top(
 //        assign DATA_DVO_O     = data_dvo;
         assign DATA_FIFO_PFULL_O   = data_fifo_full;           
         assign CMD_FIFO_FULL_O     = cmd_fifo_full;
-        assign CMD_FIFO_EMPTY_O   = cmd_fifo_empty;        
+        assign CMD_FIFO_EMPTY_O   = cmd_fifo_empty;
+        
+        assign tmp_sect_valid     = sector_count_valid;   
+        assign tmp_sect_erase     = strt_sect_erase;
+        assign tmp_subs_erase     = strt_subs_erase;
     // }}} End of wire initializations ------------
 
+
+    always @(posedge CLK_I) begin
+        if (SRST_I) 
+            sector_count_valid <= 1'b0;                    
+        else if (cmd_dvi && cmd_fifo_rdend) begin
+            sector_count_valid = 1'b1;            
+        end
+    end
 
     always @(posedge CLK_I) begin
         if (SRST_I)
@@ -184,7 +200,11 @@ module spi_loader_top(
             end
 
             PARSE_CMD_S: begin                              // 2
-                if (cmd == ERASE_SEC || cmd == ERASE_SUB || cmd == ERASE_CHIP)
+                if (cmd == ERASE_SEC)
+                    next_state = ERASE_S;
+                else if (cmd == ERASE_SUB)
+                    next_state = ERASE_S;
+                else if (cmd == ERASE_CHIP)
                     next_state = ERASE_S;
                 else if (cmd == WRITE_DATA)
                     next_state = WRITE_DATA_S;
@@ -228,7 +248,7 @@ module spi_loader_top(
     always @(*) begin
         case (state)    
             IDLE_S: begin                               // 0               
-                sector_count_valid     = 1'b0;
+                //sector_count_valid     = 1'b0;
                 start_addr_valid       = 1'b0;                
                 page_count_valid       = 1'b0;
                 erase_done             = 1'b0;  // delete?
@@ -243,15 +263,15 @@ module spi_loader_top(
             GET_FIFO_S: begin                           // 1
                 cmd_fifo_rdend         = 1'b1;
                 if (cmd_dvi) begin
-                    sector_count_valid = 1'b1;
+                    
                     start_addr_valid   = 1'b1;                
                     page_count_valid   = 1'b1;
                     cmd                = cmd_fifo_dout[50:48];
                     start_address      = cmd_fifo_dout[47:24];
-                    page_count         = cmd_fifo_dout[23:8];
+                    page_count         = cmd_fifo_dout[23:8];                    
                     sector_count       = cmd_fifo_dout[7:0];
                 end else begin
-                    sector_count_valid = 1'b0;
+                    //sector_count_valid = 1'b0;
                     start_addr_valid   = 1'b0;                
                     page_count_valid   = 1'b0;
                 end
@@ -260,13 +280,15 @@ module spi_loader_top(
 
             PARSE_CMD_S: begin                          // 2
                 cmd_fifo_rdend         = 1'b0;
-                if (cmd == ERASE_SEC) begin                    
-                    strt_sect_erase    = 1'b1;
-                end else if (cmd == ERASE_SUB)  begin                    
-                    strt_subs_erase    = 1'b1;
+                if (cmd == ERASE_SUB) begin                    
+                    strt_subs_erase    = 1'b1;                    
+                    strt_sect_erase    = 1'b0;
+                end else if (cmd == ERASE_SEC)  begin                    
+                    strt_subs_erase    = 1'b0;                    
+                    strt_sect_erase    = 1'b1;                                       
                 end else if (cmd == ERASE_CHIP) begin
-                    strt_sect_erase    = 1'b1;
-                    sector_count_valid = 1'b0;
+                    strt_subs_erase    = 1'b0;                    
+                    strt_sect_erase    = 1'b1;                    
                 end else if (cmd == WRITE_DATA) begin                                        
                     start_write        = 1'b1;
                 end else if (cmd == READ_DATA) begin
@@ -295,8 +317,8 @@ module spi_loader_top(
             end
 
             default: begin
-                strt_sect_erase        = 1'b0;
-                sector_count_valid     = 1'b0;
+                strt_sect_erase        = 1'b0;                
+                strt_subs_erase        = 1'b0;                
                 start_addr_valid       = 1'b0;                
                 page_count_valid       = 1'b0;
                 stop_write             = 1'b1;                
@@ -316,7 +338,7 @@ module spi_loader_top(
         .START_ADDR_VALID_I    ( start_addr_valid   ),
         .PAGE_COUNT_I          ( page_count         ),
         .PAGE_COUNT_VALID_I    ( page_count_valid   ),
-        .SECTOR_COUNT_I        ( sector_count       ),
+        .SECTOR_COUNT_I        ( sector_count       ), // TODO: return 
         .SECTOR_COUNT_VALID_I  ( sector_count_valid ),
         .DATA_FROM_SPI_O       ( DATA_OUT_O         ),
                                       
@@ -366,8 +388,10 @@ module spi_loader_top(
         .probe7             ( write_done      ),
         .probe8             ( read_done       ),
         .probe9             ( erasing_spi     ),
-        .probe10            ( strt_subs_erase ),
-        .probe11            ( start_write     )
+        .probe10            ( tmp_subs_erase ),
+        .probe11            ( start_write     ),
+        .probe12            ( tmp_sect_valid ),
+        .probe13            ( tmp_sect_erase )        
     );
     // }}} End of Include other modules ------------
 endmodule
