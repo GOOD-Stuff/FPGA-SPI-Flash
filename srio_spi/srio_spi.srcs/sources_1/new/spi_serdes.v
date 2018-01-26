@@ -48,8 +48,7 @@ module spi_serdes(
         reg  [7:0]  ShiftData  = 8'h00;        
         reg         SpiMosi    = 1'b0;
         reg         dTransDone = 1'b1; // Start and End of transaction            
-        reg         spi_cs_n   = 1'b1;
-               
+        reg         spi_cs_n   = 1'b1;               
     // }}} End of wire declarations ---------
 
     // {{{ Wire assignment ----------------        
