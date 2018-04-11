@@ -1,5 +1,0 @@
-xpm_cdc.sv,systemverilog,xil_defaultlib,../../../../../../../../Xilinx/Vivado/2016.3/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv,incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl/verilog"incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl"
-xpm_memory.sv,systemverilog,xil_defaultlib,../../../../../../../../Xilinx/Vivado/2016.3/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv,incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl/verilog"incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl"
-xpm_VCOMP.vhd,vhdl,xpm,../../../../../../../../Xilinx/Vivado/2016.3/data/ip/xpm/xpm_VCOMP.vhd,incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl/verilog"incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl"
-vio_0.v,verilog,xil_defaultlib,../../../../srio_spi.srcs/sources_1/ip/vio_0/sim/vio_0.v,incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl/verilog"incdir="../../../../srio_spi.srcs/sources_1/ip/vio_0/hdl"
-glbl.v,Verilog,xil_defaultlib,glbl.v

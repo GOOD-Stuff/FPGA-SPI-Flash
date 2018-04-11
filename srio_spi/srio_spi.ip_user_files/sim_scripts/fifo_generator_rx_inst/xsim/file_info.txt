@@ -1,2 +1,0 @@
-fifo_generator_rx_inst.v,verilog,xil_defaultlib,../../../../srio_spi.srcs/sources_1/ip/fifo_generator_rx_inst/sim/fifo_generator_rx_inst.v,
-glbl.v,Verilog,xil_defaultlib,glbl.v
