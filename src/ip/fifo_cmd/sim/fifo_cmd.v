@@ -47,14 +47,14 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: xilinx.com:ip:fifo_generator:13.1
-// IP Revision: 2
+// IP VLNV: xilinx.com:ip:fifo_generator:13.2
+// IP Revision: 1
 
 `timescale 1ns/1ps
 
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module fifo_cmd (
-  rst,
+  srst,
   wr_clk,
   rd_clk,
   din,
@@ -64,41 +64,47 @@ module fifo_cmd (
   full,
   empty,
   prog_full,
-  prog_empty
+  prog_empty,
+  wr_rst_busy,
+  rd_rst_busy
 );
 
-input wire rst;
+input wire srst;
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME write_clk, FREQ_HZ 78000000, PHASE 0.000" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 write_clk CLK" *)
 input wire wr_clk;
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME read_clk, FREQ_HZ 78000000, PHASE 0.000" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 read_clk CLK" *)
 input wire rd_clk;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
-input wire [51 : 0] din;
+input wire [59 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
 input wire wr_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *)
 input wire rd_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *)
-output wire [51 : 0] dout;
+output wire [59 : 0] dout;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *)
 output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
 output wire prog_full;
 output wire prog_empty;
+output wire wr_rst_busy;
+output wire rd_rst_busy;
 
-  fifo_generator_v13_1_2 #(
+  fifo_generator_v13_2_1 #(
     .C_COMMON_CLOCK(0),
     .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),
-    .C_DATA_COUNT_WIDTH(13),
+    .C_DATA_COUNT_WIDTH(14),
     .C_DEFAULT_VALUE("BlankString"),
-    .C_DIN_WIDTH(52),
+    .C_DIN_WIDTH(60),
     .C_DOUT_RST_VAL("0"),
-    .C_DOUT_WIDTH(52),
+    .C_DOUT_WIDTH(60),
     .C_ENABLE_RLOCS(0),
-    .C_FAMILY("kintex7"),
-    .C_FULL_FLAGS_RST_VAL(1),
+    .C_FAMILY("kintexu"),
+    .C_FULL_FLAGS_RST_VAL(0),
     .C_HAS_ALMOST_EMPTY(0),
     .C_HAS_ALMOST_FULL(0),
     .C_HAS_BACKUP(0),
@@ -108,46 +114,46 @@ output wire prog_empty;
     .C_HAS_OVERFLOW(0),
     .C_HAS_RD_DATA_COUNT(0),
     .C_HAS_RD_RST(0),
-    .C_HAS_RST(1),
-    .C_HAS_SRST(0),
+    .C_HAS_RST(0),
+    .C_HAS_SRST(1),
     .C_HAS_UNDERFLOW(0),
     .C_HAS_VALID(0),
     .C_HAS_WR_ACK(0),
     .C_HAS_WR_DATA_COUNT(0),
     .C_HAS_WR_RST(0),
-    .C_IMPLEMENTATION_TYPE(2),
+    .C_IMPLEMENTATION_TYPE(6),
     .C_INIT_WR_PNTR_VAL(0),
-    .C_MEMORY_TYPE(1),
+    .C_MEMORY_TYPE(4),
     .C_MIF_FILE_NAME("BlankString"),
     .C_OPTIMIZATION_MODE(0),
     .C_OVERFLOW_LOW(0),
     .C_PRELOAD_LATENCY(0),
     .C_PRELOAD_REGS(1),
-    .C_PRIM_FIFO_TYPE("2kx18"),
-    .C_PROG_EMPTY_THRESH_ASSERT_VAL(5),
-    .C_PROG_EMPTY_THRESH_NEGATE_VAL(6),
+    .C_PRIM_FIFO_TYPE("8kx4"),
+    .C_PROG_EMPTY_THRESH_ASSERT_VAL(6),
+    .C_PROG_EMPTY_THRESH_NEGATE_VAL(7),
     .C_PROG_EMPTY_TYPE(1),
-    .C_PROG_FULL_THRESH_ASSERT_VAL(8190),
-    .C_PROG_FULL_THRESH_NEGATE_VAL(8189),
+    .C_PROG_FULL_THRESH_ASSERT_VAL(16376),
+    .C_PROG_FULL_THRESH_NEGATE_VAL(16375),
     .C_PROG_FULL_TYPE(1),
-    .C_RD_DATA_COUNT_WIDTH(13),
-    .C_RD_DEPTH(8192),
-    .C_RD_FREQ(1),
-    .C_RD_PNTR_WIDTH(13),
+    .C_RD_DATA_COUNT_WIDTH(14),
+    .C_RD_DEPTH(16384),
+    .C_RD_FREQ(78),
+    .C_RD_PNTR_WIDTH(14),
     .C_UNDERFLOW_LOW(0),
     .C_USE_DOUT_RST(1),
     .C_USE_ECC(0),
-    .C_USE_EMBEDDED_REG(0),
+    .C_USE_EMBEDDED_REG(1),
     .C_USE_PIPELINE_REG(0),
     .C_POWER_SAVING_MODE(0),
     .C_USE_FIFO16_FLAGS(0),
     .C_USE_FWFT_DATA_COUNT(0),
     .C_VALID_LOW(0),
     .C_WR_ACK_LOW(0),
-    .C_WR_DATA_COUNT_WIDTH(13),
-    .C_WR_DEPTH(8192),
-    .C_WR_FREQ(1),
-    .C_WR_PNTR_WIDTH(13),
+    .C_WR_DATA_COUNT_WIDTH(14),
+    .C_WR_DEPTH(16384),
+    .C_WR_FREQ(78),
+    .C_WR_PNTR_WIDTH(14),
     .C_WR_RESPONSE_LATENCY(1),
     .C_MSGON_VAL(1),
     .C_ENABLE_RST_SYNC(1),
@@ -200,10 +206,10 @@ output wire prog_empty;
     .C_RACH_TYPE(0),
     .C_RDCH_TYPE(0),
     .C_AXIS_TYPE(0),
-    .C_IMPLEMENTATION_TYPE_WACH(1),
+    .C_IMPLEMENTATION_TYPE_WACH(2),
     .C_IMPLEMENTATION_TYPE_WDCH(1),
-    .C_IMPLEMENTATION_TYPE_WRCH(1),
-    .C_IMPLEMENTATION_TYPE_RACH(1),
+    .C_IMPLEMENTATION_TYPE_WRCH(2),
+    .C_IMPLEMENTATION_TYPE_RACH(2),
     .C_IMPLEMENTATION_TYPE_RDCH(1),
     .C_IMPLEMENTATION_TYPE_AXIS(1),
     .C_APPLICATION_TYPE_WACH(0),
@@ -213,10 +219,10 @@ output wire prog_empty;
     .C_APPLICATION_TYPE_RDCH(0),
     .C_APPLICATION_TYPE_AXIS(0),
     .C_PRIM_FIFO_TYPE_WACH("512x36"),
-    .C_PRIM_FIFO_TYPE_WDCH("1kx36"),
+    .C_PRIM_FIFO_TYPE_WDCH("512x72"),
     .C_PRIM_FIFO_TYPE_WRCH("512x36"),
     .C_PRIM_FIFO_TYPE_RACH("512x36"),
-    .C_PRIM_FIFO_TYPE_RDCH("1kx36"),
+    .C_PRIM_FIFO_TYPE_RDCH("512x72"),
     .C_PRIM_FIFO_TYPE_AXIS("1kx18"),
     .C_USE_ECC_WACH(0),
     .C_USE_ECC_WDCH(0),
@@ -294,8 +300,8 @@ output wire prog_empty;
     .backup(1'D0),
     .backup_marker(1'D0),
     .clk(1'D0),
-    .rst(rst),
-    .srst(1'D0),
+    .rst(1'D0),
+    .srst(srst),
     .wr_clk(wr_clk),
     .wr_rst(1'D0),
     .rd_clk(rd_clk),
@@ -303,12 +309,12 @@ output wire prog_empty;
     .din(din),
     .wr_en(wr_en),
     .rd_en(rd_en),
-    .prog_empty_thresh(13'B0),
-    .prog_empty_thresh_assert(13'B0),
-    .prog_empty_thresh_negate(13'B0),
-    .prog_full_thresh(13'B0),
-    .prog_full_thresh_assert(13'B0),
-    .prog_full_thresh_negate(13'B0),
+    .prog_empty_thresh(14'B0),
+    .prog_empty_thresh_assert(14'B0),
+    .prog_empty_thresh_negate(14'B0),
+    .prog_full_thresh(14'B0),
+    .prog_full_thresh_assert(14'B0),
+    .prog_full_thresh_negate(14'B0),
     .int_clk(1'D0),
     .injectdbiterr(1'D0),
     .injectsbiterr(1'D0),
@@ -329,8 +335,8 @@ output wire prog_empty;
     .prog_empty(prog_empty),
     .sbiterr(),
     .dbiterr(),
-    .wr_rst_busy(),
-    .rd_rst_busy(),
+    .wr_rst_busy(wr_rst_busy),
+    .rd_rst_busy(rd_rst_busy),
     .m_aclk(1'D0),
     .s_aclk(1'D0),
     .s_aresetn(1'D0),

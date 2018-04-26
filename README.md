@@ -1,11 +1,10 @@
 ### About ###
 This is example project of FPGA programmer of SPI Flash memory.
 ### What we have ###
-Board is xc7k160tffq676-2 (Kintex-7).
-Flash is N25Q128A (16 MB)
+Board is xcku035-fbva676-1-c (Kintex-7 Ultrascale).
+Flash is S25FL256S (32 MB)
 ### NOTE ###
-This branch change only source, doesn't present all project.
-Also this source intended for other top project.
+This branch change doesn't present all project, only source with module and their instance.
 ### FSM ###
 FSM may be doesn't accuracy to current setting
 
