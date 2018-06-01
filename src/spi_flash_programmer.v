@@ -90,6 +90,7 @@ module spi_flash_programmer(
     localparam [7:0] CMD_SE           = 8'hD8; // Sector Erase;   64 KB
     localparam [7:0] CMD_4SE          = 8'hDC; // Sector Erase for 4 byte addr
     localparam [7:0] CMD_SSE          = 8'h20; // SubSector Erase; 4 KB
+    localparam [7:0] CMD_4SSE         = 8'h21; // SubSector Erase for 4 byte addr
     localparam [7:0] CMD_BE           = 8'hC7; // Bulk Erase
     localparam [7:0] CMD_PP           = 8'h02; // Page Program
     localparam [7:0] CMD_4PP          = 8'h12; // Page Program for 4 byte addr
@@ -153,6 +154,7 @@ module spi_flash_programmer(
     reg  [3:0]       wr_tristate_data    = 4'h0E;  // Tristate of DO/DI
     reg  [15:0]      page_count          = 16'h00;     
     reg  [7:0]       wr_status           = 8'h03;    
+    reg  [7:0]       pkg_counter;
 
     reg              wr_strt_cmd_cnt;
     reg              wr_strt_vld_cnt;
@@ -266,47 +268,32 @@ module spi_flash_programmer(
     wire             sSpi_cs;
     wire             sSpi_cs_n;            
     wire [7:0]       data_to_spi;           
-
-    reg  [7:0]       pkg_counter;
+    
     reg  [31:0]      byte_counter;
-    //----- ILA signals -----
-    wire [31:0]      tmp_er_addr;
-    wire [7:0]       tmp_er_sect_cnt;    
+    //----- ILA signals -----    
     wire             tmp_er_strt_vald;
     wire             tmp_er_strt_dly;
     wire [39:0]      tmp_er_cmd_reg;
     wire             tmp_er_inprog;
     wire             tmp_er_spics;
-    wire             tmp_strt_shft;
-    wire [7:0]       tmp_er_dly_cntr;
+    wire             tmp_strt_shft;    
     wire             tmp_er_strt_subtr;
 
     wire [39:0]      tmp_wr_cmd_reg;
     wire             tmp_wr_spics;
     wire             tmp_wr_done;     
-    wire             tmp_wr_strt_cmd;
-    wire [7:0]       tmp_wr_delay;
-    wire [3:0]       tmp_wr_valid;
-    wire             tmp_wr_strt_vld;
-    wire [2:0]       tmp_wr_data_cntr;
-    wire [7:0]       tmp_wr_status;
+    wire             tmp_wr_strt_cmd;    
+    wire             tmp_wr_strt_vld;        
     wire             tmp_fifo_rden;
 
-    /*wire [31:0]      tmp_nv_cmd_reg;  
-    wire             tmp_nv_done;
-    wire             tmp_nv_strt_cmd;
-    wire             tmp_nv_strt_dly_cnt;
-    wire             tmp_nv_strt_vld_cnt;
-    wire             tmp_nv_strt_dt_cnt; */   
- 
-    wire [39:0]      tmp_rd_cmd_reg;                    
-    wire [7:0]       tmp_rd_out;    
+    wire [39:0]      tmp_rd_cmd_reg;                        
     wire             tmp_strt_dt_cnt;
     wire             tmp_rd_done;
     wire             tmp_rd_valid;  
     wire             tmp_rd_strt_dly;
     wire             tmp_rd_strt_dt;
     wire             tmp_rd_strt_shft; 
+    wire [7:0]       tmp_test;
 
     wire [31:0]      tmp_st_cmd_reg;
 // }}} End of wire declarations ------------
@@ -341,8 +328,7 @@ module spi_flash_programmer(
     assign SPI_MOSI_O        = sSpi_Mosi;
     assign SPI_CS_O          = sSpi_cs_n;
     // Signals for ILA      
-    assign tmp_er_addr       = er_curr_sect_addr;
-    assign tmp_er_sect_cnt   = er_sector_count;    
+    assign tmp_er_addr       = er_curr_sect_addr;    
     assign tmp_er_inprog     = erase_inprogress;
     assign tmp_er_cmd_reg    = er_cmd_reg;
     assign tmp_er_strt_dly   = er_strt_delay_cnt;
@@ -359,8 +345,7 @@ module spi_flash_programmer(
     assign tmp_wr_status     = wr_status;
     assign tmp_fifo_rden     = fifo_rden;    
 
-    assign tmp_rd_cmd_reg    = rd_cmd_reg;    
-    assign tmp_rd_out        = rd_data_out;    
+    assign tmp_rd_cmd_reg    = rd_cmd_reg;        
     assign tmp_rd_done       = read_done; 
     assign tmp_rd_valid      = read_valid; 
     assign tmp_rd_strt_dly   = rd_strt_delay_cnt;
@@ -609,50 +594,8 @@ module spi_flash_programmer(
             wr_rd_data <= 8'h00;
         else 
             wr_rd_data <= {wr_rd_data[6:0], sSpi_Miso};
-    end
-    //************* WRITE NVR *************************
-    /*always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I)
-            nv_cmd_cntr <= 6'h20;            
-        else if (!nv_strt_cmd_cnt)
-            nv_cmd_cntr <= 6'h20;
-        else
-            nv_cmd_cntr <= nv_cmd_cntr - 1'b1;
-    end
-
-    always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I)
-            nv_valid_cntr <= 3'h07;
-        else if (!nv_strt_vld_cnt)
-            nv_valid_cntr <= 3'h07;
-        else
-            nv_valid_cntr <= nv_valid_cntr - 1'b1;
-    end
-
-    always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I)
-            nv_delay_cntr <= 4'h00;
-        else if (!nv_strt_dly_cnt)
-            nv_delay_cntr <= 4'h00;
-        else
-            nv_delay_cntr <= nv_delay_cntr + 1'b1;
-    end
-
-    always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I)
-            nv_data_cntr <= 2'h02;
-        else if (!nv_strt_data_cnt) 
-            nv_data_cntr <= 2'h02;
-        else if (nv_valid_cntr == 3'h01)
-            nv_data_cntr <= nv_data_cntr - 1'b1;
-    end
-
-    always @(posedge LOG_CLK_I) begin
-        if (LOG_RST_I)
-            nv_shft_reg <= 16'hEFFF;
-        else if (nv_valid_cntr == 3'h01) 
-            nv_shft_reg <= {nv_shft_reg[7:0], nv_shft_reg[15:8]};        
-    end*/
+    end    
+    
     //************* READ PHASE counters ****************
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
@@ -856,7 +799,7 @@ module spi_flash_programmer(
             end
 
             ER_STATCMD_S: begin                           // 4
-                if (er_delay_cntr == 8'h04) // TODO: was +1 (5)
+                if (er_delay_cntr == 8'h03) // TODO: was +1 (5)
                     er_next_state = ER_SENDCMD3_S;
                 else
                     er_next_state = ER_STATCMD_S;
@@ -936,7 +879,7 @@ module spi_flash_programmer(
                 if (serase_inprogress)
                     er_cmd_reg    = {CMD_4SE, er_curr_sect_addr};                
                 else if (sserase_inprogress)
-                    er_cmd_reg    = {CMD_4SE, er_curr_sect_addr}; // TODO: was SSE
+                    er_cmd_reg    = {CMD_4SSE, er_curr_sect_addr}; // TODO: was SSE
             end
 
             ER_SENDCMD2_S: begin                                   // 3
@@ -1047,7 +990,7 @@ module spi_flash_programmer(
             end
 
             WR_PPCMD_S: begin                                           // 2
-                if (wr_delay_cntr == 8'h03)
+                if (wr_delay_cntr == 8'h02)
                     wr_next_state = WR_SENDCMD2_S;
                 else
                     wr_next_state = WR_PPCMD_S;
@@ -1089,14 +1032,14 @@ module spi_flash_programmer(
             end
 
             WR_PPDONE_WAIT_S: begin                                      // 8
-                if (wr_status == 8'h00)                
+                if (wr_status[1:0] == 2'h00)                
                     wr_next_state = WR_DELAY_S;
                 else
                     wr_next_state = WR_STATCMD_S;
             end
 
             WR_DELAY_S: begin
-                if (wr_delay_cntr == 8'h02)
+                if (wr_delay_cntr == 8'h01)
                     wr_next_state = WR_SENDCMD1_S;
                 else
                     wr_next_state = WR_DELAY_S;
@@ -1238,7 +1181,7 @@ module spi_flash_programmer(
                 wr_strt_subtr_cnt = 1'b0;
                 wr_cmd_reg        = {CMD_RDST, 32'h00};
                 write_done        = 1'b0;                
-                if (wr_status == 8'h00) begin
+                if (wr_status[1:0] == 2'h00) begin
                     wr_cmd_reg        = {CMD_WE, 32'h00};
                     wr_strt_subtr_cnt = 1'b1;
                 end 
@@ -1496,10 +1439,10 @@ module spi_flash_programmer(
         
         .SPI_CS_I        ( sSpi_cs    ),   // 1 bit input:  SPI Chip Select signal
         .START_TRANS_I   ( !sSpi_cs_n ),   // 1 bit input:  Signal of start of SPI transfer
-        .DONE_TRANS_O    ( serdes_done ),              // 1 bit output: End of SPI transfer
+        .DONE_TRANS_O    ( serdes_done ),  // 1 bit output: End of SPI transfer
                         
         .DATA_TO_SPI_I   ( data_to_spi ),  // 8 bit input:  Data to transfer via SPI
-        .DATA_FROM_SPI_O ( ),              // 8 bit output: Received data from SPI
+        .DATA_FROM_SPI_O ( tmp_test    ),  // 8 bit output: Received data from SPI
                         
         .SPI_CLK_O       ( sSpi_clk   ),   // 1 bit output: Clock signal for SPI transaction
         .SPI_CS_N_O      ( sSpi_cs_n  ),   // 1 bit output: Negedge Chip Select signal for SPI transaction 
@@ -1535,7 +1478,7 @@ module spi_flash_programmer(
     fifo_spi_data fifo_spi (
         .wr_clk            ( WR_CLK_I         ),
         .rd_clk            ( LOG_CLK_I        ),
-        .srst              ( LOG_RST_I        ),
+        .rst               ( LOG_RST_I        ),
 
         .din               ( fifo_unconned    ),
         .dout              ( fifo_dout        ),
@@ -1555,7 +1498,7 @@ module spi_flash_programmer(
     dbg_spi_data dbg_data (
         .clk              ( LOG_CLK_I           ),
   
-        .probe0           ( sSpi_cs_n           ),
+        .probe0           ( sSpi_cs_done        ),
         .probe1           ( sSpi_Mosi           ),
         .probe2           ( sSpi_Miso           ),
     
@@ -1600,7 +1543,7 @@ module spi_flash_programmer(
 
         .probe29          ( fifo_progempty      ),
         .probe30          ( wr_status           ),
-        .probe31          ( wr_rd_data          ),
+        .probe31          ( tmp_test            ), // TODO: wr_Rd_data
         .probe32          ( tmp_fifo_rden       ),
         .probe33          ( fifo_dout           ),        
         
@@ -1639,7 +1582,8 @@ module spi_flash_programmer(
         .probe59          ( st_rd_data          ),
         .probe60          ( st_data_cntr        ),
 
-        .probe61          ( sSpi_cs_done        )
+        .probe61          ( pkg_counter         ),
+        .probe62          ( d_fifo_rden         )
     );
 // }}} End of Include other modules ------------
 

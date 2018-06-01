@@ -59,11 +59,6 @@
 
 
 
-# False path constraint for Built-in FIFO reset
-
-#set_false_path -through [get_ports srst] -to [get_pins -hierarchical -filter {NAME =~ */gmult_prim.gll_chain*/*PRE}]  
-#set_false_path -through [get_ports srst] -to [get_pins -hierarchical -filter {NAME =~ */gmult_prim.gll_chain*/*CLR}]  
-set_false_path -to [get_pins -of [get_cells -hier -filter {NAME =~ *gbi8s_srst.srst_qr_reg[0]}] -filter {REF_PIN_NAME ==D}] 
 
 ################################################################################
 

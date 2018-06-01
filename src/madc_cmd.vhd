@@ -22,6 +22,10 @@ component madc_cmd
 		S_AXI_TLAST         : in   std_logic;		
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
 		
+		-- QSPI feedback
+		FLASH_CMD_BUSY 		: out  std_logic;
+		FLASH_DATA_BUSY 	: out  std_logic;
+		
 		-- DDC tuning (CLK_ADC clock domain) -- 0x01
 		DDC0_ARST			: out	std_logic;
 		DDC0_VALID			: out	std_logic;	
@@ -61,6 +65,9 @@ library IEEE;
 --library UNISIM;
 --	use UNISIM.VCOMPONENTS.all;
 
+	
+
+
 entity madc_cmd is
 	port (
         -- clock & reset
@@ -78,6 +85,10 @@ entity madc_cmd is
 		S_AXI_TVALID        : in   std_logic;
 		S_AXI_TLAST         : in   std_logic;		
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
+		
+		-- QSPI feedback
+		FLASH_CMD_BUSY 		: out  std_logic;
+		FLASH_DATA_BUSY 	: out  std_logic;
 		
 		-- DDC tuning (CLK_ADC clock domain) -- 0x01
 		DDC0_ARST			: out	std_logic;
@@ -139,6 +150,53 @@ signal flash_in_start_addr	: std_logic_vector(31 downto 0) := (others => '0');
 signal flash_in_page_cnt	: std_logic_vector(15 downto 0) := (others => '0');
 signal flash_in_sector_cnt	: std_logic_vector( 7 downto 0) := (others => '0');
 
+
+---------------------------------------------------------------------------
+-->>>>>>>>>>>>>> declaration component axis_checker_x8 <<<<<<<<<<<<<<<<<<--
+---------------------------------------------------------------------------
+
+
+    component axis_checker_x8
+        generic(
+            TIMER_LIMIT             :           integer                          := 156250000   
+        );
+        port(
+            ACLK                    :   in      std_logic                                       ;
+            ARESET                  :   in      std_logic                                       ;
+            ENABLE                  :   in      std_logic                                       ;
+            S_AXIS_TDATA            :   in      std_logic_vector (  7 downto 0 )                ;
+            S_AXIS_TVALID           :   in      std_logic                                       ;
+            DATA_SPEED              :   out     std_logic_vector ( 31 downto 0 )                ;
+            HAS_DATA_ERR            :   out     std_logic                           
+        );
+    end component;
+    
+	
+	
+	signal 	vio_RESET                  :   std_logic                                       ;
+	signal 	vio_ENABLE                  :   std_logic                                       ;
+	signal 	chk_S_AXIS_TDATA            :   std_logic_vector (  7 downto 0 )                ;
+	signal 	chk_S_AXIS_TVALID           :   std_logic                                       ;
+	signal 	chk_DATA_SPEED              :   std_logic_vector ( 31 downto 0 )                ;
+	signal 	chk_HAS_DATA_ERR            :   std_logic 			 							;
+  
+	
+	---------------------------------------------------------------------------
+	-->>>>>>>>>>>>>>>> declaration component vio_checker <<<<<<<<<<<<<<<<<<<<--
+	---------------------------------------------------------------------------
+
+  
+  
+    COMPONENT vio_checker
+	  PORT (
+	    clk : IN STD_LOGIC;
+	    probe_in0 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+	    probe_out0 : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+	    probe_out1 : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+	  );
+	END COMPONENT;
+
+
 ---------------------------------------------------------------------------
 -->>>>>>>>>>>>>> declaration component spi_loader_fifo <<<<<<<<<<<<<<<<<<--
 ---------------------------------------------------------------------------
@@ -165,22 +223,22 @@ signal flash_data_fifo_full 	: std_logic := '0';
 
 
 -- TODO: del, for debug
-component ila_0
-	port (
-		clk     : in std_logic;
-		probe0  : in std_logic_vector(0 downto 0);
-		probe1  : in std_logic_vector(7 downto 0);
-		probe2  : in std_logic_vector(0 downto 0);
-		probe3  : in std_logic_vector(7 downto 0);
-		probe4  : in std_logic_vector(0 downto 0);
-		probe5  : in std_logic_vector(0 downto 0);
-		probe6  : in std_logic_vector(8 downto 0);
-		probe7  : in std_logic_vector(2 downto 0);
-		probe8  : in std_logic_vector(7 downto 0);
-		probe9  : in std_logic_vector(0 downto 0);
-		probe10 : in std_logic_vector(0 downto 0)
-	);
-end component;
+--component ila_0
+--	port (
+--		clk     : in std_logic;
+--		probe0  : in std_logic_vector(0 downto 0);
+--		probe1  : in std_logic_vector(7 downto 0);
+--		probe2  : in std_logic_vector(0 downto 0);
+--		probe3  : in std_logic_vector(7 downto 0);
+--		probe4  : in std_logic_vector(0 downto 0);
+--		probe5  : in std_logic_vector(0 downto 0);
+--		probe6  : in std_logic_vector(8 downto 0);
+--		probe7  : in std_logic_vector(2 downto 0);
+--		probe8  : in std_logic_vector(7 downto 0);
+--		probe9  : in std_logic_vector(0 downto 0);
+--		probe10 : in std_logic_vector(0 downto 0)
+--	);
+--end component;
 
 ---------------------------------------------------------------------------
 -->>>>>>>>>>>>>> declaration component spi_loader_top <<<<<<<<<<<<<<<<<<<--
@@ -818,7 +876,7 @@ process (RST, CLK) begin
 				end if;
 				
 				--	8	START_ADDR[31:24]
-				if (in_byte_cnt = 7) then
+				if (in_byte_cnt = 8) then
 					flash_in_start_addr(31 downto 24)	<= S_AXI_TDATA;
 				end if;
 
@@ -931,28 +989,29 @@ spi_loader_fifo_inst : spi_loader_fifo
 		
 	);
 
-flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0')  else '0'; -- and flash_data_fifo_pfull = '0') else '0';
+flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0' and flash_data_fifo_pfull = '0')  else '0'; -- and flash_data_fifo_pfull = '0') else '0';
 flash_data_dv			<= flash_data_fifo_rden;
 
 
-ila_spi_loader_fifo: ila_0
-	port map (
-		clk        => CLK_FLASH,
-		probe0(0)  => flash_data_dv,
-		probe1     => flash_data,
-		probe2(0)  => flash_data_valid,
-		probe3 	   => flash_in_data,
-		probe4(0)  => flash_data_fifo_empty,
-		probe5(0)  => flash_data_fifo_rden,
-		probe6     => in_byte_cnt,
-		probe7 	   => flash_in_cmd,
-		probe8 	   => S_AXI_TDATA,
-		probe9(0)  => flash_data_fifo_full,
-		probe10(0) => flash_data_fifo_pfull
-	);
+--ila_spi_loader_fifo: ila_0
+--	port map (
+--		clk        => CLK,
+--		probe0(0)  => flash_data_dv,
+--		probe1     => flash_data,
+--		probe2(0)  => flash_data_valid,
+--		probe3 	   => flash_in_data,
+--		probe4(0)  => flash_data_fifo_empty,
+--		probe5(0)  => chk_has_data_err,
+--		probe6     => in_byte_cnt,
+--		probe7 	   => flash_in_cmd,
+--		probe8 	   => S_AXI_TDATA,
+--		probe9(0)  => S_AXI_TVALID ,
+--		probe10(0) => flash_data_fifo_pfull
+--	);
 -------------------------------------------------------------------------------
 -->>>>>>>>>>>>>>>>> instantiate component spi_loader_top <<<<<<<<<<<<<<<<<<<<--
 -------------------------------------------------------------------------------
+-- we use one clock for write and read because data already translate to clock CLK_FLASH in spi_loader_fifo
 spi_loader_top_inst : spi_loader_top
 	port map (
 		CLK_INT				=> CLK_FLASH, 
@@ -979,6 +1038,9 @@ spi_loader_top_inst : spi_loader_top
 		SPI_MOSI_O  		=> open
     ); 
 
+FLASH_CMD_BUSY  <= flash_cmd_fifo_full;
+FLASH_DATA_BUSY <= flash_data_fifo_pfull;
+
 ---- stub
 --DDC0_ARST	<= '0';
 --DDC0_VALID	<= '1';	
@@ -1004,5 +1066,43 @@ spi_loader_top_inst : spi_loader_top
 --SCALE1		<= "0011";
 --SCALE2		<= "0011";
 --SCALE3		<= "0011";
+
+
+---------------------------------------------------------------------------
+-->>>>>>>>>>>>>> instantiate component axis_checker_x8 <<<<<<<<<<<<<<<<<<--
+---------------------------------------------------------------------------
+
+
+    axis_checker_x8_inst_0 : axis_checker_x8
+        generic map (
+            TIMER_LIMIT             =>  100000000    
+        )
+        port map(
+            ACLK                    =>   CLK                    ,
+            ARESET                  =>   vio_RESET              ,
+            ENABLE                  =>   vio_ENABLE             ,
+            S_AXIS_TDATA            =>   S_AXI_TDATA            ,
+            S_AXIS_TVALID           =>   S_AXI_TVALID           ,
+            DATA_SPEED              =>   chk_DATA_SPEED       ,
+            HAS_DATA_ERR            =>   chk_HAS_DATA_ERR
+        );
+
+---------------------------------------------------------------------------
+-->>>>>>>>>>>>>> instantiate component axis_checker_x8 <<<<<<<<<<<<<<<<<<--
+---------------------------------------------------------------------------
+
+      
+
+    vio_checker_inst : vio_checker
+        PORT map (
+            clk         =>  CLK ,
+            probe_in0(0) =>  chk_has_data_err,
+            probe_out0(0) => vio_ENABLE ,
+            probe_out1(0) => vio_RESET
+    );
+
+    
+
+	
 
 end madc_cmd_arch;

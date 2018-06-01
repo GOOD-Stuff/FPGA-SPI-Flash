@@ -41,6 +41,11 @@ set_property IOSTANDARD LVCMOS18 [get_ports {GA[*]}]
 set_property IOSTANDARD LVCMOS18 [get_ports SYSMON_A_SDA]
 set_property IOSTANDARD LVCMOS18 [get_ports SYSMON_A_SCL]
 
+############################################################################################# 
+## external IIC extender  																   ## 
+############################################################################################# 
+set_property IOSTANDARD LVCMOS18 [get_ports {IIC_EXTEND[*]}]
+
 #############################################################################################
 ## ADC                                                                                     ##
 #############################################################################################
@@ -81,7 +86,13 @@ set_property IOSTANDARD LVDS [get_ports ADC_D_D0_N]
 set_property IOSTANDARD LVDS [get_ports ADC_D_D1_P]
 set_property IOSTANDARD LVDS [get_ports ADC_D_D1_N]
 
-set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]
+
+set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]
+set_property BITSTREAM.CONFIG.NEXT_CONFIG_ADDR 0x01020000 [current_design]
+set_property BITSTREAM.CONFIG.NEXT_CONFIG_REBOOT ENABLE [current_design]
+#set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+
+set_property BITSTREAM.CONFIG.CONFIGRATE 57 [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
 #set_property BITSTREAM.CONFIG.USR_ACCESS TIMESTAMP [current_design]

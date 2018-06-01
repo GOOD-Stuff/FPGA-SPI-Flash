@@ -36,6 +36,15 @@
 // ------------------------------>|       |
 //                                |_______|
 //
+//
+//              _________
+//             |         |
+//             |         |
+// ----------->|  ICAP   |---------->
+//             |         |
+//             |_________|
+//
+//
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -72,7 +81,7 @@ module spi_loader_top(
         localparam [2:0] WRITE_DATA   = 3'h03; // Write data return
         localparam [2:0] WRITE_HEADER = 3'h04; // Write header (not implemented)                               
         localparam [2:0] READ_DATA    = 3'h05; // Read data
-        localparam [2:0] READ_STATUS  = 3'h06; // Read Flag Status
+        localparam [2:0] READ_STATUS  = 3'h06; // Read Flag Status        
     // FSM
         localparam [3:0] IDLE_S       = 4'h00; // Set validation of data
         localparam [3:0] GET_FIFO_S   = 4'h01; // Read from command FIFO
@@ -121,12 +130,13 @@ module spi_loader_top(
         wire        data_fifo_full;
         wire        data_fifo_empty;    
         
-        wire [7:0] data_to_fifo;
+        wire [7:0]  data_to_fifo;
     // ILA
         wire        tmp_sect_valid;  
         wire        tmp_sect_erase;  
         wire        tmp_subs_erase;
-        wire        tmp_fifo_rdenb;
+        wire        tmp_fifo_rdenb;        
+        wire [7:0]  data_in_fifo;
     // }}} End of wire declarations ------------
         
         
@@ -435,18 +445,21 @@ module spi_loader_top(
     fifo_cmd fifo_cmd (
         .wr_clk       ( CLK_INT          ),
         .rd_clk       ( CLK_I            ),
-        .srst         ( SRST_I           ),
+        .rst          ( SRST_I           ),
+
         .din          ( cmd_fifo_din     ),
         .wr_en        ( CMD_DVI_I        ),
         .rd_en        ( cmd_fifo_rdenb   ),
         .dout         ( cmd_fifo_dout    ),
+
         .full         (     ),        
         .empty        ( cmd_fifo_empty   ),
-        .prog_full    ( cmd_fifo_full ),
+        .wr_data_count( data_in_fifo     ),
+        .prog_full    ( cmd_fifo_full    ),
         .prog_empty   (  ),
+
         .wr_rst_busy  (  ),
         .rd_rst_busy  (  )
-
     );
 
     dbg_spi_cmd dbg_cmd (
@@ -458,7 +471,7 @@ module spi_loader_top(
         .probe2         ( start_address   ),
         .probe3         ( page_count      ),
         .probe4         ( sector_count    ),      
-        .probe5         ( cmd_dvi         ),
+        .probe5         ( data_fifo_full  ),
         .probe6         ( cmd             ),
       
         .probe7         ( write_done      ),
@@ -467,10 +480,10 @@ module spi_loader_top(
         .probe10        ( data_fifo_wren  ),
         .probe11        ( start_write     ),
         .probe12        ( data_to_fifo    ),
-        .probe13        ( tmp_sect_erase  ),
-        .probe14        ( start_read      ),
+        .probe13        ( data_in_fifo    ),
+        .probe14        ( CMD_DVI_I       ),
         .probe15        ( cmd_fifo_empty  ),        
-        .probe16        ( tmp_fifo_rdenb  ),
+        .probe16        ( cmd_fifo_full   ),
         .probe17        ( pkg_counter     ),
         .probe18        ( cmd_fifo_dout   ),        
         .probe19        ( cmd_fifo_rdenb  )       
