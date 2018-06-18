@@ -1,3 +1,7 @@
+2018.1:
+ * Version 6.2 (Rev. 6)
+ * General: Updated ILA to handle XDC warnings
+
 2017.4:
  * Version 6.2 (Rev. 5)
  * General: Updated ILA to handle XDC warnings

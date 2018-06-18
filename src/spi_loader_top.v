@@ -135,8 +135,7 @@ module spi_loader_top(
         wire        tmp_sect_valid;  
         wire        tmp_sect_erase;  
         wire        tmp_subs_erase;
-        wire        tmp_fifo_rdenb;        
-        wire [7:0]  data_in_fifo;
+        wire        tmp_fifo_rdenb;                
     // }}} End of wire declarations ------------
         
         
@@ -454,7 +453,7 @@ module spi_loader_top(
 
         .full         (     ),        
         .empty        ( cmd_fifo_empty   ),
-        .wr_data_count( data_in_fifo     ),
+        
         .prog_full    ( cmd_fifo_full    ),
         .prog_empty   (  ),
 
@@ -462,7 +461,7 @@ module spi_loader_top(
         .rd_rst_busy  (  )
     );
 
-    dbg_spi_cmd dbg_cmd (
+    /*dbg_spi_cmd dbg_cmd (
         .clk            ( CLK_I           ),
 
         .probe0         ( state           ),
@@ -480,13 +479,13 @@ module spi_loader_top(
         .probe10        ( data_fifo_wren  ),
         .probe11        ( start_write     ),
         .probe12        ( data_to_fifo    ),
-        .probe13        ( data_in_fifo    ),
+        .probe13        ( data_fifo_empty ),
         .probe14        ( CMD_DVI_I       ),
         .probe15        ( cmd_fifo_empty  ),        
         .probe16        ( cmd_fifo_full   ),
         .probe17        ( pkg_counter     ),
         .probe18        ( cmd_fifo_dout   ),        
         .probe19        ( cmd_fifo_rdenb  )       
-    );
+    );*/
     // }}} End of Include other modules ------------
 endmodule

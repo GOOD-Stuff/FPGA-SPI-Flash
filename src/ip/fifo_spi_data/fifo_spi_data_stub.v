@@ -1,19 +1,19 @@
-// Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2017.4.1 (win64) Build 2117270 Tue Jan 30 15:32:00 MST 2018
-// Date        : Tue May 29 18:13:28 2018
+// Tool Version: Vivado v.2018.1 (win64) Build 2188600 Wed Apr  4 18:40:38 MDT 2018
+// Date        : Sat Jun  9 17:04:01 2018
 // Host        : vldmr-PC running 64-bit Service Pack 1  (build 7601)
 // Command     : write_verilog -force -mode synth_stub
-//               C:/Projects/mrdk_adc_ab/mrdk_adc_ab/mrdk_adc_ab.srcs/sources_1/misc/cmd/ip/fifo_spi_data/fifo_spi_data_stub.v
+//               c:/Projects/mrdk_40g_a/mrdk_40g_a/mrdk_40g_a.srcs/sources_1/ip/fifo_spi_data/fifo_spi_data_stub.v
 // Design      : fifo_spi_data
 // Purpose     : Stub declaration of top-level module interface
-// Device      : xcku035-fbva676-1-c
+// Device      : xcku9p-ffve900-1-e
 // --------------------------------------------------------------------------------
 
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-(* x_core_info = "fifo_generator_v13_2_1,Vivado 2017.4.1" *)
+(* x_core_info = "fifo_generator_v13_2_2,Vivado 2018.1" *)
 module fifo_spi_data(rst, wr_clk, rd_clk, din, wr_en, rd_en, dout, full, 
   empty, prog_full, prog_empty, wr_rst_busy, rd_rst_busy)
 /* synthesis syn_black_box black_box_pad_pin="rst,wr_clk,rd_clk,din[7:0],wr_en,rd_en,dout[7:0],full,empty,prog_full,prog_empty,wr_rst_busy,rd_rst_busy" */;
