@@ -645,6 +645,10 @@ mdsp_a_cmd_inst : mdsp_a_cmd
 		S_AXI_TVALID        => z2c_axis_tvalid,
 		S_AXI_TLAST         => z2c_axis_tlast,		
 		S_AXI_TDATA         => z2c_axis_tdata,
+        -- output interface
+        --M_AXI_TVALID        => c2z_axis_tvalid,
+        --M_AXI_TLAST         => c2z_axis_tlast,
+        --M_AXI_TDATA         => c2z_axis_tdata,
 		-- sync (CLK_BKPLN clock domain)
 		SYNC_CLK_BKPLN 		=> bkpln2bb_sync_clk_bkpln,
 		-- sync (CLK_BB clock domain)
@@ -968,6 +972,7 @@ nb_warapper_inst : nb_warapper
 -------------------------------------------------------------------------------
 -->>>>>>>>>>>>>>>>>>>>>>>> TEST c2c interface <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<--
 -------------------------------------------------------------------------------
+-- TODO: return
 process (dclk) begin
     if (dclk'event and dclk = '1') then
 

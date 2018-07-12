@@ -75,11 +75,13 @@ module spi_flash_programmer(
     localparam [3:0] TS_INPUT         = 4'h0D;
     localparam [3:0] TS_INOUT         = 4'h0C; // TODO: not sure, that this work
     // SPI commands
+    localparam [7:0] CMD_WRR          = 8'h01;
     localparam [7:0] CMD_RD           = 8'h03; // Read
     localparam [7:0] CMD_FASTREAD     = 8'h0B; // Fast Read
     localparam [7:0] CMD_4FASTREAD    = 8'h0C; // Fast Read from 4 byte address
     localparam [7:0] CMD_RDID         = 8'h9F; // Read ID    
     localparam [7:0] CMD_RDST         = 8'h05; // Read Status Register
+    localparam [7:0] CMD_RDCR         = 8'h35; // Read Configuration Register
     localparam [7:0] CMD_FLAGSTAT     = 8'h70; // Read Flag Status Register
     localparam [7:0] CMD_CLEARSTAT    = 8'h50; // Clear Flag Status Register
     localparam [7:0] CMD_WE           = 8'h06; // Write Enable
@@ -100,12 +102,15 @@ module spi_flash_programmer(
     localparam [7:0] CMD_RDLK         = 8'hE8; // Read Lock Register
     // FSM
     // Read    
-    localparam [2:0] RD_IDLE_S        = 3'h00; // Wait start
-    localparam [2:0] RD_INIT_S        = 3'h01; // Set RDID Command
-    localparam [2:0] RD_SENDCMD1_S    = 3'h02; // Send READ ID command
-    localparam [2:0] RD_DELAY_S       = 3'h03; // Little delay for align
-    localparam [2:0] RD_READ_S        = 3'h04; // Read data from SPI MISO    
-    localparam [2:0] RD_DONE_S        = 3'h05; // Set read_done signal. End of read.
+    localparam [3:0] RD_IDLE_S        = 4'h00; // Wait start
+    localparam [3:0] RD_SRST_S        = 4'h01; // Set RDID Command
+    localparam [3:0] RD_SENDCMD1_S    = 4'h02; // Send READ ID command    
+    localparam [3:0] RD_READ1_S       = 4'h03; // Read data from SPI MISO        
+    localparam [3:0] RD_CHCKST_S      = 4'h04; // Check Status Register value
+    localparam [3:0] RD_WREN_S        = 4'h05; // Set Write Enable command
+    localparam [3:0] RD_SENDCMD2_S    = 4'h06; // Send WE command
+    localparam [3:0] RD_WRSR_S        = 4'h07; // Set Write Register command
+    localparam [3:0] RD_SENDCMD3_S    = 4'h08; // Send WRR command    
     // Write
     localparam [3:0] WR_IDLE_S        = 4'h00; // Get start_address and count of page, and set WE command
     localparam [3:0] WR_SENDCMD1_S    = 4'h01; // Send WE command
@@ -192,12 +197,12 @@ module spi_flash_programmer(
 
     reg  [3:0]       er_state, er_next_state;
     //----- read ---------
-    /*reg  [5:0]       rd_cmd_cntr         = 6'h28;
+    reg  [5:0]       rd_cmd_cntr         = 6'h28;
     reg  [39:0]      rd_cmd_reg;
     reg  [7:0]       rd_rd_data          = 8'h00;
     reg  [39:0]      rd_shft_reg         = 40'h00;
 
-    reg  [3:0]       rd_delay_cntr       = 4'h08;
+    reg  [3:0]       rd_delay_cntr       = 4'h00;
     reg  [3:0]       rd_data_cntr        = 4'h08;
 
     reg  [WIDTH-1:0] rd_current_addr     = 32'h00;
@@ -219,7 +224,7 @@ module spi_flash_programmer(
 
     reg              read_inprogress     = 1'b0;
 
-    reg  [2:0]       rd_state, rd_next_state;*/
+    reg  [3:0]       rd_state, rd_next_state;
     //----- Startupe3 signals -----
     wire             sSpi_clk;   
     wire             serdes_done; 
@@ -261,13 +266,11 @@ module spi_flash_programmer(
     wire             tmp_wr_strt_vld;        
     wire             tmp_fifo_rden;
 
-    /*wire [39:0]      tmp_rd_cmd_reg;                        
-    wire             tmp_strt_dt_cnt;
+    wire [39:0]      tmp_rd_cmd_reg;                            
     wire             tmp_rd_done;
     wire             tmp_rd_valid;  
     wire             tmp_rd_strt_dly;
-    wire             tmp_rd_strt_dt;
-    wire             tmp_rd_strt_shft;     */
+    wire             tmp_rd_strt_data;    
 // }}} End of wire declarations ------------
 
 
@@ -284,18 +287,18 @@ module spi_flash_programmer(
     assign st_read_start     = READ_ST_I;
   
     assign data_to_spi       = (erase_inprogress) ? er_cmd_reg[39:32] : 
-                               (write_inprogress) ? wr_cmd_reg[39:32] : 8'b00;
-                               //rd_cmd_reg[39:32]; 
+                               (write_inprogress) ? wr_cmd_reg[39:32] : //8'b00;
+                               rd_cmd_reg[39:32]; 
     assign sSpi_cs           = (erase_inprogress) ? er_SpiCsB         : 
-                               (write_inprogress) ? wr_SpiCsB         : 1'b1;
-                               //rd_SpiCsB;    
+                               (write_inprogress) ? wr_SpiCsB         : //1'b1;
+                               rd_SpiCsB;    
 
-    assign DATA_FROM_SPI_O   = 8'h00;
+    assign DATA_FROM_SPI_O   = rd_data_out;
     assign FIFO_FULL_O       = fifo_progfull; 
     assign FIFO_EMPTY_O      = fifo_progempty;
     assign ERASEING_O        = erase_inprogress;
-    assign READ_VALID_O      = 1'b0;//dd_read_valid; 
-    assign READ_DONE_O       = 1'b0;//read_done;
+    assign READ_VALID_O      = d_read_valid;  //XXX: was dd_read_valid
+    assign READ_DONE_O       = read_done;
     assign WRITE_DONE_O      = write_done;
     assign SPI_MOSI_O        = sSpi_Mosi;
     assign SPI_CS_O          = sSpi_cs_n;
@@ -316,12 +319,11 @@ module spi_flash_programmer(
     assign tmp_wr_strt_vld   = wr_strt_vld_cnt;        
     assign tmp_fifo_rden     = fifo_rden;    
 
-    /*assign tmp_rd_cmd_reg    = rd_cmd_reg;        
+    assign tmp_rd_cmd_reg    = rd_cmd_reg;        
     assign tmp_rd_done       = read_done; 
     assign tmp_rd_valid      = read_valid; 
     assign tmp_rd_strt_dly   = rd_strt_delay_cnt;
-    assign tmp_rd_strt_dt    = rd_strt_data_cnt;
-    assign tmp_rd_strt_shft  = rd_strt_shft;   */ 
+    assign tmp_rd_strt_data  = rd_strt_data_cnt;    
 // }}} End of wire initializations ------------ 
 
     // Set sector address 
@@ -566,7 +568,7 @@ module spi_flash_programmer(
     end    
     
     //************* READ PHASE counters ****************
-  /*  always @(posedge LOG_CLK_I) begin
+    always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
             read_inprogress <= 1'b0;                    
         else if (read_start)
@@ -590,11 +592,11 @@ module spi_flash_programmer(
     // Delay counter
     always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
-            rd_delay_cntr <= 4'h08;
+            rd_delay_cntr <= 4'h00;
         else if (!rd_strt_delay_cnt)
-            rd_delay_cntr <= 4'h08;
+            rd_delay_cntr <= 4'h00;
         else
-            rd_delay_cntr <= rd_delay_cntr - 1'b1;
+            rd_delay_cntr <= rd_delay_cntr + 1'b1;
     end
    
     // Count of input (from SPI Flash) data
@@ -603,10 +605,8 @@ module spi_flash_programmer(
             rd_data_cntr <= 4'h08;
         else if (!rd_strt_data_cnt)
             rd_data_cntr <= 4'h08;
-        else if ((rd_data_cntr == 4'h08) || (rd_data_cntr == 4'h07))
-            rd_data_cntr <= 4'h00;
         else
-            rd_data_cntr <= rd_data_cntr + 1'b1;
+            rd_data_cntr <= rd_data_cntr - 1'b1;
     end
 
     // Serialize data from SPI MISO
@@ -642,7 +642,7 @@ module spi_flash_programmer(
         if (LOG_RST_I) begin
             d_read_valid  <= 1'b0;
             dd_read_valid <= 1'b0;
-        end else  begin
+        end else begin
             d_read_valid  <= read_valid;
             dd_read_valid <= d_read_valid;
         end
@@ -656,10 +656,11 @@ module spi_flash_programmer(
     end    
 
     // Set output data
-    always @(posedge LOG_CLK_I) begin
+    // TODO: check
+    always @(/*posedge LOG_CLK_I*/ *) begin
         if (LOG_RST_I)
             rd_data_out <= 8'h00; 
-        else if (d_read_valid) 
+        else if (rd_data_cntr == 4'h00)//d_read_valid) 
             rd_data_out <= rd_rd_data;
         else
             rd_data_out <= 8'h00;
@@ -670,10 +671,10 @@ module spi_flash_programmer(
         if (LOG_RST_I) 
             rd_shft_reg <= 40'h00;
         else if (rd_strt_shft)
-            rd_shft_reg <= {rd_shft_reg[31:0], 8'h00};
+            rd_shft_reg <= {rd_shft_reg[31:0], rd_shft_reg[39:32]};
         else
             rd_shft_reg <= rd_cmd_reg;
-    end*/
+    end
     //*******************************************
 
 
@@ -1130,8 +1131,14 @@ module spi_flash_programmer(
 // }}} End of write data FSM ---------------
 
 
-// {{{ Read data of FSM ---------
-/*    always @(posedge LOG_CLK_I) begin
+// {{{ Start of Recovery FSM ---------------
+    /*
+        TODO: 
+            Read CR, SR
+            Think about OTP
+            Try to reset BP
+    */
+    always @(posedge LOG_CLK_I) begin
         if (LOG_RST_I)
             rd_state <= RD_IDLE_S;
         else
@@ -1140,129 +1147,182 @@ module spi_flash_programmer(
 
     always @(*) begin
         rd_next_state = RD_IDLE_S;
-        case (rd_state)
-            RD_IDLE_S: begin                            // 0
-                if (read_inprogress && (rd_data_size > 16'h00))
-                    rd_next_state = RD_INIT_S;
+        case(rd_state)
+            RD_IDLE_S: begin                        // 0
+                if (read_inprogress)
+                    rd_next_state = RD_SRST_S;
                 else
                     rd_next_state = RD_IDLE_S;
             end
 
-            RD_INIT_S: begin                            // 1
-                rd_next_state     = RD_SENDCMD1_S;
+            RD_SRST_S: begin                        // 1
+                rd_next_state = RD_SENDCMD1_S;
             end
 
-            RD_SENDCMD1_S: begin                        // 2
-                if (rd_cmd_cntr == 6'h01)
-                    rd_next_state = RD_DELAY_S; // READ_S;
+            RD_SENDCMD1_S: begin                    // 2
+                if (rd_cmd_cntr == 6'd32)
+                    rd_next_state = RD_READ1_S;
                 else
                     rd_next_state = RD_SENDCMD1_S;
             end
 
-            // XXX: uncomment for FAST_READ
-            RD_DELAY_S: begin                          // 3
-                if (rd_delay_cntr == 4'h01)
-                    rd_next_state = RD_READ_S;
-                else 
-                    rd_next_state = RD_DELAY_S;
-            end
-
-            RD_READ_S: begin                            // 4
-                if (rd_data_size == 16'h00)
-                    rd_next_state = RD_DONE_S;
+            RD_READ1_S: begin                        // 3             
+                if (rd_data_cntr == 4'h01) 
+                    rd_next_state = RD_CHCKST_S;
                 else
-                    rd_next_state = RD_READ_S;
+                    rd_next_state = RD_READ1_S;                
             end
 
-            RD_DONE_S: begin                            // 5
-                rd_next_state     = RD_IDLE_S;
+            RD_CHCKST_S: begin                      // 4
+                if (rd_data_out > 8'h03) 
+                    rd_next_state = RD_WREN_S;
+                else
+                    rd_next_state = RD_IDLE_S;
             end
 
-            default: begin
-                rd_next_state     = RD_IDLE_S;
+            RD_WREN_S: begin                        // 5
+                if (rd_delay_cntr == 4'h01) 
+                    rd_next_state = RD_SENDCMD2_S;
+                else
+                    rd_next_state = RD_WREN_S;
             end
+
+            RD_SENDCMD2_S: begin                    // 6
+                if (rd_cmd_cntr == 6'd32)
+                    rd_next_state = RD_WRSR_S;
+                else
+                    rd_next_state = RD_SENDCMD2_S;
+            end
+
+            RD_WRSR_S: begin                        // 7
+                if (rd_delay_cntr == 4'h02)
+                    rd_next_state = RD_SENDCMD3_S;
+                else
+                    rd_next_state = RD_WRSR_S;
+            end
+
+            RD_SENDCMD3_S: begin                    // 8
+                if (rd_cmd_cntr == 6'd24)
+                    rd_next_state = RD_SRST_S;
+                else
+                    rd_next_state = RD_SENDCMD3_S;
+            end                    
         endcase
     end
 
     always @(*) begin
         case(rd_state)
-            RD_IDLE_S: begin                                                // 0                                
-                rd_SpiCsB         = 1'b1;                
+            RD_IDLE_S: begin                        // 0
+                rd_SpiCsB         = 1'b1;
                 rd_strt_cmd_cnt   = 1'b0;
-                rd_strt_data_cnt  = 1'b0;
                 rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b0;
                 rd_strt_shft      = 1'b0;
-                read_valid        = 1'b0;    
-                read_done         = 1'b0;            
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
                 rd_cmd_reg        = 40'h00;
             end
 
-            RD_INIT_S: begin                                                // 1
-                rd_SpiCsB         = 1'b1;                
+            RD_SRST_S: begin                        // 1                               
+                rd_SpiCsB         = 1'b1;
                 rd_strt_cmd_cnt   = 1'b0;
-                rd_strt_data_cnt  = 1'b0;
                 rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b0;
                 rd_strt_shft      = 1'b0;
                 read_valid        = 1'b0;
-                read_done         = 1'b0;                
-                rd_cmd_reg        = {CMD_4FASTREAD, rd_current_addr};
+                read_done         = 1'b0;
+                rd_cmd_reg        = {CMD_RDST, 32'h00}; 
+            end  
+
+            RD_SENDCMD1_S: begin                     // 2                                   
+                rd_SpiCsB         = 1'b0;
+                rd_strt_cmd_cnt   = 1'b1;
+                rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b0;
+                rd_strt_shft      = 1'b0;
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
+                rd_cmd_reg        = {CMD_RDST, 32'h00};        
+                if (rd_cmd_cntr == 6'd32)
+                    rd_cmd_reg    = 40'h00;         
+            end 
+
+            RD_READ1_S: begin                        // 3                                   
+                rd_SpiCsB         = 1'b0;
+                rd_strt_cmd_cnt   = 1'b0;
+                rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b1;
+                rd_strt_shft      = 1'b0;
+                rd_cmd_reg        = 40'h00;
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
+                if (rd_data_cntr == 4'h01)
+                    read_valid = 1'b1;
+            end 
+
+            RD_CHCKST_S: begin                      // 4
+                rd_SpiCsB         = 1'b1;
+                rd_strt_cmd_cnt   = 1'b0;
+                rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b0;
+                rd_strt_shft      = 1'b0;
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
+                rd_cmd_reg        = 40'h00;
+                if (rd_data_out <= 8'h03)
+                    read_done = 1'b1;
             end
 
-            RD_SENDCMD1_S: begin                                            // 2
-                rd_SpiCsB         = 1'b0;                          
-                rd_strt_cmd_cnt   = 1'b1;
+            RD_WREN_S: begin                        // 5
+                rd_SpiCsB         = 1'b1;
+                rd_strt_cmd_cnt   = 1'b0;
+                rd_strt_delay_cnt = 1'b1;
                 rd_strt_data_cnt  = 1'b0;
-                rd_strt_delay_cnt = 1'b0;                
+                rd_strt_shft      = 1'b0;
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
+                rd_cmd_reg        = {CMD_WE, 32'h00};
+            end
+
+            RD_SENDCMD2_S: begin                    // 6
+                rd_SpiCsB         = 1'b0;
+                rd_strt_cmd_cnt   = 1'b1;
+                rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b0;
+                rd_strt_shft      = 1'b0;
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
+                rd_cmd_reg        = {CMD_WE, 32'h00};
+                if (rd_cmd_cntr == 6'd32)
+                    rd_cmd_reg    = 40'h00;
+            end
+
+            RD_WRSR_S: begin                        // 7                                   
+                rd_SpiCsB         = 1'b1;
+                rd_strt_cmd_cnt   = 1'b0;
+                rd_strt_delay_cnt = 1'b1;
+                rd_strt_data_cnt  = 1'b0;
+                rd_strt_shft      = 1'b0;                
+                read_valid        = 1'b0;
+                read_done         = 1'b0;
+                rd_cmd_reg        = {CMD_WRR, 32'h00};                
+            end 
+
+            RD_SENDCMD3_S: begin                     // 8
+                rd_SpiCsB         = 1'b0;
+                rd_strt_cmd_cnt   = 1'b1;
+                rd_strt_delay_cnt = 1'b0;
+                rd_strt_data_cnt  = 1'b0;
                 rd_strt_shft      = 1'b0;
                 read_valid        = 1'b0;
                 read_done         = 1'b0;
                 rd_cmd_reg        = rd_shft_reg;
-                if ((rd_cmd_cntr == 6'd09) || (rd_cmd_cntr == 6'd17)
-                 || (rd_cmd_cntr == 6'd25) || (rd_cmd_cntr == 6'd33))
-                    rd_strt_shft  = 1'b1;                
-            end
-
-            RD_DELAY_S: begin                                             // 3
-                rd_SpiCsB         = 1'b0;                
-                rd_strt_cmd_cnt   = 1'b0;
-                rd_strt_data_cnt  = 1'b0;
-                rd_strt_delay_cnt = 1'b1;
-                rd_strt_shft      = 1'b0;
-                rd_cmd_reg        = 40'h00;
-                read_valid        = 1'b0;   
-                read_done         = 1'b0;                
-            end
-
-            RD_READ_S: begin                                                // 4                
-                rd_SpiCsB         = 1'b0;            
-                rd_strt_cmd_cnt   = 1'b0;
-                rd_strt_data_cnt  = 1'b1;
-                rd_strt_delay_cnt = 1'b0;
-                rd_strt_shft      = 1'b0;
-                rd_cmd_reg        = 40'h00;                
-                read_valid        = 1'b0;
-                read_done         = 1'b0; 
-                if (rd_data_cntr == 4'h07)
-                    read_valid    = 1'b1;                
-            end        
-
-            RD_DONE_S: begin                                                // 5                                            
-                rd_SpiCsB         = 1'b1;                
-                rd_strt_cmd_cnt   = 1'b0;
-                rd_strt_data_cnt  = 1'b0;
-                rd_strt_delay_cnt = 1'b0;
-                rd_strt_shft      = 1'b0;
-                rd_cmd_reg        = 40'h00;
-                read_valid        = 1'b0;
-                read_done         = 1'b1;                
-            end
-
-            default: begin                                
-                
+                if (rd_cmd_cntr == 6'd32)
+                    rd_cmd_reg = 40'h00;
             end
         endcase
-    end*/
-// }}} End of read data FSM -------------
+    end
+// }}} End of Recovery FSM -----------------
 
 
 // {{{ Include other modules ------------
@@ -1376,29 +1436,35 @@ module spi_flash_programmer(
 
         .probe29          ( fifo_progempty      ),
         .probe30          ( wr_status           ),
-        .probe31          ( wr_rd_data          ), // TODO: wr_Rd_data
+        .probe31          ( wr_rd_data          ),
         .probe32          ( tmp_fifo_rden       ),
         .probe33          ( fifo_dout           ),        
-        
-        //.probe34          ( byte_counter        ),
-        .probe34          ( write_inprogress    ),
-        // Read phase  
-/*        .probe36          ( rd_state            ), 
-        .probe37          ( rd_next_state       ), 
-
-        .probe38          ( rd_data_out         ),
-        .probe39          ( read_valid          ), 
-
-        .probe40          ( fifo_progfull       ),
-        .probe41          ( rd_delay_cntr       ),
-                
-        .probe42          ( rd_rd_data          ),
-        .probe43          ( rd_current_addr     ),
-        .probe44          ( tmp_rd_done         ),*/
-        .probe35          ( fifo_unconned       ),
-
+        .probe34          ( fifo_progfull       ),     
+        .probe35          ( fifo_unconned       ),  
         .probe36          ( pkg_counter         ),
-        .probe37          ( d_fifo_rden         )
+        .probe37          ( d_fifo_rden         ),        
+        .probe38          ( write_inprogress    ),
+
+        // Read phase  
+        .probe39          ( rd_state            ), 
+        .probe40          ( rd_next_state       ), 
+
+        .probe41          ( rd_data_out         ),
+        .probe42          ( tmp_rd_valid        ), 
+        .probe43          ( tmp_rd_done         ),
+
+        .probe44          ( rd_delay_cntr       ),
+        .probe45          ( rd_data_cntr        ),
+
+        .probe46          ( tmp_rd_strt_data    ),
+        .probe47          ( tmp_rd_strt_dly     ),
+                
+        .probe48          ( rd_rd_data          ),
+        .probe49          ( rd_data_size        ),
+        .probe50          ( read_start          ),
+        .probe51          ( read_inprogress     ),
+        .probe52          ( rd_cmd_cntr         ),
+        .probe53          ( tmp_rd_cmd_reg      )
     );
 // }}} End of Include other modules ------------
 

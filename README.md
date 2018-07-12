@@ -1,5 +1,7 @@
 ### About ###
 This is example project of FPGA programmer of SPI Flash memory.
+
+This is branch of fix QSPI Flash S25FL512S (when it blocked)
 ### What we have ###
 Board is xcku9p-ffve900-1-e (Kintex-7 Ultrascale+).
 Flash is S25FL512S (64 MB)

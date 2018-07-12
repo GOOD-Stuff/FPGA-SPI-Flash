@@ -405,7 +405,7 @@ module spi_loader_top(
         .SECT_ERASE_I             ( strt_sect_erase    ),
         .SSECT_ERASE_I            ( strt_subs_erase    ),
         .WRITE_I                  ( start_write        ),
-        .READ_I                   ( start_read         ),
+        .READ_I                   ( start_read_st      ),
         .READ_ST_I                ( start_read_st      ),
         .ERASEING_O               ( erasing_spi        ),
         .READ_VALID_O             ( DATA_DVO_O         ),
@@ -427,7 +427,6 @@ module spi_loader_top(
         .pagecountvalid   ( page_count_valid ),
         .sectorcount      ( {5'h00, sector_count}     ),
         .sectorcountvalid ( sector_count_valid ),
-
         .fifowren         ( data_fifo_wren     ),
         .fifofull         ( data_fifo_full     ),
         .fifoempty        ( data_fifo_empty    ),
@@ -435,7 +434,6 @@ module spi_loader_top(
         .fifowrerr        ( ),
         .fiforderr        ( ),
         .writedone        ( write_done ),
-
         .reset            ( SRST_I          ),
         .erase            ( strt_sect_erase ),
         .eraseing         ( erasing_spi     )
@@ -455,18 +453,16 @@ module spi_loader_top(
         .empty        ( cmd_fifo_empty   ),
         
         .prog_full    ( cmd_fifo_full    ),
-        .prog_empty   (  ),
+        //.prog_empty   (  ),
 
         .wr_rst_busy  (  ),
         .rd_rst_busy  (  )
     );
 
-    /*dbg_spi_cmd dbg_cmd (
+    dbg_spi_cmd dbg_cmd (
         .clk            ( CLK_I           ),
-
         .probe0         ( state           ),
         .probe1         ( next_state      ),
-
         .probe2         ( start_address   ),
         .probe3         ( page_count      ),
         .probe4         ( sector_count    ),      
@@ -477,7 +473,7 @@ module spi_loader_top(
         .probe8         ( read_done       ),
         .probe9         ( erasing_spi     ),
         .probe10        ( data_fifo_wren  ),
-        .probe11        ( start_write     ),
+        .probe11        ( start_read_st   ),
         .probe12        ( data_to_fifo    ),
         .probe13        ( data_fifo_empty ),
         .probe14        ( CMD_DVI_I       ),
@@ -486,6 +482,6 @@ module spi_loader_top(
         .probe17        ( pkg_counter     ),
         .probe18        ( cmd_fifo_dout   ),        
         .probe19        ( cmd_fifo_rdenb  )       
-    );*/
+    );
     // }}} End of Include other modules ------------
 endmodule

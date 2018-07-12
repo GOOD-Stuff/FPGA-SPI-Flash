@@ -64,7 +64,6 @@ module fifo_cmd (
   full,
   empty,
   prog_full,
-  prog_empty,
   wr_rst_busy,
   rd_rst_busy
 );
@@ -89,7 +88,6 @@ output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
 output wire prog_full;
-output wire prog_empty;
 output wire wr_rst_busy;
 output wire rd_rst_busy;
 
@@ -130,9 +128,9 @@ output wire rd_rst_busy;
     .C_PRELOAD_LATENCY(0),
     .C_PRELOAD_REGS(1),
     .C_PRIM_FIFO_TYPE("512x72"),
-    .C_PROG_EMPTY_THRESH_ASSERT_VAL(58),
-    .C_PROG_EMPTY_THRESH_NEGATE_VAL(59),
-    .C_PROG_EMPTY_TYPE(1),
+    .C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
+    .C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
+    .C_PROG_EMPTY_TYPE(0),
     .C_PROG_FULL_THRESH_ASSERT_VAL(4095),
     .C_PROG_FULL_THRESH_NEGATE_VAL(4094),
     .C_PROG_FULL_TYPE(1),
@@ -332,7 +330,7 @@ output wire rd_rst_busy;
     .rd_data_count(),
     .wr_data_count(),
     .prog_full(prog_full),
-    .prog_empty(prog_empty),
+    .prog_empty(),
     .sbiterr(),
     .dbiterr(),
     .wr_rst_busy(wr_rst_busy),

@@ -22,6 +22,11 @@ component mdsp_a_cmd
 		S_AXI_TLAST         : in   std_logic;		
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
 		
+		-- output interface
+		--M_AXI_TVALID 		: out  std_logic;
+		--M_AXI_TLAST 		: out  std_logic;
+		--M_AXI_TDATA 		: out  std_logic_vector( 7 downto 0);
+
 		-- sync (CLK_BKPLN clock domain)
 		SYNC_CLK_BKPLN 		: out	std_logic;
 		
@@ -67,7 +72,11 @@ entity mdsp_a_cmd is
 		S_AXI_TVALID        : in   std_logic;
 		S_AXI_TLAST         : in   std_logic;		
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
-		
+		-- output interface
+		--M_AXI_TVALID 		: out  std_logic;
+		--M_AXI_TLAST 		: out  std_logic;
+		--M_AXI_TDATA 		: out  std_logic_vector( 7 downto 0);
+
 		-- sync (CLK_BKPLN clock domain)
 		SYNC_CLK_BKPLN 		: out	std_logic;
 		
@@ -117,7 +126,10 @@ signal flash_in_cmd     	: std_logic_vector( 2 downto 0) := (others => '0');
 signal flash_in_start_addr	: std_logic_vector(31 downto 0) := (others => '0');
 signal flash_in_page_cnt	: std_logic_vector(15 downto 0) := (others => '0');
 signal flash_in_sector_cnt	: std_logic_vector( 7 downto 0) := (others => '0');
-
+signal check_flash_cnt 		: std_logic_vector(31 downto 0) := (others => '0');
+--signal dma_axi_tvalid 		: std_logic := '0';
+--signal dma_axi_tlast		: std_logic := '0';
+--signal dma_axi_tdata 		: std_logic_vector( 7 downto 0) := (others => '0');
 ------------------------------------------------------------------------------
 -->>>>>>>>>>>>> declaration component madc_cmd_clk_conv <<<<<<<<<<<<<<<<<<<<--
 ------------------------------------------------------------------------------
@@ -219,15 +231,15 @@ port (
 	probe1 : in std_logic_vector(0 downto 0);
 	probe2 : in std_logic_vector(0 downto 0);
 	probe3 : in std_logic_vector(0 downto 0);
---	probe4 : in std_logic_vector(151 downto 0);
---	probe5 : in std_logic_vector(58 downto 0);
-	probe4 : in std_logic_vector(7 downto 0);
---	probe7 : in std_logic_vector(151 downto 0);
-	probe5 : in std_logic_vector(58 downto 0);
-	probe6 : in std_logic_vector(0 downto 0);
-	probe7 : in std_logic_vector(7 downto 0);
-	probe8 : in std_logic_vector(7 downto 0);
-	probe9 : in std_logic_vector(0 downto 0)
+	probe4 : in std_logic_vector(0 downto 0);
+	probe5 : in std_logic_vector(2 downto 0);
+	probe6 : in std_logic_vector(7 downto 0);
+	probe7 : in std_logic_vector(15 downto 0);
+	probe8 : in std_logic_vector(58 downto 0);
+	probe9 : in std_logic_vector(0 downto 0);
+	probe10 : in std_logic_vector(7 downto 0);
+	probe11 : in std_logic_vector(7 downto 0);
+	probe12 : in std_logic_vector(0 downto 0)
 --	probe13 : in std_logic_vector(9 downto 0)
 );
 end component;
@@ -727,15 +739,17 @@ dbg_spi_top_inst: dbg_spi_top
 		probe1(0)  => flash_cmd_fifo_full,
 		probe2(0)  => flash_data_dv,
 		probe3(0)  => flash_data_fifo_empty,
---		probe4     => s_axis_tdata_flash_big,
---		probe5     => s_axis_tdata_flash,
-		probe4     => flash_data,	
---	    probe7 	   => m_axis_tdata_flash_big,	
-		probe5     => m_axis_tdata_flash,
-		probe6(0)  => S_AXI_TVALID,
-		probe7    => S_AXI_TDATA,
-		probe8    => flash_in_data,
-		probe9(0) => flash_data_valid
+
+		probe4(0)  => flash_cmd_dv,
+		probe5     => flash_cmd,
+		probe6     => flash_data,	
+	    probe7 	   => flash_page_cnt,	
+
+		probe8     => m_axis_tdata_flash,
+		probe9(0)  => S_AXI_TVALID,
+		probe10    => S_AXI_TDATA,
+		probe11    => flash_in_data,
+		probe12(0) => flash_data_valid
 --		probe13    => in_byte_cnt
 	);
 
@@ -772,7 +786,51 @@ spi_loader_top_inst : spi_loader_top
 
 --FLASH_CMD_BUSY  <= flash_cmd_fifo_full;
 --FLASH_DATA_BUSY <= flash_data_fifo_pfull;
+--process (CLK, RST) begin
+--	if (RST = '1') then
+--		check_flash_cnt <= (others => '0');
+--	elsif (CLK'event and CLK = '1') then
+--		if check_flash_cnt < 100000000 then
+--			check_flash_cnt <= check_flash_cnt + 1;
+--		else
+--			check_flash_cnt <= (others => '0');
+--		end if;
+--	end if;
+--end process;
 
+--process(CLK, RST) begin
+--	if (RST = '1') then
+--		dma_axi_tvalid <= '0';
+--        dma_axi_tlast  <= '0';	
+--    elsif (CLK'event AND CLK = '1') then 
+--        if check_flash_cnt < 100000000 then
+--            dma_axi_tvalid <= '0';
+--            dma_axi_tlast  <= '0';
+--        elsif addr_en = '1' then
+--            dma_axi_tvalid <= '1';
+--            dma_axi_tlast  <= '1';
+--        else
+--            dma_axi_tvalid <= '0';
+--            dma_axi_tlast  <= '0';
+--        end if;
+--    end if;
+--end process;
+
+--process(CLK, RST) begin
+--	if (RST = '1') then
+--		dma_axi_tdata <= (others => '0');
+--	elsif CLK'event AND CLK = '1' then
+--		if (addr_en = '1') and (dma_axi_tvalid = '1') then
+--			dma_axi_tdata <= "0" & address(4 downto 0) & flash_cmd_fifo_full & flash_data_fifo_pfull;
+--		else
+--			dma_axi_tdata <= "010000" & flash_cmd_fifo_full & flash_data_fifo_pfull;
+--		end if;
+--	end if;
+--end process;
+
+--M_AXI_TVALID <= dma_axi_tvalid;
+--M_AXI_TLAST  <= dma_axi_tlast;
+--M_AXI_TDATA  <= "0" & address(4 downto 0) & flash_cmd_fifo_full & flash_data_fifo_pfull;--dma_axi_tdata;
 
 -------------------------------------------------------------------------------
 -->>>>>>>>>>>>>>> instantiate component madc_cmd_clk_conv <<<<<<<<<<<<<<<<<<<--
