@@ -8,4 +8,4 @@ This branch change doesn't present all project, only source with module and thei
 ### FSM ###
 FSM may be doesn't accuracy to current setting
 
-![Diagram](https://image.ibb.co/n3PoBm/FSM.png)
+![Diagram](https://image.ibb.co/n7fx9J/spi_loader_fsm.png)

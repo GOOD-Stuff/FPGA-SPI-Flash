@@ -455,7 +455,7 @@ module spi_loader_top(
         .empty        ( cmd_fifo_empty   ),
         
         .prog_full    ( cmd_fifo_full    ),
-        .prog_empty   (  ),
+        //.prog_empty   (  ),
 
         .wr_rst_busy  (  ),
         .rd_rst_busy  (  )

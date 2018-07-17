@@ -26,18 +26,7 @@ component mdsp_a_cmd
 		SYNC_CLK_BKPLN 		: out	std_logic;
 		
 		-- sync (CLK_BB clock domain)
-		SYNC_CLK_BB 		: out	std_logic;
-		
-		----------- tuning NB -----------
-		-- (CLK_HOST clock domain)
-		NB_DVO  			: out	std_logic;
-		NB_NUM				: out	std_logic_vector( 7 downto 0);
-		NB_SRC_IP			: out	std_logic_vector(31 downto 0);						
-		NB_SRC_PORT			: out	std_logic_vector(15 downto 0);	
-		NB_DST_MAC			: out	std_logic_vector(47 downto 0);				
-		NB_DST_IP			: out	std_logic_vector(31 downto 0);
-		NB_DST_PORT			: out	std_logic_vector(15 downto 0)
-		
+		SYNC_CLK_BB 		: out	std_logic;				
 	);
 end component;
 
@@ -72,18 +61,7 @@ entity mdsp_a_cmd is
 		SYNC_CLK_BKPLN 		: out	std_logic;
 		
 		-- sync (CLK_BB clock domain)
-		SYNC_CLK_BB 		: out	std_logic;		
-		
-		----------- tuning NB -----------
-		-- (CLK_HOST clock domain)
-		NB_DVO  			: out	std_logic;
-		NB_NUM				: out	std_logic_vector( 7 downto 0);
-		NB_SRC_IP			: out	std_logic_vector(31 downto 0);						
-		NB_SRC_PORT			: out	std_logic_vector(15 downto 0);	
-		NB_DST_MAC			: out	std_logic_vector(47 downto 0);				
-		NB_DST_IP			: out	std_logic_vector(31 downto 0);
-		NB_DST_PORT			: out	std_logic_vector(15 downto 0)
-				
+		SYNC_CLK_BB 		: out	std_logic				
 	);
 end mdsp_a_cmd;
 
@@ -94,14 +72,6 @@ constant RESOURCE_NB		        : std_logic_vector( 7 downto 0) := x"04";
 constant RESOURCE_SVC_FLASH_LOADER	: std_logic_vector( 7 downto 0) := x"80";
 constant FILLER_29BIT				: std_logic_vector(28 downto 0) := (others => '0');
 constant FILLER_64BIT 				: std_logic_vector(63 downto 0) := (others => '0');
-
-signal nb_dvo_i				: std_logic;
-signal nb_num_i				: std_logic_vector( 7 downto 0);	
-signal nb_src_ip_i			: std_logic_vector(31 downto 0);						
-signal nb_src_port_i		: std_logic_vector(15 downto 0);	
-signal nb_dst_mac_i			: std_logic_vector(47 downto 0);				
-signal nb_dst_ip_i			: std_logic_vector(31 downto 0);
-signal nb_dst_port_i		: std_logic_vector(15 downto 0);
 
 signal address			: std_logic_vector( 7 downto 0);
 signal addr_en			: std_logic;
@@ -245,33 +215,6 @@ signal s_axis_tdata_flash_big : std_logic_vector(151 downto 0) := (others => '0'
 signal svc_valid			: std_logic;
 signal svc_sync_in			: std_logic;
 
-signal s_axis_tvalid_svc_clk_bkpln		: std_logic;
-signal s_axis_tvalid_svc_clk_bb			: std_logic;
-signal s_axis_tready_svc_clk_bkpln		: std_logic;
-signal s_axis_tready_svc_clk_bb			: std_logic;
-signal s_axis_tdata_svc					: std_logic_vector(151 downto 0);
-signal m_axis_tvalid_svc_clk_bkpln 		: std_logic;
-signal m_axis_tvalid_svc_clk_bb	 		: std_logic;
-signal m_axis_tdata_svc_clk_bkpln		: std_logic_vector(151 downto 0);
-signal m_axis_tdata_svc_clk_bb			: std_logic_vector(151 downto 0);
-
--- NB0-255
-signal nb_valid				: std_logic;
-signal d0nb_valid			: std_logic;
-signal d1nb_valid			: std_logic;
-signal nb_num_set			: std_logic_vector( 7 downto 0);
-signal nb_src_ip_set		: std_logic_vector(31 downto 0);
-signal nb_src_port_set		: std_logic_vector(15 downto 0);
-signal nb_dst_mac_set		: std_logic_vector(47 downto 0);
-signal nb_dst_ip_set		: std_logic_vector(31 downto 0);
-signal nb_dst_port_set		: std_logic_vector(15 downto 0);
-
-signal s_axis_tvalid_nb 	: std_logic;
-signal s_axis_tready_nb 	: std_logic;
-signal s_axis_tdata_nb		: std_logic_vector(151 downto 0);
-signal m_axis_tvalid_nb 	: std_logic;
-signal m_axis_tdata_nb		: std_logic_vector(151 downto 0);
-
 begin
 
 rst_n	<= not RST;
@@ -316,247 +259,6 @@ process (RST, CLK) begin
 		end if;	
 	end if;
 end process;
-
----------------------------------------------------------------------------
--->>>>>>>>>>>>>>>>>>>>>>>> RESOURCE_SVC <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<--
----------------------------------------------------------------------------
-process (RST, CLK) begin
-	if (CLK'event and CLK = '1') then
-		if (RST = '1') then
-			svc_valid					<= '0';
-			svc_sync_in					<= '0';
-			s_axis_tvalid_svc_clk_bkpln	<= '0';
-			s_axis_tvalid_svc_clk_bb	<= '0';
-			
-		else
-		
-			-- input 
-			if (S_AXI_TVALID = '1' and resource = RESOURCE_SVC) then
-				if (in_byte_cnt = 5) then	
-					svc_sync_in	<= S_AXI_TDATA(0);
-					svc_valid	<= '1';
-				end if;
-			else
-				svc_valid	<= '0';
-			end if;
-			
-			-- to convertor
-			if (svc_valid = '1') then
-				s_axis_tvalid_svc_clk_bkpln	<= '1';
-				s_axis_tvalid_svc_clk_bb	<= '1';
-			else
-			
-				if (s_axis_tready_svc_clk_bkpln = '1') then
-					s_axis_tvalid_svc_clk_bkpln	<= '0';
-				end if;
-			
-				if (s_axis_tready_svc_clk_bb = '1') then
-					s_axis_tvalid_svc_clk_bb	<= '0';
-				end if;
-								
-			end if;	
-
-		end if;	
-	end if;
-end process;
-
-s_axis_tdata_svc(  0)	<= svc_sync_in;
-
--------------------------------------------------------------------------------
--->>>>>>>>>>>>>>> instantiate component madc_cmd_clk_conv <<<<<<<<<<<<<<<<<<<--
--------------------------------------------------------------------------------
-madc_cmd_clk_conv_svc_bkpln_inst : madc_cmd_clk_conv
-	port map (
-    	s_axis_aresetn 	=> rst_n,
-		m_axis_aresetn 	=> rst_n,
-		s_axis_aclk 	=> CLK,
-		s_axis_tvalid 	=> s_axis_tvalid_svc_clk_bkpln,
-		s_axis_tready 	=> s_axis_tready_svc_clk_bkpln,
-		s_axis_tdata 	=> s_axis_tdata_svc,
-		m_axis_aclk 	=> CLK_BKPLN,
-		m_axis_tvalid 	=> m_axis_tvalid_svc_clk_bkpln,
-		m_axis_tready 	=> '1',
-   	 	m_axis_tdata 	=> m_axis_tdata_svc_clk_bkpln
-  	);
-
-process (CLK_BKPLN) begin
-	if (CLK_BKPLN'event and CLK_BKPLN = '1') then
-		if (m_axis_tvalid_svc_clk_bkpln = '1') then
-			SYNC_CLK_BKPLN	<= m_axis_tdata_svc_clk_bkpln( 0);
-		end if;
-	end if;
-end process;
-
--------------------------------------------------------------------------------
--->>>>>>>>>>>>>>> instantiate component madc_cmd_clk_conv <<<<<<<<<<<<<<<<<<<--
--------------------------------------------------------------------------------
-madc_cmd_clk_conv_svc_bb_inst : madc_cmd_clk_conv
-	port map (
-    	s_axis_aresetn 	=> rst_n,
-		m_axis_aresetn 	=> rst_n,
-		s_axis_aclk 	=> CLK,
-		s_axis_tvalid 	=> s_axis_tvalid_svc_clk_bb,
-		s_axis_tready 	=> s_axis_tready_svc_clk_bb,
-		s_axis_tdata 	=> s_axis_tdata_svc,
-		m_axis_aclk 	=> CLK_BB,
-		m_axis_tvalid 	=> m_axis_tvalid_svc_clk_bb,
-		m_axis_tready 	=> '1',
-   	 	m_axis_tdata 	=> m_axis_tdata_svc_clk_bb
-  	);
-
-process (CLK_BB) begin
-	if (CLK_BB'event and CLK_BB = '1') then
-		if (m_axis_tvalid_svc_clk_bb = '1') then
-			SYNC_CLK_BB	<= m_axis_tdata_svc_clk_bb( 0);
-		end if;
-	end if;
-end process;
-
----------------------------------------------------------------------------
--->>>>>>>>>>>>>>>>>>>>>>>> RESOURCE_BB <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<--
----------------------------------------------------------------------------
-process (RST, CLK) begin
-	if (CLK'event and CLK = '1') then
-		if (RST = '1') then
-
-			nb_valid			<= '0';
-			d0nb_valid			<= '0';
-			d1nb_valid			<= '0';
-			nb_num_set			<= (others => '0');
-			s_axis_tvalid_nb	<= '0';
-
-		else
-			
-			d0nb_valid	<= nb_valid;
-			d1nb_valid	<= d0nb_valid;
-			
-			-- input 
-			if (S_AXI_TVALID = '1' and resource = RESOURCE_NB) then
-
-				-- 4	NB_NUM[7:0]
-				if (in_byte_cnt = 4) then	
-					nb_num_set	<= S_AXI_TDATA;
-				end if;
-
-				--	13	NB_SRC_IP[7:0] 
-				if (in_byte_cnt = 13) then	
-					nb_src_ip_set( 7 downto  0)	<= S_AXI_TDATA;
-				end if;
-								
-				--	14	NB_SRC_IP[15:8]
-				if (in_byte_cnt = 14) then	
-					nb_src_ip_set(15 downto  8)	<= S_AXI_TDATA;
-				end if;
-								
-				--	15	NB_SRC_IP[23:16]
-				if (in_byte_cnt = 15) then	
-					nb_src_ip_set(23 downto 16)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	16	NB_SRC_IP[31:24] 
-				if (in_byte_cnt = 16) then	
-					nb_src_ip_set(31 downto 24)	<= S_AXI_TDATA;
-				end if;					
-				
-				--	17	NB_SRC_PORT[7:0] 
-				if (in_byte_cnt = 17) then	
-					nb_src_port_set( 7 downto  0)	<= S_AXI_TDATA;
-				end if;				
-
-				--	18	NB_SRC_PORT[15:8]
-				if (in_byte_cnt = 18) then	
-					nb_src_port_set(15 downto  8)	<= S_AXI_TDATA;
-				end if;	
-								
-				--	19	NB_DST_MAC[7:0] 
-				if (in_byte_cnt = 19) then	
-					nb_dst_mac_set( 7 downto  0)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	20	NB_DST_MAC[15:8]
-				if (in_byte_cnt = 20) then	
-					nb_dst_mac_set(15 downto  8)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	21	NB_DST_MAC[23:16]
-				if (in_byte_cnt = 21) then	
-					nb_dst_mac_set(23 downto 16)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	22	NB_DST_MAC[31:24] 
-				if (in_byte_cnt = 22) then	
-					nb_dst_mac_set(31 downto 24)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	23	NB_DST_MAC[39:32]
-				if (in_byte_cnt = 23) then	
-					nb_dst_mac_set(39 downto 32)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	24	NB_DST_MAC[47:40]
-				if (in_byte_cnt = 24) then	
-					nb_dst_mac_set(47 downto 40)	<= S_AXI_TDATA;
-				end if;				
-				
-				--	25	NB_DST_IP[7:0]
-				if (in_byte_cnt = 25) then	
-					nb_dst_ip_set( 7 downto  0)	<= S_AXI_TDATA;
-				end if;				
-
-				--	26	NB_DST_IP[15:8] 
-				if (in_byte_cnt = 26) then	
-					nb_dst_ip_set(15 downto  8)	<= S_AXI_TDATA;
-				end if;
-				
-				--	27	NB_DST_IP[23:16] 
-				if (in_byte_cnt = 27) then	
-					nb_dst_ip_set(23 downto 16)	<= S_AXI_TDATA;
-				end if;
-				
-				--	28	NB_DST_IP[31:24] 
-				if (in_byte_cnt = 28) then	
-					nb_dst_ip_set(31 downto 24)	<= S_AXI_TDATA;
-				end if;
-				
-				--	29	NB_DST_PORT[7:0] 
-				if (in_byte_cnt = 29) then	
-					nb_dst_port_set( 7 downto  0)	<= S_AXI_TDATA;
-				end if;
-				
-				--	30	NB_DST_PORT[15:8] 			
-				if (in_byte_cnt = 30) then	
-					nb_dst_port_set(15 downto  8)	<= S_AXI_TDATA;
-				end if;			
-
-				if (S_AXI_TLAST = '1') then
-					nb_valid	<= '1';
-				else
-					nb_valid	<= '0';
-				end if;
-				
-			else	
-				nb_valid	<= '0';	
-			end if;
-
-			-- to convertor BB
-			if (nb_valid = '1') then --  or d0nb_valid = '1' or d1nb_valid = '1') then
-				s_axis_tvalid_nb	<= '1';
-			else
-				if (s_axis_tready_nb = '1') then
-					s_axis_tvalid_nb	<= '0';
-				end if;
-			end if;
-						
-		end if;	
-	end if;
-end process;
-
-s_axis_tdata_nb( 31 downto   0)	<= nb_src_ip_set;
-s_axis_tdata_nb( 47 downto  32)	<= nb_src_port_set;
-s_axis_tdata_nb( 95 downto  48)	<= nb_dst_mac_set;
-s_axis_tdata_nb(127 downto  96)	<= nb_dst_ip_set;
-s_axis_tdata_nb(143 downto 128)	<= nb_dst_port_set;
-s_axis_tdata_nb(151 downto 144)	<= nb_num_set;
 
 
 ---------------------------------------------------------------------------
@@ -715,7 +417,7 @@ spi_loader_fifo_inst : spi_loader_fifo
 		
 	);
 
-flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0' and flash_data_fifo_pfull = '0')  else '0'; -- and flash_data_fifo_pfull = '0') else '0';
+flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0' and flash_data_fifo_pfull = '0')  else '0';
 flash_data_dv			<= flash_data_fifo_rden;
 
 
@@ -772,65 +474,5 @@ spi_loader_top_inst : spi_loader_top
 
 --FLASH_CMD_BUSY  <= flash_cmd_fifo_full;
 --FLASH_DATA_BUSY <= flash_data_fifo_pfull;
-
-
--------------------------------------------------------------------------------
--->>>>>>>>>>>>>>> instantiate component madc_cmd_clk_conv <<<<<<<<<<<<<<<<<<<--
--------------------------------------------------------------------------------
-madc_cmd_clk_conv_nb_inst : madc_cmd_clk_conv
-	port map (
-    	s_axis_aresetn 	=> rst_n,
-		m_axis_aresetn 	=> rst_n,
-		s_axis_aclk 	=> CLK,
-		s_axis_tvalid 	=> s_axis_tvalid_nb,
-		s_axis_tready 	=> s_axis_tready_nb,
-		s_axis_tdata 	=> s_axis_tdata_nb,
-		m_axis_aclk 	=> CLK_HOST,
-		m_axis_tvalid 	=> m_axis_tvalid_nb,
-		m_axis_tready 	=> '1',
-   	 	m_axis_tdata 	=> m_axis_tdata_nb
-  	);
-
-process (CLK_HOST, RST) begin
-	if (RST = '1') then
-		nb_dvo_i		<= '0';
-		nb_num_i		<= (others => '0');	
-		nb_src_ip_i		<= (others => '0');							
-		nb_src_port_i	<= (others => '0');		
-		nb_dst_mac_i	<= (others => '0');					
-		nb_dst_ip_i		<= (others => '0');	
-		nb_dst_port_i	<= (others => '0');			
-		
-		NB_DVO			<= '0';
-		NB_NUM			<= (others => '0');
-		NB_SRC_IP		<= (others => '0');						
-		NB_SRC_PORT		<= (others => '0');	
-		NB_DST_MAC		<= (others => '0');				
-		NB_DST_IP		<= (others => '0');
-		NB_DST_PORT		<= (others => '0');
-				
-	elsif (CLK_HOST'event and CLK_HOST = '1') then
-		if (m_axis_tvalid_nb = '1') then
-			nb_dvo_i		<= '1';
-			nb_num_i		<= m_axis_tdata_nb(151 downto 144);	
-			nb_src_ip_i		<= m_axis_tdata_nb( 31 downto   0);							
-			nb_src_port_i	<= m_axis_tdata_nb( 47 downto  32);		
-			nb_dst_mac_i	<= m_axis_tdata_nb( 95 downto  48);					
-			nb_dst_ip_i		<= m_axis_tdata_nb(127 downto  96);	
-			nb_dst_port_i	<= m_axis_tdata_nb(143 downto 128);				
-		else
-			nb_dvo_i		<= '0';
-		end if;
-
-		NB_DVO		<= nb_dvo_i;
-		NB_NUM		<= nb_num_i;
-		NB_SRC_IP	<= nb_src_ip_i;						
-		NB_SRC_PORT	<= nb_src_port_i;	
-		NB_DST_MAC	<= nb_dst_mac_i;				
-		NB_DST_IP	<= nb_dst_ip_i;
-		NB_DST_PORT	<= nb_dst_port_i;	
-		
-	end if;
-end process;
 
 end mdsp_a_cmd_arch;
