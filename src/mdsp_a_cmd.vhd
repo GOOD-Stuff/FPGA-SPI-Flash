@@ -22,11 +22,27 @@ component mdsp_a_cmd
 		S_AXI_TLAST         : in   std_logic;		
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
 		
+		-- output interface
+		M_AXI_TVALID 		: out  std_logic;
+		M_AXI_TLAST 		: out  std_logic;
+		M_AXI_TDATA 		: out  std_logic_vector( 7 downto 0);
+
 		-- sync (CLK_BKPLN clock domain)
 		SYNC_CLK_BKPLN 		: out	std_logic;
 		
 		-- sync (CLK_BB clock domain)
-		SYNC_CLK_BB 		: out	std_logic;				
+		SYNC_CLK_BB 		: out	std_logic;
+		
+		----------- tuning NB -----------
+		-- (CLK_HOST clock domain)
+		NB_DVO  			: out	std_logic;
+		NB_NUM				: out	std_logic_vector( 7 downto 0);
+		NB_SRC_IP			: out	std_logic_vector(31 downto 0);						
+		NB_SRC_PORT			: out	std_logic_vector(15 downto 0);	
+		NB_DST_MAC			: out	std_logic_vector(47 downto 0);				
+		NB_DST_IP			: out	std_logic_vector(31 downto 0);
+		NB_DST_PORT			: out	std_logic_vector(15 downto 0)
+		
 	);
 end component;
 
@@ -56,12 +72,27 @@ entity mdsp_a_cmd is
 		S_AXI_TVALID        : in   std_logic;
 		S_AXI_TLAST         : in   std_logic;		
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
-		
+		-- output interface
+		M_AXI_TVALID 		: out  std_logic;
+		M_AXI_TLAST 		: out  std_logic;
+		M_AXI_TDATA 		: out  std_logic_vector( 7 downto 0);
+
 		-- sync (CLK_BKPLN clock domain)
 		SYNC_CLK_BKPLN 		: out	std_logic;
 		
 		-- sync (CLK_BB clock domain)
-		SYNC_CLK_BB 		: out	std_logic				
+		SYNC_CLK_BB 		: out	std_logic;		
+		
+		----------- tuning NB -----------
+		-- (CLK_HOST clock domain)
+		NB_DVO  			: out	std_logic;
+		NB_NUM				: out	std_logic_vector( 7 downto 0);
+		NB_SRC_IP			: out	std_logic_vector(31 downto 0);						
+		NB_SRC_PORT			: out	std_logic_vector(15 downto 0);	
+		NB_DST_MAC			: out	std_logic_vector(47 downto 0);				
+		NB_DST_IP			: out	std_logic_vector(31 downto 0);
+		NB_DST_PORT			: out	std_logic_vector(15 downto 0)
+				
 	);
 end mdsp_a_cmd;
 
@@ -70,6 +101,7 @@ architecture mdsp_a_cmd_arch of mdsp_a_cmd is
 constant RESOURCE_SVC		        : std_logic_vector( 7 downto 0) := x"00";
 constant RESOURCE_NB		        : std_logic_vector( 7 downto 0) := x"04";
 constant RESOURCE_SVC_FLASH_LOADER	: std_logic_vector( 7 downto 0) := x"80";
+constant RESOURCE_CHECK_FLASH 		: std_logic_vector( 7 downto 0) := x"81";
 constant FILLER_29BIT				: std_logic_vector(28 downto 0) := (others => '0');
 constant FILLER_64BIT 				: std_logic_vector(63 downto 0) := (others => '0');
 
@@ -87,7 +119,12 @@ signal flash_in_cmd     	: std_logic_vector( 2 downto 0) := (others => '0');
 signal flash_in_start_addr	: std_logic_vector(31 downto 0) := (others => '0');
 signal flash_in_page_cnt	: std_logic_vector(15 downto 0) := (others => '0');
 signal flash_in_sector_cnt	: std_logic_vector( 7 downto 0) := (others => '0');
-
+signal check_flash_cnt 		: std_logic_vector(31 downto 0) := (others => '0');
+signal dma_axi_tvalid 		: std_logic := '0';
+signal dma_axi_tlast		: std_logic := '0';
+signal dma_axi_tdata 		: std_logic_vector( 7 downto 0) := (others => '0');
+signal d_s_axi_tvalid 	    : std_logic := '1'; -- TODO: del
+signal dma_valid_snd    	: std_logic := '0';
 ------------------------------------------------------------------------------
 -->>>>>>>>>>>>> declaration component madc_cmd_clk_conv <<<<<<<<<<<<<<<<<<<<--
 ------------------------------------------------------------------------------
@@ -189,16 +226,21 @@ port (
 	probe1 : in std_logic_vector(0 downto 0);
 	probe2 : in std_logic_vector(0 downto 0);
 	probe3 : in std_logic_vector(0 downto 0);
---	probe4 : in std_logic_vector(151 downto 0);
---	probe5 : in std_logic_vector(58 downto 0);
-	probe4 : in std_logic_vector(7 downto 0);
---	probe7 : in std_logic_vector(151 downto 0);
-	probe5 : in std_logic_vector(58 downto 0);
-	probe6 : in std_logic_vector(0 downto 0);
-	probe7 : in std_logic_vector(7 downto 0);
-	probe8 : in std_logic_vector(7 downto 0);
-	probe9 : in std_logic_vector(0 downto 0)
---	probe13 : in std_logic_vector(9 downto 0)
+	probe4 : in std_logic_vector(0 downto 0);
+	probe5 : in std_logic_vector(2 downto 0);
+	probe6 : in std_logic_vector(7 downto 0);
+	probe7 : in std_logic_vector(15 downto 0);
+	probe8 : in std_logic_vector(58 downto 0);
+	probe9 : in std_logic_vector(0 downto 0);
+	probe10 : in std_logic_vector(7 downto 0);
+	probe11 : in std_logic_vector(7 downto 0);
+	probe12 : in std_logic_vector(0 downto 0);
+	probe13 : in std_logic_vector(7 downto 0);
+	probe14 : in std_logic_vector(0 downto 0);
+	probe15 : in std_logic_vector(0 downto 0);
+	probe16 : in std_logic_vector(7 downto 0);
+	probe17 : in std_logic_vector(0 downto 0);
+	probe18 : in std_logic_vector(0 downto 0)
 );
 end component;
 
@@ -260,7 +302,6 @@ process (RST, CLK) begin
 	end if;
 end process;
 
-
 ---------------------------------------------------------------------------
 -->>>>>>>>>>>>>>>>>>> RESOURCE_SVC_FLASH_LOADER <<<<<<<<<<<<<<<<<<<<<<<<<--
 ---------------------------------------------------------------------------
@@ -273,8 +314,7 @@ process (RST, CLK) begin
 			flash_in_cmd     	<= (others => '0');
 			flash_in_start_addr	<= (others => '0');
 			flash_in_page_cnt	<= (others => '0');
-			flash_in_sector_cnt	<= (others => '0');
-
+			flash_in_sector_cnt	<= (others => '0');			
 		else
 		
 			if (S_AXI_TVALID = '1' and addr_en = '1' and resource = RESOURCE_SVC_FLASH_LOADER) then	
@@ -417,7 +457,7 @@ spi_loader_fifo_inst : spi_loader_fifo
 		
 	);
 
-flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0' and flash_data_fifo_pfull = '0')  else '0';
+flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0' and flash_data_fifo_pfull = '0')  else '0'; -- and flash_data_fifo_pfull = '0') else '0';
 flash_data_dv			<= flash_data_fifo_rden;
 
 
@@ -429,16 +469,24 @@ dbg_spi_top_inst: dbg_spi_top
 		probe1(0)  => flash_cmd_fifo_full,
 		probe2(0)  => flash_data_dv,
 		probe3(0)  => flash_data_fifo_empty,
---		probe4     => s_axis_tdata_flash_big,
---		probe5     => s_axis_tdata_flash,
-		probe4     => flash_data,	
---	    probe7 	   => m_axis_tdata_flash_big,	
-		probe5     => m_axis_tdata_flash,
-		probe6(0)  => S_AXI_TVALID,
-		probe7    => S_AXI_TDATA,
-		probe8    => flash_in_data,
-		probe9(0) => flash_data_valid
---		probe13    => in_byte_cnt
+
+		probe4(0)  => S_AXI_TLAST,
+		probe5     => flash_cmd,
+		probe6     => flash_data,	
+	    probe7 	   => flash_page_cnt,	
+
+		probe8     => m_axis_tdata_flash,
+		probe9(0)  => S_AXI_TVALID,
+		probe10    => S_AXI_TDATA,
+		probe11    => flash_in_data,
+		probe12(0) => flash_data_valid,
+
+		probe13    => dma_axi_tdata,
+		probe14(0) => dma_axi_tvalid,
+		probe15(0) => dma_axi_tlast,
+		probe16    => resource,
+		probe17(0) => addr_en,
+		probe18(0) => dma_valid_snd		
 	);
 
 
@@ -472,7 +520,53 @@ spi_loader_top_inst : spi_loader_top
 		SPI_MOSI_O  		=> open
     ); 
 
---FLASH_CMD_BUSY  <= flash_cmd_fifo_full;
---FLASH_DATA_BUSY <= flash_data_fifo_pfull;
+
+---------------------------------------------------------------------------
+-->>>>>>>>>>>>>>>>>>>>>>>> RESOURCE_CHECK_FLASH <<<<<<<<<<<<<<<<<<<<<<<<<--
+---------------------------------------------------------------------------
+process (RST, CLK) begin
+	if (CLK'event and CLK = '1') then
+		if (RST = '1') then
+			d_s_axi_tvalid <= '0';
+		else
+			d_s_axi_tvalid <= S_AXI_TVALID;
+		end if;
+	end if;
+end process;
+
+process (RST, CLK) begin
+	if (CLK'event and CLK = '1') then
+		if (RST = '1') then			
+			dma_axi_tdata  <= x"FF";	
+		elsif (addr_en = '1' and resource = RESOURCE_CHECK_FLASH) then									
+			dma_axi_tdata   <= "0" & address(4 downto 0) & flash_cmd_fifo_full & flash_data_fifo_pfull;
+		else				
+			dma_axi_tdata   <= x"FF";--"010000" & flash_cmd_fifo_full & flash_data_fifo_pfull;		
+		end if;
+	end if;
+end process;
+
+dma_valid_snd <= d_s_axi_tvalid and S_AXI_TLAST and (not S_AXI_TVALID);
+
+process (RST, CLK) begin
+	if (CLK'event and CLK = '1') then
+		if (RST = '1') then
+			dma_axi_tvalid <= '0';
+			dma_axi_tlast  <= '0';	
+		else 
+			if (dma_valid_snd = '1' and addr_en = '1' and resource = RESOURCE_CHECK_FLASH) then					
+				dma_axi_tvalid <= '1';
+				dma_axi_tlast  <= '1';
+			else
+				dma_axi_tvalid <= '0';
+				dma_axi_tlast  <= '0';
+			end if;
+		end if;
+	end if; 
+end process;
+
+M_AXI_TVALID <= dma_axi_tvalid;
+M_AXI_TLAST  <= dma_axi_tlast;
+M_AXI_TDATA  <= dma_axi_tdata;
 
 end mdsp_a_cmd_arch;
