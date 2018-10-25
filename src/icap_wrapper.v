@@ -3,10 +3,10 @@
 // Company: 
 // Engineer: Gustov Vladimir
 // 
-// Create Date: 23.04.2018 13:39:08
-// Design Name: usb3_8k_cnt
+// Create Date: 25.10.2018 14:31:30
+// Design Name: estrada_v
 // Module Name: icap_wrapper
-// Project Name: usb3_8k_flash
+// Project Name: 
 // Target Devices: xc7k160tffg676-2
 // Tool Versions: Vivado 2016.3
 // Description: This module is wrapper under ICAP2
@@ -15,16 +15,18 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: XAPP1100
+// Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+
+
 
 module icap_wrapper(
     input         CLK,       // clock signal
     input         RST,       // reset signal    
     input [31:0]  ADDRESS_I, // Address of upload bitstream in QSPI Flash
     input         VALID_I,   // Address valid
-    output        BUSY       // Work in process
+    output        DONE       // Work in process
     );
 
 // {{{ local parameters (constants) --------  
@@ -53,44 +55,50 @@ module icap_wrapper(
     wire [31:0] sI;                        // Input data to ICAP
     wire        sWrite_en;                 // Active - Low;
     wire        sChip_enable;              // Active - Low;
-    wire        reset_process; 
+    wire        reset_process;
 
-    reg         reset_inprogress;  
-    reg         d_reset_inprogress;    
+    reg         reset_inprogress = 1'b0;  
+    reg         d_reset_inprogress;
     
+
+    reg         finish;
     reg         ce = 1'b0;
-    reg         strt_counter;
+
+    reg         strt_counter;    
     reg  [1:0]  counter = 2'h00;
-    reg  [31:0] data   = DUMMY_WORD;
+    reg  [31:0] data    = DUMMY_WORD;
     
-    reg         end_trans;    
+    reg         end_trans;
+/*
+    reg         ;
+    reg  [3:0]  ;*/
 
     reg  [3:0]  state, next_state;    
 // }}} End of wire declarations ------------
     
     
 // {{{ Wire initializations -------------------
-    assign sI           = {data[24], data[25], data[26], data[27], data[28], data[29], data[30], data[31],
-                           data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23],
-                           data[8],  data[9],  data[10], data[11], data[12], data[13], data[14], data[15],
-                           data[0],  data[1],  data[2],  data[3],  data[4],  data[5],  data[6],  data[7]};
-                           
+    assign sI            = {data[24], data[25], data[26], data[27], data[28], data[29], data[30], data[31],
+                            data[16], data[17], data[18], data[19], data[20], data[21], data[22], data[23],
+                            data[8],  data[9],  data[10], data[11], data[12], data[13], data[14], data[15],
+                            data[0],  data[1],  data[2],  data[3],  data[4],  data[5],  data[6],  data[7]};
     assign reset_process = (reset_inprogress && d_reset_inprogress);
-    assign sWrite_en    = !reset_process;
-    assign sChip_enable = !ce;
-
-    assign BUSY         = end_trans;
+    assign sWrite_en     = !reset_process;
+    assign sChip_enable  = !ce;
+    
+    assign BUSY = end_trans;
 // }}} End of wire initializations ------------
 
 
     always @(posedge CLK) begin
         if (RST)
             counter <= 2'h00;
-        else if (strt_counter)
-            counter <= counter + 1'b1;
-        else 
+        else if (!strt_counter)
             counter <= 2'h00;
+        else 
+            counter <= counter + 1'b1;
     end
+
 
     always @(posedge CLK) begin
         if (RST)
@@ -107,6 +115,13 @@ module icap_wrapper(
         else 
             d_reset_inprogress <= reset_inprogress;                    
     end
+/*
+    always @(posedge CLK) begin
+        if (RST)
+            d_start_transfer_cnt <= 1'b0;
+        else
+            d_start_transfer_cnt <= strt_transfer_cnt;
+    end*/
 
 
 // {{{ FSM logic -------------------
@@ -174,68 +189,68 @@ module icap_wrapper(
     end
 
     always @(*) begin
-        case (state) 
-            IDLE_S: begin                            // 0
-                data          = DUMMY_WORD;                
-                ce            = 1'b0;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+        case (state)
+            IDLE_S: begin
+                data         = DUMMY_WORD;                
+                ce           = 1'b0;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            DUMMY_S: begin                       // 1
-                data          = DUMMY_WORD;             
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            DUMMY_S: begin
+                data         = DUMMY_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            SYNC_S: begin                        // 2
-                data          = SYNC_WORD;             
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            SYNC_S: begin
+                data         = SYNC_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            NOOP_S: begin                        // 3
-                data          = NOOP_WORD;             
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            NOOP_S: begin
+                data         = NOOP_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;                
             end
 
-            WBSTAR_S: begin                      // 4
-                data          = WBSTAR_WORD;             
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            WBSTAR_S: begin
+                data         = WBSTAR_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            ADDRESS_S: begin                     // 5
-                data          = ADDRESS_I;             
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            ADDRESS_S: begin
+                data         = 32'h00;//ADDRESS_I;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            CMD_S: begin                         // 6
-                data          = CMD_WORD;             
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            CMD_S: begin
+                data         = CMD_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            IPROG_S: begin                       // 7
-                data          = IPROG_WORD;
-                ce            = 1'b1;
-                strt_counter  = 1'b0;                
-                end_trans     = 1'b0;
+            IPROG_S: begin
+                data         = IPROG_WORD;
+                ce           = 1'b1;
+                strt_counter = 1'b0;
+                end_trans    = 1'b0;
             end
 
-            FIN_NOOP_S: begin                   // 8               
-                data          = NOOP_WORD;                
-                ce            = 1'b1;
-                strt_counter  = 1'b1;                
-                end_trans     = 1'b0;
+            FIN_NOOP_S: begin
+                data         = NOOP_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b1;
+                end_trans    = 1'b0;
                 if (counter == 2'h01) begin
                     ce        = 1'b0;
                     end_trans = 1'b1;
@@ -243,13 +258,13 @@ module icap_wrapper(
             end
 
             END_S: begin
-                data          = DUMMY_WORD;
-                ce            = 1'b0;
-                strt_counter  = 1'b0;
-                end_trans     = 1'b1;
+                data         = DUMMY_WORD;                
+                ce           = 1'b0;
+                strt_counter = 1'b0;
+                end_trans    = 1'b1;
             end
 
-            default: begin                
+            default: begin
             end
         endcase
     end
@@ -275,9 +290,9 @@ module icap_wrapper(
       .RDWRB    ( sWrite_en     )   // 1-bit input: Read/Write Select input      
     );
 
-    dbg_spi_icap dbg_icap (
+    /*dbg_spi_icap dbg_icap (
         .clk              ( CLK ),
-        
+      
         .probe0           ( sI           ),
         .probe1           ( sChip_enable ),
         .probe2           ( sWrite_en    ),
@@ -285,7 +300,6 @@ module icap_wrapper(
         .probe4           ( state        ),
         .probe5           ( next_state   ),
         .probe6           ( reset_inprogress )
-    );
+    );*/
 // }}} End of Include other modules ------------
-
 endmodule
