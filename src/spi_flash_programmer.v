@@ -32,7 +32,7 @@ module spi_flash_programmer(
     input         LOG_RST_I,            // Active-high, synchronous reset
     // Flash
     input  [31:0] DATA_TO_FIFO_I,       // 8-bit data to FIFO
-    input  [32:0] START_ADDR_I,         // Start address for write into SPI memory
+    input  [31:0] START_ADDR_I,         // Start address for write into SPI memory
     input         START_ADDR_VALID_I,   // Valid signal of start address
     input  [15:0] PAGE_COUNT_I,         // Count of pages for write into SPI memory
     input         PAGE_COUNT_VALID_I,   // Valid signal of page counts

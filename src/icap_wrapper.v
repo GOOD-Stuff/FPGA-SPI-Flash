@@ -18,9 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
-
-
 module icap_wrapper(
     input         CLK,       // clock signal
     input         RST,       // reset signal    
@@ -31,8 +28,10 @@ module icap_wrapper(
 
 // {{{ local parameters (constants) --------  
     localparam DUMMY_WORD  = 32'hFFFFFFFF;
-    localparam SYNC_WORD   = 32'hAA995566;
+    localparam SYNC_WORD   = 32'hAA995566;    
     localparam NOOP_WORD   = 32'h20000000;
+    localparam SPIC_WORD   = 32'h3003E001;
+    localparam SPIS_WORD   = 32'h0000000C; // 1xSPI, 32bit address    
     localparam WBSTAR_WORD = 32'h30020001;
     localparam CMD_WORD    = 32'h30008001;
     localparam IPROG_WORD  = 32'h0000000F;    
@@ -41,38 +40,34 @@ module icap_wrapper(
     localparam [3:0] DUMMY_S     = 4'h01;
     localparam [3:0] SYNC_S      = 4'h02;
     localparam [3:0] NOOP_S      = 4'h03;
-    localparam [3:0] WBSTAR_S    = 4'h04;
-    localparam [3:0] ADDRESS_S   = 4'h05;
-    localparam [3:0] CMD_S       = 4'h06;    
-    localparam [3:0] IPROG_S     = 4'h07;
-    localparam [3:0] FIN_NOOP_S  = 4'h08;
-    localparam [3:0] END_S       = 4'h09;
+    localparam [3:0] SPICON_S    = 4'h04;
+    localparam [3:0] SPISET_S    = 4'h05;        
+    localparam [3:0] WBSTAR_S    = 4'h06;
+    localparam [3:0] ADDRESS_S   = 4'h07;    
+    localparam [3:0] CMD_S       = 4'h08; // confirm command    
+    localparam [3:0] IPROG_S     = 4'h09;    
+    localparam [3:0] END_S       = 4'h0A;
 // }}} End local parameters -------------
 
-
-// {{{ Wire declarations ----------------
+ 
+// {{{ Wire declarations ---------------- 
     wire [31:0] sO;                        // Output data from ICAP
     wire [31:0] sI;                        // Input data to ICAP
     wire        sWrite_en;                 // Active - Low;
     wire        sChip_enable;              // Active - Low;
     wire        reset_process;
-
+    wire [31:0] wbstar_address;    
     reg         reset_inprogress = 1'b0;  
     reg         d_reset_inprogress;
     
-
-    reg         finish;
     reg         ce = 1'b0;
-
     reg         strt_counter;    
     reg  [1:0]  counter = 2'h00;
     reg  [31:0] data    = DUMMY_WORD;
     
-    reg         end_trans;
-/*
-    reg         ;
-    reg  [3:0]  ;*/
-
+    reg  [3:0]  phase_state;
+    reg  [3:0]  prev_phase_state;
+    reg         end_trans; 
     reg  [3:0]  state, next_state;    
 // }}} End of wire declarations ------------
     
@@ -85,8 +80,9 @@ module icap_wrapper(
     assign reset_process = (reset_inprogress && d_reset_inprogress);
     assign sWrite_en     = !reset_process;
     assign sChip_enable  = !ce;
-    
-    assign BUSY = end_trans;
+    assign wbstar_address = {8'h00, ADDRESS_I[31:8]};    
+
+    assign DONE = end_trans;
 // }}} End of wire initializations ------------
 
 
@@ -98,7 +94,6 @@ module icap_wrapper(
         else 
             counter <= counter + 1'b1;
     end
-
 
     always @(posedge CLK) begin
         if (RST)
@@ -115,13 +110,13 @@ module icap_wrapper(
         else 
             d_reset_inprogress <= reset_inprogress;                    
     end
-/*
+
     always @(posedge CLK) begin
         if (RST)
-            d_start_transfer_cnt <= 1'b0;
+            prev_phase_state <= 4'h00;
         else
-            d_start_transfer_cnt <= strt_transfer_cnt;
-    end*/
+            prev_phase_state <= phase_state;
+    end
 
 
 // {{{ FSM logic -------------------
@@ -152,7 +147,24 @@ module icap_wrapper(
             end
 
             NOOP_S: begin                           // 3
-                next_state = WBSTAR_S;    
+                if (phase_state == 4'h0F) begin
+                    if (counter == 2'h02) next_state = END_S;    
+                    else                  next_state = NOOP_S;
+                end else if (phase_state == 4'h01) begin
+                    if (counter == 2'h01) next_state = SPICON_S;    
+                    else                  next_state = NOOP_S;
+                end else if (phase_state == 4'h02) begin
+                    if (counter == 2'h01) next_state = WBSTAR_S;    
+                    else                  next_state = NOOP_S;
+                end 
+            end
+
+            SPICON_S: begin                         // 4
+                next_state = SPISET_S;
+            end
+
+            SPISET_S: begin                         // 5
+                next_state = CMD_S;
             end
 
             WBSTAR_S: begin                         // 4
@@ -164,18 +176,14 @@ module icap_wrapper(
             end
 
             CMD_S: begin                            // 6
-                next_state = IPROG_S;
+                if (phase_state == 4'h02)
+                    next_state = NOOP_S;
+                else if (phase_state == 4'h04)
+                    next_state = IPROG_S;
             end
 
             IPROG_S: begin                          // 7
-                next_state = FIN_NOOP_S;
-            end
-
-            FIN_NOOP_S: begin                       // 8
-                if (counter == 2'h01)
-                    next_state = END_S;
-                else
-                    next_state = FIN_NOOP_S;
+                next_state = NOOP_S;
             end
 
             END_S: begin
@@ -190,81 +198,116 @@ module icap_wrapper(
 
     always @(*) begin
         case (state)
-            IDLE_S: begin
+            IDLE_S: begin                            // 0
                 data         = DUMMY_WORD;                
                 ce           = 1'b0;
-                strt_counter = 1'b0;
+                strt_counter = 1'b0;                
                 end_trans    = 1'b0;
+
+                phase_state  = 4'h00;
             end
 
-            DUMMY_S: begin
+            DUMMY_S: begin                           // 1
                 data         = DUMMY_WORD;                
                 ce           = 1'b1;
-                strt_counter = 1'b0;
+                strt_counter = 1'b0;                
                 end_trans    = 1'b0;
+
+                phase_state  = 4'h00;
             end
 
-            SYNC_S: begin
+            SYNC_S: begin                            // 2
                 data         = SYNC_WORD;                
                 ce           = 1'b1;
-                strt_counter = 1'b0;
+                strt_counter = 1'b0;                
                 end_trans    = 1'b0;
+
+                phase_state  = 4'h01;
             end
 
-            NOOP_S: begin
+            NOOP_S: begin                            // 3
                 data         = NOOP_WORD;                
                 ce           = 1'b1;
-                strt_counter = 1'b0;
-                end_trans    = 1'b0;                
-            end
+                strt_counter = 1'b1;                
+                end_trans    = 1'b0;  
 
-            WBSTAR_S: begin
-                data         = WBSTAR_WORD;                
-                ce           = 1'b1;
-                strt_counter = 1'b0;
-                end_trans    = 1'b0;
-            end
-
-            ADDRESS_S: begin
-                data         = 32'h00;//ADDRESS_I;                
-                ce           = 1'b1;
-                strt_counter = 1'b0;
-                end_trans    = 1'b0;
-            end
-
-            CMD_S: begin
-                data         = CMD_WORD;                
-                ce           = 1'b1;
-                strt_counter = 1'b0;
-                end_trans    = 1'b0;
-            end
-
-            IPROG_S: begin
-                data         = IPROG_WORD;
-                ce           = 1'b1;
-                strt_counter = 1'b0;
-                end_trans    = 1'b0;
-            end
-
-            FIN_NOOP_S: begin
-                data         = NOOP_WORD;                
-                ce           = 1'b1;
-                strt_counter = 1'b1;
-                end_trans    = 1'b0;
-                if (counter == 2'h01) begin
+                phase_state  = prev_phase_state;  
+                if (prev_phase_state == 4'h0F) begin
                     ce        = 1'b0;
                     end_trans = 1'b1;
                 end
             end
 
-            END_S: begin
+            SPICON_S: begin                         // 4
+                data         = SPIC_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = 4'h00;
+            end
+
+            SPISET_S: begin                         // 5
+                data         = SPIS_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = 4'h02;
+            end
+
+            WBSTAR_S: begin                         // 6
+                data         = WBSTAR_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = 4'h00;
+            end
+
+            ADDRESS_S: begin                        // 7
+                data         = wbstar_address;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = 4'h04;
+            end
+
+            CMD_S: begin                            // 8
+                data         = CMD_WORD;                
+                ce           = 1'b1;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = prev_phase_state;
+            end
+
+            IPROG_S: begin                          // 9
+                data         = IPROG_WORD;
+                ce           = 1'b1;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = 4'h0F;
+            end
+
+            END_S: begin                            // 0A
                 data         = DUMMY_WORD;                
                 ce           = 1'b0;
-                strt_counter = 1'b0;
+                strt_counter = 1'b0;                
                 end_trans    = 1'b1;
+
+                phase_state  = 4'h00;
             end
 
             default: begin
+                data         = DUMMY_WORD;                
+                ce           = 1'b0;
+                strt_counter = 1'b0;                
+                end_trans    = 1'b0;
+
+                phase_state  = 4'h00;
             end
         endcase
     end
@@ -275,7 +318,7 @@ module icap_wrapper(
     // ICAPE2: Internal Configuration Access Port Kintex-7    
     // Write: RDWRB = Low;  next tact CSIB = Low.
     // Read:  RDWRB = High; next tact CSIB = Low;
-    ICAPE2 #(
+   ICAPE2 #(
       .DEVICE_ID(0'h3651093),    // Specifies the pre-programmed Device ID value to be used for
                                  // simulation purposes.
       .ICAP_WIDTH("X32"),        // Specifies the input and output data width.
@@ -290,7 +333,7 @@ module icap_wrapper(
       .RDWRB    ( sWrite_en     )   // 1-bit input: Read/Write Select input      
     );
 
-    /*dbg_spi_icap dbg_icap (
+ /*   dbg_spi_icap dbg_icap (
         .clk              ( CLK ),
       
         .probe0           ( sI           ),
@@ -299,7 +342,7 @@ module icap_wrapper(
         .probe3           ( VALID_I      ),
         .probe4           ( state        ),
         .probe5           ( next_state   ),
-        .probe6           ( reset_inprogress )
+        .probe6           ( reset_inprogress )        
     );*/
 // }}} End of Include other modules ------------
 endmodule

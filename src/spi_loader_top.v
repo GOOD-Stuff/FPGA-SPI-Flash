@@ -125,7 +125,7 @@ module spi_loader_top (
         reg         start_addr_valid    = 1'b0;
         reg         page_count_valid    = 1'b0;
         reg         sector_count_valid  = 1'b0;
-        reg  [32:0] start_address       = 32'h00; // because SPI flash is 3-byte address order
+        reg  [31:0] start_address       = 32'h00; // because SPI flash is 3-byte address order
         reg  [15:0] page_count          = 16'h00;
         reg  [7:0]  sector_count        = 8'h00;
     // FIFO
@@ -139,10 +139,10 @@ module spi_loader_top (
         wire        data_fifo_full;
         wire        data_fifo_empty;
         wire        data_fifo_wren;
-        wire [31:0] data_to_fifo;
+        wire [31:0] data_to_fifo;        
     // ICAP
-        reg         strt_reset = 1'b0;
-        wire        icap_busy;
+        reg         strt_reset          = 1'b0;
+        wire        icap_done;
     // ILA
         wire        tmp_sect_valid;
         wire        tmp_sect_erase;
@@ -153,8 +153,8 @@ module spi_loader_top (
 
 
     // {{{ Wire initializations ------------ 
-        assign sSpi_Miso         = SPI_MISO_I;
-
+        assign sSpi_Miso         = SPI_MISO_I;        
+        
         assign cmd_fifo_din      = {CMD_DVI_I, CMD_I, START_ADDR_I, PAGE_COUNT_I, SECTOR_COUNT_I};        
         assign load_valid        = !cmd_fifo_empty;
         assign cmd_dvi           = cmd_fifo_dout[59];
@@ -278,7 +278,7 @@ module spi_loader_top (
                 end
 
                 RESET_FPGA_S: begin
-                    if (icap_busy) next_state = IDLE_S;
+                    if (icap_done) next_state = IDLE_S;
                     else           next_state = RESET_FPGA_S;
                 end
 
@@ -439,8 +439,8 @@ module spi_loader_top (
         .CLK          ( CLK_I         ),    // c
         .RST          ( SRST_I        ),  // r        
         .ADDRESS_I    ( start_address ),
-        .VALID_I      ( start_reset   ),
-        .DONE         ( icap_busy     )
+        .VALID_I      ( strt_reset    ),
+        .DONE         ( icap_done     )
     );
 
     fifo_cmd fifo_cmd (
@@ -489,7 +489,10 @@ module spi_loader_top (
         .probe20        ( CMD_DVI_I  ),
         .probe21        ( cmd_fifo_rdenb ),
         .probe22        ( cmd_fifo_full  ),
-        .probe23        ( data_fifo_full )
+        .probe23        ( data_fifo_full ),
+
+        .probe24        ( 1'b0/*strt_reset*/     ),
+        .probe25        ( 1'b0/*icap_done*/      )
     );
     // }}} End of Include other modules ------------
 endmodule

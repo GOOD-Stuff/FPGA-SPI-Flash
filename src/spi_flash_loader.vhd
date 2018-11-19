@@ -26,7 +26,7 @@ entity spi_flash_loader is
     port (
         -- Clock and reset
         RST                     : in    std_logic;
-        ENABLE                    : in    std_logic;
+        ENABLE                  : in    std_logic;
         USB_CLK                 : in    std_logic;
         CLK_100                 : in    std_logic;
         -- Input Control interfave
@@ -66,7 +66,8 @@ component dbg_spi_resourse
         probe7 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
         probe8 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
         probe9 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-        probe10 : IN STD_LOGIC_VECTOR(0 DOWNTO 0)
+        probe10 : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+        probe11 : IN STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
 end component;
 
@@ -107,9 +108,9 @@ signal flash_start_addr         : std_logic_vector(31 downto 0) := (others => '0
 signal flash_page_cnt           : std_logic_vector(15 downto 0) := (others => '0');
 signal flash_sector_cnt         : std_logic_vector( 7 downto 0) := (others => '0');
 
-signal flash_fifo_cmd_empty         : std_logic := '0';
-signal flash_fifo_cmd_full          : std_logic := '0';
-signal flash_fifo_data_full         : std_logic := '0';
+signal flash_fifo_cmd_empty     : std_logic := '0';
+signal flash_fifo_cmd_full      : std_logic := '0';
+signal flash_fifo_data_full     : std_logic := '0';
 
 ---------------------------------------------------------------------------
 -->>>>>>>>>>>>>>>> declaration component spi_loader_top <<<<<<<<<<<<<<<<<--
@@ -221,7 +222,8 @@ begin
 
         probe8(0) => flash_fifo_cmd_empty,
         probe9(0) => flash_fifo_cmd_full,
-        probe10(0) => flash_fifo_data_full
+        probe10(0) => flash_fifo_data_full,
+        probe11    => ctrl_src_wr_1
     );        
         
 end spi_flash_loader_arch;
