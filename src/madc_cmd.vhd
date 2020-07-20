@@ -23,8 +23,12 @@ component madc_cmd
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
 		
 		-- QSPI feedback
-		FLASH_CMD_BUSY 		: out  std_logic;
-		FLASH_DATA_BUSY 	: out  std_logic;
+		FLASH_CMD_EMPTY		: out   std_logic;
+		FLASH_CMD_BUSY 		: out	std_logic;
+		FLASH_DATA_BUSY 	: out	std_logic;	
+		FLASH_ERASING       : out   std_logic;
+		FLASH_WRITING       : out   std_logic;
+		FLASH_PKT_BYTES  	: out   std_logic_vector(26 downto 0);
 		
 		-- DDC tuning (CLK_ADC clock domain) -- 0x01
 		DDC0_ARST			: out	std_logic;
@@ -62,8 +66,8 @@ library IEEE;
 	use IEEE.std_logic_1164.all;
 	use IEEE.std_logic_UNSIGNED.all;
 	
---library UNISIM;
---	use UNISIM.VCOMPONENTS.all;
+library UNISIM;
+	use UNISIM.VCOMPONENTS.all;
 
 	
 
@@ -87,8 +91,12 @@ entity madc_cmd is
 		S_AXI_TDATA         : in   std_logic_vector( 7 downto 0);
 		
 		-- QSPI feedback
-		FLASH_CMD_BUSY 		: out  std_logic;
-		FLASH_DATA_BUSY 	: out  std_logic;
+		FLASH_CMD_EMPTY		: out   std_logic;
+		FLASH_CMD_BUSY 		: out	std_logic;
+		FLASH_DATA_BUSY 	: out	std_logic;	
+		FLASH_ERASING       : out   std_logic;
+		FLASH_WRITING       : out   std_logic;
+		FLASH_PKT_BYTES  	: out   std_logic_vector(26 downto 0);
 		
 		-- DDC tuning (CLK_ADC clock domain) -- 0x01
 		DDC0_ARST			: out	std_logic;
@@ -122,14 +130,12 @@ end madc_cmd;
 
 architecture madc_cmd_arch of madc_cmd is
 
-constant RESOURCE_DDC				: std_logic_vector( 7 downto 0) := x"01";
-constant RESOURCE_FIR				: std_logic_vector( 7 downto 0) := x"02";
 constant RESOURCE_SVC_FLASH_LOADER	: std_logic_vector( 7 downto 0) := x"80";
 
 signal address			: std_logic_vector( 7 downto 0);
 signal addr_en			: std_logic;
 signal resource			: std_logic_vector( 7 downto 0);
-signal in_byte_cnt		: std_logic_vector( 8 downto 0) := (others => '0');
+signal in_byte_cnt		: std_logic_vector(15 downto 0) := (others => '0');
 
 signal rst_n			: std_logic;
 
@@ -202,18 +208,17 @@ signal flash_in_sector_cnt	: std_logic_vector( 7 downto 0) := (others => '0');
 ---------------------------------------------------------------------------
 component spi_loader_fifo
 	port (
-		rst 	: in 	std_logic;
-		wr_clk 	: in 	std_logic;
-		rd_clk 	: in 	std_logic;
-		din 	: in 	std_logic_vector(7 downto 0);
-		wr_en 	: in 	std_logic;
-		rd_en 	: in 	std_logic;
-		dout 	: out 	std_logic_vector(7 downto 0);
-		full 	: out 	std_logic;
-		empty 	: out 	std_logic;
-    	wr_rst_busy : OUT STD_LOGIC;
-    	rd_rst_busy : OUT STD_LOGIC		
-
+		rst 		: in 	std_logic;
+		wr_clk 		: in 	std_logic;
+		rd_clk 		: in 	std_logic;
+		din 		: in 	std_logic_vector(7 downto 0);
+		wr_en 		: in 	std_logic;
+		rd_en 		: in 	std_logic;
+		dout 		: out 	std_logic_vector(7 downto 0);
+		full 		: out 	std_logic;
+		empty 		: out 	std_logic
+--    	wr_rst_busy : out 	std_logic; 
+--		rd_rst_busy : out 	std_logic
 );
 end component;
 
@@ -221,24 +226,9 @@ signal flash_data_fifo_rden		: std_logic := '0';
 signal flash_data_fifo_empty	: std_logic := '0';
 signal flash_data_fifo_full 	: std_logic := '0';
 
-
--- TODO: del, for debug
---component ila_0
---	port (
---		clk     : in std_logic;
---		probe0  : in std_logic_vector(0 downto 0);
---		probe1  : in std_logic_vector(7 downto 0);
---		probe2  : in std_logic_vector(0 downto 0);
---		probe3  : in std_logic_vector(7 downto 0);
---		probe4  : in std_logic_vector(0 downto 0);
---		probe5  : in std_logic_vector(0 downto 0);
---		probe6  : in std_logic_vector(8 downto 0);
---		probe7  : in std_logic_vector(2 downto 0);
---		probe8  : in std_logic_vector(7 downto 0);
---		probe9  : in std_logic_vector(0 downto 0);
---		probe10 : in std_logic_vector(0 downto 0)
---	);
---end component;
+signal flash_erase_proc      	: std_logic := '0';
+signal flash_write_proc      	: std_logic := '0';
+signal flash_write_done      	: std_logic := '0';
 
 ---------------------------------------------------------------------------
 -->>>>>>>>>>>>>> declaration component spi_loader_top <<<<<<<<<<<<<<<<<<<--
@@ -265,6 +255,11 @@ component spi_loader_top
         CMD_FIFO_EMPTY_O	: out	std_logic;	-- The signal of module when it has completed erasing
         CMD_FIFO_FULL_O  	: out	std_logic;	-- The signal of module when it has completed writing
         DATA_FIFO_PFULL_O	: out	std_logic;	-- FIFO is full, must wait while it will be release    
+    
+        WRITE_DONE_O        : out   std_logic;
+        WRITING_PROC_O      : out   std_logic;
+        WR_PKT_CNT_O        : out   std_logic_vector(26 downto 0); -- Counter of writing page bytes
+        ERASE_PROC_O        : out   std_logic;
 
         SPI_CS_O			: out	std_logic;	-- Chip Select signal for SPI Flash
         SPI_MOSI_O			: out	std_logic	-- Master Output Slave Input
@@ -312,10 +307,11 @@ signal m_axis_tvalid_flash 	: std_logic;
 signal s_axis_tready_flash 	: std_logic;
 signal m_axis_tdata_flash	: std_logic_vector(63 downto 0);
 
+
 begin
 
 rst_n	<= not RST;
-address	<= "000" & RS(0) & '1' & GA;
+address	<= "0000" & '1' & GA;
 
 ---------------------------------------------------------------------------
 -->>>>>>>>>>>>>>>>>>>>>>>>> CHECK address <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<--
@@ -333,13 +329,13 @@ process (RST, CLK) begin
 				if (S_AXI_TLAST = '1') then
 					in_byte_cnt	<= (others => '0');
 				else
-					if (in_byte_cnt < x"10C") then --x"FF") then
+					if (in_byte_cnt < x"FFFF") then
 						in_byte_cnt	<= in_byte_cnt + 1;
 					end if;
 				end if;				
 
 				-- address			
-        		if (in_byte_cnt = x"02") then
+        		if (in_byte_cnt = 2) then
         			if (S_AXI_TDATA = address) then
      					addr_en		<= '1';
      				else
@@ -348,7 +344,7 @@ process (RST, CLK) begin
 				end if;  			
 			
 				-- resource			
-        		if (in_byte_cnt = x"03") then 
+        		if (in_byte_cnt = 3) then 
      				resource	<= S_AXI_TDATA;
 				end if;
 			   			
@@ -415,8 +411,8 @@ process (RST, CLK) begin
 					flash_in_sector_cnt	<= S_AXI_TDATA;
 				end if;			
 				
-				-- DATA_TO_PROG (256 байт)	
-				if (in_byte_cnt > 11 and in_byte_cnt < 268 and flash_in_cmd = "011") then
+				-- DATA_TO_PROG (512 bytes)	
+				if (in_byte_cnt > 11 and in_byte_cnt < 524 and flash_in_cmd = "011") then
 					flash_data_valid	<= '1';
 					flash_in_data		<= S_AXI_TDATA;
 				else
@@ -495,18 +491,17 @@ end process;
 -------------------------------------------------------------------------------
 spi_loader_fifo_inst : spi_loader_fifo
 	port map (
-		rst 	=> RST,
-		wr_clk 	=> CLK,
-		rd_clk 	=> CLK_FLASH,
-		din 	=> flash_in_data,
-		wr_en 	=> flash_data_valid,
-		rd_en 	=> flash_data_fifo_rden,
-		dout 	=> flash_data,
-		full 	=> flash_data_fifo_full,
-		empty 	=> flash_data_fifo_empty,
-    	wr_rst_busy => open, 
-		rd_rst_busy => open
-		
+		rst 		=> RST,
+		wr_clk 		=> CLK,
+		rd_clk 		=> CLK_FLASH,
+		din 		=> flash_in_data,
+		wr_en 		=> flash_data_valid,
+		rd_en 		=> flash_data_fifo_rden,
+		dout 		=> flash_data,
+		full 		=> flash_data_fifo_full,
+		empty 		=> flash_data_fifo_empty
+--    	wr_rst_busy => open, 
+--		rd_rst_busy => open
 	);
 
 flash_data_fifo_rden	<= '1' when (flash_data_fifo_empty = '0' and flash_data_fifo_pfull = '0')  else '0'; -- and flash_data_fifo_pfull = '0') else '0';
@@ -554,12 +549,20 @@ spi_loader_top_inst : spi_loader_top
         CMD_FIFO_FULL_O  	=> flash_cmd_fifo_full,
         DATA_FIFO_PFULL_O	=> flash_data_fifo_pfull,    
 
+        WRITE_DONE_O        => flash_write_done,
+        WRITING_PROC_O      => flash_write_proc,
+        WR_PKT_CNT_O        => FLASH_PKT_BYTES,
+        ERASE_PROC_O        => flash_erase_proc,
+
 		SPI_CS_O  			=> open,
 		SPI_MOSI_O  		=> open
     ); 
 
+FLASH_CMD_EMPTY	<= flash_cmd_fifo_empty;
 FLASH_CMD_BUSY  <= flash_cmd_fifo_full;
 FLASH_DATA_BUSY <= flash_data_fifo_pfull;
+FLASH_ERASING   <= flash_erase_proc;
+FLASH_WRITING   <= flash_write_proc;
 
 
 end madc_cmd_arch;

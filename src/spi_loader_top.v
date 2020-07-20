@@ -7,8 +7,8 @@
 // Design Name: usb3_8k_filter
 // Module Name: spi_loader_top
 // Project Name: usb3_8k_cnt
-// Target Devices:  XC7K160TFFQ676-2 (Kintex-7)
-// Tool Versions: Vivado 2016.3
+// Target Devices:  XCKU060-FFVA1156-1-C (Kintex-7 Ultrascale)
+// Tool Versions: Vivado 2018.3
 // Description: This module is wrapper under SPI Flash programmer
 // 
 // Dependencies: 
@@ -22,7 +22,7 @@
 // ----------->|          |--------------------------------->
 // CMD 3       |          | CMD_FIFO_FULL
 // ----/------>|   FIFO   |--------------------------------->
-// ST_ADDR 24  |          |
+// ST_ADDR 32  |          |
 // ---------/->|          |
 // PG_CNT 16   |          |
 // -------/--->|          |
@@ -32,17 +32,9 @@
 //                                | FIFO  |
 // DATA_DVI                       |       |DATA_FIFO_PFULL
 // ------------------------------>|       |----------------->
-// DATA_TO_PROG                   |       |
-// ------------------------------>|       |
+// DATA_TO_PROG           8       |       |
+// -----------------------/------>|       |
 //                                |_______|
-//
-//
-//              _________
-//             |         |
-//             |         |
-// ----------->|  ICAP   |---------->
-//             |         |
-//             |_________|
 //
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +61,11 @@ module spi_loader_top(
     output        CMD_FIFO_FULL_O,   // The signal of module when it has completed writing
     output        DATA_FIFO_PFULL_O, // FIFO is full, must wait while it will be release    
     
-
+    output        WRITE_DONE_O,      // The signal of done write processing (short)
+    output        WRITING_PROC_O,    // The signal of write processing      (long)
+    output [26:0] WR_PKT_CNT_O,      // The counts of flashed bytes
+    output        ERASE_PROC_O,      // The signal of erase processing      (long)
+    
     output        SPI_CS_O,          // Chip Select signal for SPI Flash
     output        SPI_MOSI_O         // Master Output Slave Input    
     );
@@ -107,16 +103,16 @@ module spi_loader_top(
         reg  [2:0]  cmd                 = 3'h00;
         wire        cmd_dvi;        
     // Signals of start count
-        reg         strt_sect_erase;
-        reg         strt_subs_erase;        
-        reg         start_write;        
+        reg         strt_sect_erase     = 1'h00;
+        reg         strt_subs_erase     = 1'h00;        
+        reg         start_write         = 1'h00;        
         wire        erasing_spi;
-        reg         start_read;
-        reg         start_read_st;
+        reg         start_read          = 1'h00;
+        reg         start_read_st       = 1'h00;
     // Memory signals (address, pages, etc.)
-        reg         start_addr_valid    = 1'b0;
-        reg         page_count_valid    = 1'b0;
-        reg         sector_count_valid  = 1'b0;
+        reg         start_addr_valid    = 1'h00;
+        reg         page_count_valid    = 1'h00;
+        reg         sector_count_valid  = 1'h00;
         reg  [31:0] start_address       = 32'h00;
         reg  [15:0] page_count          = 16'h00;
         reg  [7:0]  sector_count        = 8'h00;
@@ -125,17 +121,17 @@ module spi_loader_top(
         wire        cmd_fifo_empty;
         wire [59:0] cmd_fifo_dout;
         wire [59:0] cmd_fifo_din;
-        reg         cmd_fifo_rdenb;
+        reg         cmd_fifo_rdenb      = 1'h00;
         wire        data_fifo_wren;
         wire        data_fifo_full;
         wire        data_fifo_empty;    
         
         wire [7:0]  data_to_fifo;
     // ILA
-        wire        tmp_sect_valid;  
+        /*wire        tmp_sect_valid;  
         wire        tmp_sect_erase;  
         wire        tmp_subs_erase;
-        wire        tmp_fifo_rdenb;                
+        wire        tmp_fifo_rdenb;*/                
     // }}} End of wire declarations ------------
         
         
@@ -150,25 +146,17 @@ module spi_loader_top(
 
         assign DATA_FIFO_PFULL_O  = data_fifo_full;           
         assign CMD_FIFO_FULL_O    = cmd_fifo_full;
-        assign CMD_FIFO_EMPTY_O   = cmd_fifo_empty;        
-        assign data_to_fifo       = DATA_TO_PROG_I;
-                                /*= {DATA_TO_PROG_I[7], DATA_TO_PROG_I[6], DATA_TO_PROG_I[5], // reverse order bit
-                                     DATA_TO_PROG_I[4], DATA_TO_PROG_I[3], DATA_TO_PROG_I[2],
-                                     DATA_TO_PROG_I[1], DATA_TO_PROG_I[0], DATA_TO_PROG_I[15],
-                                     DATA_TO_PROG_I[14], DATA_TO_PROG_I[13], DATA_TO_PROG_I[12],
-                                     DATA_TO_PROG_I[11], DATA_TO_PROG_I[10], DATA_TO_PROG_I[9],
-                                     DATA_TO_PROG_I[8], DATA_TO_PROG_I[23], DATA_TO_PROG_I[22],
-                                     DATA_TO_PROG_I[21], DATA_TO_PROG_I[20], DATA_TO_PROG_I[19],
-                                     DATA_TO_PROG_I[18], DATA_TO_PROG_I[17], DATA_TO_PROG_I[16],
-                                     DATA_TO_PROG_I[31], DATA_TO_PROG_I[30], DATA_TO_PROG_I[29],
-                                     DATA_TO_PROG_I[28], DATA_TO_PROG_I[27], DATA_TO_PROG_I[26],
-                                     DATA_TO_PROG_I[25], DATA_TO_PROG_I[24]};
-                                    // { << { DATA_TO_PROG_I } };              */                                    
+        assign CMD_FIFO_EMPTY_O   = cmd_fifo_empty;
+      
+        assign WRITE_DONE_O       = write_done;
+        assign ERASE_PROC_O       = erasing_spi;        
+        
+        assign data_to_fifo       = DATA_TO_PROG_I;                                                                 
 
-        assign tmp_sect_valid     = sector_count_valid;   
+        /*assign tmp_sect_valid     = sector_count_valid;   
         assign tmp_sect_erase     = strt_sect_erase;
         assign tmp_subs_erase     = strt_subs_erase;
-        assign tmp_fifo_rdenb     = cmd_fifo_rdenb;
+        assign tmp_fifo_rdenb     = cmd_fifo_rdenb;*/
     // }}} End of wire initializations ------------
 
     
@@ -239,16 +227,11 @@ module spi_loader_top(
                 if (cmd == ERASE_SEC || cmd == ERASE_SUB
                                      || cmd == ERASE_CHIP)
                     next_state = ERASE_S;                                                                        
-                else if (cmd == WRITE_HEADER)
-                    next_state = WRITE_REG_S;
-                else if (cmd == WRITE_DATA)
-                    next_state = WRITE_DATA_S;
-                else if (cmd == READ_DATA)
-                    next_state = READ_S;
-                else if (cmd == READ_STATUS)
-                    next_state = READ_ST_S;                    
-                else
-                    next_state = PARSE_CMD_S;
+                else if (cmd == WRITE_HEADER) next_state = WRITE_REG_S;
+                else if (cmd == WRITE_DATA)   next_state = WRITE_DATA_S;
+                else if (cmd == READ_DATA)    next_state = READ_S;
+                else if (cmd == READ_STATUS)  next_state = READ_ST_S;                    
+                else                          next_state = PARSE_CMD_S;
             end
 
             ERASE_S: begin                                   // 3
@@ -295,30 +278,30 @@ module spi_loader_top(
     always @(*) begin
         case (state)    
             IDLE_S: begin                               // 0                                                               
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;                                
-                start_write          = 1'b0;                
-                start_read           = 1'b0;    
-                start_read_st        = 1'b0;                                         
-                cmd_fifo_rdenb       = 1'b0;             
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;                                
+                start_write     = 1'b0;                
+                start_read      = 1'b0;    
+                start_read_st   = 1'b0;                                         
+                cmd_fifo_rdenb  = 1'b0;             
             end
                
-            GET_FIFO_S: begin                           // 1
-                cmd_fifo_rdenb       = 1'b1;
-                start_write          = 1'b0;       
-                start_read           = 1'b0;  
-                start_read_st        = 1'b0;     
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;                
+            GET_FIFO_S: begin                      // 1
+                cmd_fifo_rdenb  = 1'b1;
+                start_write     = 1'b0;       
+                start_read      = 1'b0;  
+                start_read_st   = 1'b0;     
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;                
             end
 
-            PARSE_CMD_S: begin                          // 2
-                cmd_fifo_rdenb       = 1'b0;
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;                    
-                start_write          = 1'b0;                
-                start_read           = 1'b0;
-                start_read_st        = 1'b0;
+            PARSE_CMD_S: begin                     // 2
+                cmd_fifo_rdenb  = 1'b0;
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;                    
+                start_write     = 1'b0;                
+                start_read      = 1'b0;
+                start_read_st   = 1'b0;
                 if      (cmd == ERASE_SUB)    strt_subs_erase  = 1'b1;                                        
                 else if (cmd == ERASE_SEC)    strt_sect_erase  = 1'b1;                                       
                 else if (cmd == ERASE_CHIP)   strt_sect_erase  = 1'b1;     
@@ -329,60 +312,55 @@ module spi_loader_top(
             end    
 
             ERASE_S: begin                             // 3
-                cmd_fifo_rdenb       = 1'b0;                
-                start_write          = 1'b0;                
-                start_read           = 1'b0; 
-                start_read_st        = 1'b0;                              
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;
+                cmd_fifo_rdenb  = 1'b0;                
+                start_write     = 1'b0;                
+                start_read      = 1'b0; 
+                start_read_st   = 1'b0;                              
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;
             end
 
-            WRITE_REG_S: begin                        // 4
-                cmd_fifo_rdenb       = 1'b0;                
-                start_write          = 1'b0;                
-                start_read           = 1'b0;    
-                start_read_st        = 1'b0;                           
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;
+            WRITE_REG_S: begin                   // 4
+                cmd_fifo_rdenb  = 1'b0;                
+                start_write     = 1'b0;                
+                start_read      = 1'b0;    
+                start_read_st   = 1'b0;                           
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;
             end
           
-            WRITE_DATA_S: begin                        // 5                
-                cmd_fifo_rdenb       = 1'b0;
-                start_write          = 1'b0;
-                start_read           = 1'b0;  
-                start_read_st        = 1'b0; 
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;                            
+            WRITE_DATA_S: begin                   // 5                
+                cmd_fifo_rdenb  = 1'b0;
+                start_write     = 1'b0;
+                start_read      = 1'b0;  
+                start_read_st   = 1'b0; 
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;                            
             end
             
-            READ_S: begin                              // 6
-                cmd_fifo_rdenb       = 1'b0;
-                start_write          = 1'b0;
-                start_read           = 1'b0; 
-                start_read_st        = 1'b0; 
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;                             
+            READ_S: begin                         // 6
+                cmd_fifo_rdenb  = 1'b0;
+                start_write     = 1'b0;
+                start_read      = 1'b0; 
+                start_read_st   = 1'b0; 
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;                             
             end
 
-            READ_ST_S: begin                           // 7
-                cmd_fifo_rdenb       = 1'b0;
-                start_write          = 1'b0;
-                start_read           = 1'b0; 
-                start_read_st        = 1'b0; 
-                strt_sect_erase      = 1'b0;
-                strt_subs_erase      = 1'b0;
-            end
-
-            default: begin
-                                        
+            READ_ST_S: begin                      // 7
+                cmd_fifo_rdenb  = 1'b0;
+                start_write     = 1'b0;
+                start_read      = 1'b0; 
+                start_read_st   = 1'b0; 
+                strt_sect_erase = 1'b0;
+                strt_subs_erase = 1'b0;
             end
         endcase
     end
     // }}} End of FSM logic ------------
     
     
-    // {{{ Include other modules ------------
-    
+    // {{{ Include other modules ------------    
     spi_flash_programmer spi_prog (
         .WR_CLK_I                 ( CLK_INT            ),
         .LOG_CLK_I                ( CLK_I              ),               
@@ -405,9 +383,11 @@ module spi_loader_top(
         .SECT_ERASE_I             ( strt_sect_erase    ),
         .SSECT_ERASE_I            ( strt_subs_erase    ),
         .WRITE_I                  ( start_write        ),
-        .READ_I                   ( start_read         ),
+        .READ_I                   ( start_read_st      ),
         .READ_ST_I                ( start_read_st      ),
         .ERASEING_O               ( erasing_spi        ),
+        .WRITING_O                ( WRITING_PROC_O     ),
+        .WR_PKT_CNT_O             ( WR_PKT_CNT_O       ),
         .READ_VALID_O             ( DATA_DVO_O         ),
         .READ_DONE_O              ( read_done          ),
    
@@ -416,30 +396,6 @@ module spi_loader_top(
         //.SPI_MISO_I               ( sSpi_Miso          )
     ); 
 
-    /*spiflashprogrammer spi_prog (
-        .Clk              ( CLK_I   ),
-        .fifoclk          ( CLK_INT ),
-  
-        .data_to_fifo     ( {24'h00, data_to_fifo}     ),
-        .startaddr        ( start_address    ),
-        .startaddrvalid   ( start_addr_valid ),
-        .pagecount        ( page_count       ),
-        .pagecountvalid   ( page_count_valid ),
-        .sectorcount      ( {5'h00, sector_count}     ),
-        .sectorcountvalid ( sector_count_valid ),
-
-        .fifowren         ( data_fifo_wren     ),
-        .fifofull         ( data_fifo_full     ),
-        .fifoempty        ( data_fifo_empty    ),
-        .fifoafull        ( ),
-        .fifowrerr        ( ),
-        .fiforderr        ( ),
-        .writedone        ( write_done ),
-
-        .reset            ( SRST_I          ),
-        .erase            ( strt_sect_erase ),
-        .eraseing         ( erasing_spi     )
-    );*/
 
     fifo_cmd fifo_cmd (
         .wr_clk       ( CLK_INT          ),
@@ -454,19 +410,18 @@ module spi_loader_top(
         .full         (     ),        
         .empty        ( cmd_fifo_empty   ),
         
-        .prog_full    ( cmd_fifo_full    ),
-        //.prog_empty   (   ),
+        .prog_full    ( cmd_fifo_full    )
+        //.prog_empty   (  ),
 
-        .wr_rst_busy  (  ),
-        .rd_rst_busy  (  )
+        //.wr_rst_busy  (  ),
+        //.rd_rst_busy  (  )
     );
 
-   /* dbg_spi_cmd dbg_cmd (
+   /* ila_0 dbg_cmd (
         .clk            ( CLK_I           ),
-
         .probe0         ( state           ),
         .probe1         ( next_state      ),
-
+        
         .probe2         ( start_address   ),
         .probe3         ( page_count      ),
         .probe4         ( sector_count    ),      
@@ -477,18 +432,15 @@ module spi_loader_top(
         .probe8         ( read_done       ),
         .probe9         ( erasing_spi     ),
         .probe10        ( data_fifo_wren  ),
-        .probe11        ( start_write     ),
-        .probe12        ( data_to_fifo    ),        
-        .probe13        ( CMD_DVI_I       ),
-        .probe14        ( cmd_fifo_empty  ),        
-        .probe15        ( cmd_fifo_full   ),
-        .probe16        ( pkg_counter     ),
-        .probe17        ( cmd_fifo_dout   ),        
-        .probe18        ( cmd_fifo_rdenb  ),
-        
-        .probe19 		( cmd_fifo_din 	  ),
-        .probe20	 	( tmp_subs_erase  ),
-        .probe21 		( tmp_sect_erase  )
+        .probe11        ( start_read_st   ),
+        .probe12        ( data_to_fifo    ),
+        .probe13        ( data_fifo_empty ),
+        .probe14        ( CMD_DVI_I       ),
+        .probe15        ( cmd_fifo_empty  ),        
+        .probe16        ( cmd_fifo_full   ),
+        .probe17        ( pkg_counter     ),
+        .probe18        ( cmd_fifo_dout   ),        
+        .probe19        ( cmd_fifo_rdenb  )       
     );*/
     // }}} End of Include other modules ------------
 endmodule
